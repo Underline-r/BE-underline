@@ -1,7 +1,7 @@
 package com.project.underline.common.payload;
 
 import com.project.underline.common.metadata.LaguageType;
-import com.project.underline.common.metadata.Message;
+import com.project.underline.common.metadata.StatusMessage;
 
 public class ResponseFactory {
 
@@ -10,11 +10,11 @@ public class ResponseFactory {
     }
 
     public static <T> Response<T> createSuccess(T data){
-        return ResponseFactory.createSuccess(data, Message.SUCCESS.getStatusCode());
+        return ResponseFactory.createSuccess(data, StatusMessage.SUCCESS.getStatusCode());
     }
 
     public static <T> Response<T> createSuccess(T data, int statusCode){
-        return ResponseFactory.createSuccess(data,statusCode,Message.SUCCESS.getMessage(statusCode, LaguageType.KOREAN.getLaguageType()));
+        return ResponseFactory.createSuccess(data,statusCode, StatusMessage.SUCCESS.getMessage(statusCode));
     }
 
     public static <T> Response<T> createSuccess(T data,int statusCode, String message){
