@@ -2,6 +2,7 @@ package com.project.underline.common.payload;
 
 import com.project.underline.common.metadata.LaguageType;
 import com.project.underline.common.metadata.StatusMessage;
+import org.springframework.http.HttpStatus;
 
 public class ResponseFactory {
 
@@ -13,11 +14,11 @@ public class ResponseFactory {
         return ResponseFactory.createSuccess(data, StatusMessage.SUCCESS.getStatusCode());
     }
 
-    public static <T> Response<T> createSuccess(T data, int statusCode){
+    public static <T> Response<T> createSuccess(T data, HttpStatus statusCode){
         return ResponseFactory.createSuccess(data,statusCode, StatusMessage.SUCCESS.getMessage(statusCode));
     }
 
-    public static <T> Response<T> createSuccess(T data,int statusCode, String message){
+    public static <T> Response<T> createSuccess(T data,HttpStatus statusCode, String message){
 
         Response<T> response = new Response<>();
 

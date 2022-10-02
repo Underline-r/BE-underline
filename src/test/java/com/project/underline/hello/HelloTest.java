@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import static com.project.underline.hello.QHello.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -22,16 +23,16 @@ class HelloTest {
 
     @Test
     void helloTest() {
-        Hello hello = new Hello();
-        em.persist(hello);
+        Hello test = new Hello();
+        em.persist(test);
 
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-        Hello findHello = queryFactory.selectFrom(QHello.hello)
+        Hello findHello = queryFactory.selectFrom(hello)
                 .fetchOne();
 
-        Assertions.assertThat(findHello).isEqualTo(hello);
-        Assertions.assertThat(hello.getId()).isEqualTo(hello.getId());
+        Assertions.assertThat(findHello).isEqualTo(test);
+        Assertions.assertThat(test.getId()).isEqualTo(test.getId());
     }
 
 }
