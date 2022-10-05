@@ -31,4 +31,14 @@ public class ResponseFactory {
 
         return response;
     }
+
+    public static <T> Response<T> createFail(HttpStatus statusCode, String message){
+
+        Response<T> response = new Response<>();
+
+        response.setMessage(message);
+        response.setStatusCode(statusCode);
+
+        return response;
+    }
 }

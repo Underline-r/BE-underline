@@ -6,6 +6,7 @@ public enum StatusMessage {
     SUCCESS(HttpStatus.OK,"success","success"),
     TOKEN_OVER(HttpStatus.UNAUTHORIZED,"토큰이 만료되었습니다","token is over"),
     FORBIDDEN(HttpStatus.FORBIDDEN,"인가되지 않은 사용자입니다","This user is not authorized"),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST,"custom bad request","custom bad request"),
     ;
 
     private HttpStatus statusCode;
