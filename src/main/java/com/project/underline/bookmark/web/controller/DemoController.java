@@ -1,7 +1,7 @@
 package com.project.underline.bookmark.web.controller;
 
 import com.project.underline.bookmark.web.dto.BookmarkRequest;
-import com.project.underline.common.DefaultRes;
+import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.common.metadata.ResponseMessage;
 import com.project.underline.common.metadata.StatusCode;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class DemoController {
 //                new DefaultRes<>(StatusCode.OK, ResponseMessage.CREATED_USER, bookmarkRequest), HttpStatus.OK
 
                 // class + final String + builder
-                DefaultRes.res(StatusCode.OK, ResponseMessage.CREATED_USER, bookmarkRequest), HttpStatus.OK
+                DefaultResponse.res(StatusCode.OK, ResponseMessage.CREATED_USER, bookmarkRequest), HttpStatus.OK
         );
     }
 
