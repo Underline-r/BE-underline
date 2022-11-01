@@ -46,8 +46,8 @@ public class WebSecurityConfig{
                 // request 권한 설정
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/signup").permitAll()
+                .antMatchers("/sign-in").permitAll()
+                .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
                 /* 유저 권한 나눌 경우 사용
                 .antMatchers("/temp").hasRole("ADMIN")
                  */

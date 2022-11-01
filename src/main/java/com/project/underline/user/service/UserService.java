@@ -26,13 +26,16 @@ public class UserService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
 
+    /**
+     * TODO: 커스텀 예외 만들 지 다시 생각해봅시다.
+     * @param signupRequestDto
+     * @return
+     */
     public Long createUser(SignupRequestDto signupRequestDto) {
-
-        /*String validatedEmail = signupRequestDto.getEmail().replaceAll(" ", "");
-
+        String validatedEmail = signupRequestDto.getEmail().replaceAll(" ", "");
         if (userRepository.existsByEmail(validatedEmail)) {
-            throw new RuntimeException("이미 사용 중인 이메일 입니다.");
-        }*/
+            throw new IllegalArgumentException("이미 사용 중인 이메일 입니다.");
+        }
 
         User user = signupRequestDto.toUser(passwordEncoder);
         return userRepository.save(user).getId();
