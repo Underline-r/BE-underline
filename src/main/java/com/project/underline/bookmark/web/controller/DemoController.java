@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoController {
 
+    /**
+     * TODO: test API 로 권한 테스트를 해보았는데, 권한이 없을 경우 예외처리도 다시 생각해야함.
+     */
     @GetMapping("/test")
     public ResponseEntity test() {
         BookmarkRequest bookmarkRequest = new BookmarkRequest();
