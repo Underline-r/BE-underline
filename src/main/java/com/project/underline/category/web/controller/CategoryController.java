@@ -1,5 +1,6 @@
 package com.project.underline.category.web.controller;
 
+import com.project.underline.category.metadata.CategoryList;
 import com.project.underline.category.service.CategoryService;
 import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,9 +53,13 @@ public class CategoryController {
 
     @GetMapping("/category-list")
     public ResponseEntity categoryList(){
+        HashMap<String, String> categoryList = CategoryList.getCategoryList();
 
         return new ResponseEntity(
                 DefaultResponse.builder()
+                        .statusCode(StatusCode.OK)
+                        .message(SUCCESS)
+                        .data(categoryList)
                         .build()
                 , HttpStatus.OK
         );
