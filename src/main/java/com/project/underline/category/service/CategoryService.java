@@ -12,9 +12,9 @@ import java.util.List;
 @Service
 public class CategoryService {
 
-    UserCategoryRelationRepository userCategoryRelationRepository;
+    private final UserCategoryRelationRepository userCategoryRelationRepository;
 
-    public void registerFavoriteCategory(Long userId, List<String> category) throws RuntimeException{
+    public void registerFavoriteCategory(Long userId, List<String> category){
         List<UserCategoryRelation> userLikedCategoryList = new ArrayList<UserCategoryRelation>();
 
         /* To-do. 클라이언트에서 온 category가 Enum list에 있는 값이 아닐수도 있으니까 검증로직 추후 추가 */

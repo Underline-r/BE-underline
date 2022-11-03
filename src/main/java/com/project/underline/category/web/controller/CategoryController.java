@@ -2,6 +2,7 @@ package com.project.underline.category.web.controller;
 
 import com.project.underline.category.metadata.CategoryList;
 import com.project.underline.category.service.CategoryService;
+import com.project.underline.category.web.dto.UserRegisterCategoryList;
 import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.user.entity.User;
@@ -23,13 +24,13 @@ import static com.project.underline.common.metadata.ResponseMessage.SUCCESS;
 @RequiredArgsConstructor
 public class CategoryController {
 
-    CategoryService categoryService;
-    UserRepository userRepository;
+    private final CategoryService categoryService;
+    private final UserRepository userRepository;
 
     @PostMapping("/category")
     @ResponseBody
     public ResponseEntity registerFavoriteCategory(
-            @RequestBody List<String> category,
+                @RequestBody UserRegisterCategoryList category,
             @AuthenticationPrincipal UserDetails userDetails){
 
         /* To-do. DB에 저장된 userId값이 필요한건데 name밖에 못가져옴 한방에 id값을 가져올 방법은? */
@@ -37,7 +38,7 @@ public class CategoryController {
         Optional<User> user = userRepository.findByEmail(userName);
         Long userId = user.get().getId();
 
-        categoryService.registerFavoriteCategory(userId,category);
+        categoryService.registerFavoriteCategory(userId,category.getCategory());
 
         return new ResponseEntity(
                 DefaultResponse.builder()

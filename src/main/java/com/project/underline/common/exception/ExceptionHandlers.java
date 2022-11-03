@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  */
 @ControllerAdvice
 public class ExceptionHandlers {
-    @ExceptionHandler(RuntimeException.class)
+
+    @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<DefaultResponse> commonException(NullPointerException e) {
         return new ResponseEntity<DefaultResponse>(
                 DefaultResponse.errRes(StatusCode.BAD_REQUEST, e.getClass(), e.getMessage()), HttpStatus.BAD_REQUEST);

@@ -1,12 +1,14 @@
 package com.project.underline.category.entity;
 
 import com.project.underline.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @Getter
 @Table(name = "UserCategoryRelation")
@@ -27,6 +29,8 @@ public class UserCategoryRelation {
 //    @JoinColumn(name="user_id")
 //    private User user;
 
-    public UserCategoryRelation(Long userId, String eachCategory) {
+    public UserCategoryRelation(Long userId, String category) {
+        this.userId = userId;
+        this.category = category;
     }
 }
