@@ -23,9 +23,9 @@ public class UserCategoryRelation {
     @Column(name="CATEGORY")
     private String category;
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name="user_id")
+//    private User user;
 
     public UserCategoryRelation(Long userId, String eachCategory) {
     }

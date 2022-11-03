@@ -1,13 +1,13 @@
 package com.project.underline.category.metadata;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.PostConstruct;
+import java.util.HashMap;
+
+@Configuration
 public class CategoryList {
-    Category[] categoryCodeList = Category.values();
+    private static Category[] categoryCodeList = Category.values();
 
     // key -> code , value -> message형식으로 {code:value, code:value .. } 이런식으로 return하고 클라이언트에서 줄땐 다시 code값으로 넘겨줘야함
     // To-do. code로 넘겨줘야한다고 알려주기
@@ -15,7 +15,7 @@ public class CategoryList {
     public static final HashMap<String, String> categoryEnglishMessageMap = new HashMap<String, String>();
 
     @PostConstruct
-    void categoryMap(){
+    public static void categoryMap(){
         for (Category category :categoryCodeList) {
             categoryKoreanMessageMap.put(category.getCode(),category.getKoreanMessage());
             categoryEnglishMessageMap.put(category.getCode(),category.getEnglishMessage());

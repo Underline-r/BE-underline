@@ -48,6 +48,7 @@ public class WebSecurityConfig{
                 .authorizeRequests()
                 .antMatchers("/sign-in").permitAll()
                 .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
+                .antMatchers(HttpMethod.GET,"/category-list").permitAll()
                 /* 유저 권한 나눌 경우 사용
                 .antMatchers("/temp").hasRole("ADMIN")
                  */

@@ -4,7 +4,6 @@ import com.project.underline.category.metadata.CategoryList;
 import com.project.underline.category.service.CategoryService;
 import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
-import com.project.underline.common.security.CustomUserDetailsService;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +27,7 @@ public class CategoryController {
     UserRepository userRepository;
 
     @PostMapping("/category")
+    @ResponseBody
     public ResponseEntity registerFavoriteCategory(
             @RequestBody List<String> category,
             @AuthenticationPrincipal UserDetails userDetails){
