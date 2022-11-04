@@ -9,6 +9,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     //로그인 시
     Optional<User> findByEmail(String email);
+
     //중복 가입 방지
     boolean existsByEmail(String email);
 

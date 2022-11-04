@@ -9,8 +9,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Getter
-@Table(name = "user")
+@Table(name = "users")
 public class User{
+    /* table 명 user -> users로 변경해둠 */
 
     @Id
     @GeneratedValue
