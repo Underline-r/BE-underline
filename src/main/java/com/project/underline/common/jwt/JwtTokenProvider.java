@@ -25,8 +25,8 @@ public class JwtTokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String BEARER_TYPE = "bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 30;                 //30분 설정
-    private static final long  REFRESH_TOKEN_EXPIRE_TIME = 1000 * 60 * 60 * 24 * 7;     //7일
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 20;                 //30분 설정
+    private static final long  REFRESH_TOKEN_EXPIRE_TIME = 1000 * 20;     //7일
 
     private final Key key;
 
@@ -40,7 +40,6 @@ public class JwtTokenProvider {
      * 유저 정보 이용 AccessToken, RefreshToken 생성 Method
      */
     public TokenDto generateToken(Authentication authentication) {
-        log.info("token Dto 시작");
 
         String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -59,8 +58,6 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
-
-        log.info("token Dto 끝");
 
         return TokenDto.builder()
                 .grantType(BEARER_TYPE)

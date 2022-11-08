@@ -1,6 +1,7 @@
 package com.project.underline.user.web;
 
 import com.project.underline.common.jwt.TokenDto;
+import com.project.underline.common.jwt.TokenRequestDto;
 import com.project.underline.common.metadata.ResponseMessage;
 import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
@@ -36,6 +37,14 @@ public class UserController {
         TokenDto tokenDto = userService.login(loginRequestDto);
         return new ResponseEntity(
                 DefaultResponse.res(StatusCode.OK, "로그인 되었습니다.", tokenDto), HttpStatus.OK
+        );
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        TokenDto tokenDto = userService.refresh(tokenRequestDto);
+        return new ResponseEntity(
+                DefaultResponse.res(StatusCode.OK, "토큰 갱신되었습니다.", tokenDto), HttpStatus.OK
         );
     }
 }

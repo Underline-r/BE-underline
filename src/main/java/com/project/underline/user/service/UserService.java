@@ -2,6 +2,9 @@ package com.project.underline.user.service;
 
 import com.project.underline.common.jwt.JwtTokenProvider;
 import com.project.underline.common.jwt.TokenDto;
+import com.project.underline.common.jwt.TokenRequestDto;
+import com.project.underline.common.jwt.refreshtoken.RefreshToken;
+import com.project.underline.common.jwt.refreshtoken.RefreshTokenRepository;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import com.project.underline.user.web.dto.LoginRequestDto;
@@ -25,6 +28,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * TODO: 커스텀 예외 만들 지 다시 생각해봅시다.
@@ -51,6 +55,36 @@ public class UserService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .userEmail(authentication.getName())
+                .refreshValue(tokenDto.getRefreshToken())
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+
+        return tokenDto;
+    }
+
+    public TokenDto refresh(TokenRequestDto tokenRequestDto) {
+        if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+        }
+
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+
+        RefreshToken refreshToken = refreshTokenRepository.findById(authentication.getName())
+                .orElseThrow(
+                        () -> new RuntimeException("로그아웃 한 사용자 입니다.")
+                );
+
+        if (!refreshToken.getRefreshValue().equals(tokenRequestDto.getRefreshToken())) {
+            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+        }
+
+        TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
+        refreshTokenRepository.save(newRefreshToken);
 
         return tokenDto;
     }
