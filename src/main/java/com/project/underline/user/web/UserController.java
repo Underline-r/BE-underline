@@ -40,6 +40,11 @@ public class UserController {
         );
     }
 
+    /**
+     * Access token이 만료되었을 경우 프론트에서 요청할 api
+     * Refresh token을 Service Layer에서 검증 후 유효하지 않다면 재 로그인 유도
+     * 유효하다면 바로 신규 토큰 발급
+     */
     @PostMapping("/refresh")
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         TokenDto tokenDto = userService.refresh(tokenRequestDto);

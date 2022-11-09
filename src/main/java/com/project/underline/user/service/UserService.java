@@ -1,5 +1,6 @@
 package com.project.underline.user.service;
 
+import com.project.underline.common.exception.customexception.InvalidTokenException;
 import com.project.underline.common.jwt.JwtTokenProvider;
 import com.project.underline.common.jwt.TokenDto;
 import com.project.underline.common.jwt.TokenRequestDto;
@@ -57,7 +58,7 @@ public class UserService {
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
 
         RefreshToken refreshToken = RefreshToken.builder()
-                .userEmail(authentication.getName())
+                .userId(authentication.getName())
                 .refreshValue(tokenDto.getRefreshToken())
                 .build();
 
@@ -67,21 +68,24 @@ public class UserService {
     }
 
     public TokenDto refresh(TokenRequestDto tokenRequestDto) {
+        // 1. Refresh token 검사
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token 이 유효하지 않습니다.");
+            throw new InvalidTokenException("유효하지 않은 Refresh Token 입니다. 로그인 하세요.");
         }
 
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
-
+        // 2. db에 토큰이 담겨있는지 검사
         RefreshToken refreshToken = refreshTokenRepository.findById(authentication.getName())
                 .orElseThrow(
-                        () -> new RuntimeException("로그아웃 한 사용자 입니다.")
+                        () -> new InvalidTokenException("토큰 정보가 없습니다. 로그인 하세요.")
                 );
 
+        // 3. 요청 토큰, db 토큰이 일치하는지 검사
         if (!refreshToken.getRefreshValue().equals(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+            throw new InvalidTokenException("토큰이 일치하지 않습니다. 로그인 하세요.");
         }
 
+        // 4. 1,2,3 검증 단계 이후 -> 신규 토큰 생성 후 리턴
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
         RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);

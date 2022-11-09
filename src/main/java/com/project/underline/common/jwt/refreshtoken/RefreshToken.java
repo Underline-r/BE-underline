@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Entity
 public class RefreshToken {
     @Id
-    private String userEmail;
+    private String userId;
 
     private String refreshValue;
 
@@ -22,8 +22,8 @@ public class RefreshToken {
     }
 
     @Builder
-    public RefreshToken(String userEmail, String refreshValue) {
-        this.userEmail = userEmail;
+    public RefreshToken(String userId, String refreshValue) {
+        this.userId = userId;
         this.refreshValue = refreshValue;
     }
 }
