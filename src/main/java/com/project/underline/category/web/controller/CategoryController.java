@@ -2,7 +2,7 @@ package com.project.underline.category.web.controller;
 
 import com.project.underline.category.metadata.CategoryList;
 import com.project.underline.category.service.CategoryService;
-import com.project.underline.category.web.dto.UserRegisterCategoryList;
+import com.project.underline.category.web.dto.UserCategoryListRequest;
 import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.user.entity.User;
@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 
 import static com.project.underline.common.metadata.ResponseMessage.SUCCESS;
@@ -30,7 +29,7 @@ public class CategoryController {
     @PostMapping("/category")
     @ResponseBody
     public ResponseEntity registerFavoriteCategory(
-                @RequestBody UserRegisterCategoryList category,
+                @RequestBody UserCategoryListRequest category,
             @AuthenticationPrincipal UserDetails userDetails){
 
         /* To-do. DB에 저장된 userId값이 필요한건데 name밖에 못가져옴 한방에 id값을 가져올 방법은? */
