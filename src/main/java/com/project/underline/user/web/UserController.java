@@ -1,6 +1,7 @@
 package com.project.underline.user.web;
 
 import com.project.underline.common.jwt.TokenDto;
+import com.project.underline.common.jwt.TokenRequestDto;
 import com.project.underline.common.metadata.ResponseMessage;
 import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
@@ -36,6 +37,19 @@ public class UserController {
         TokenDto tokenDto = userService.login(loginRequestDto);
         return new ResponseEntity(
                 DefaultResponse.res(StatusCode.OK, "로그인 되었습니다.", tokenDto), HttpStatus.OK
+        );
+    }
+
+    /**
+     * Access token이 만료되었을 경우 프론트에서 요청할 api
+     * Refresh token을 Service Layer에서 검증 후 유효하지 않다면 재 로그인 유도
+     * 유효하다면 바로 신규 토큰 발급
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        TokenDto tokenDto = userService.refresh(tokenRequestDto);
+        return new ResponseEntity(
+                DefaultResponse.res(StatusCode.OK, "토큰 갱신되었습니다.", tokenDto), HttpStatus.OK
         );
     }
 }

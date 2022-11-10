@@ -1,7 +1,11 @@
 package com.project.underline.user.service;
 
+import com.project.underline.common.exception.customexception.InvalidTokenException;
 import com.project.underline.common.jwt.JwtTokenProvider;
 import com.project.underline.common.jwt.TokenDto;
+import com.project.underline.common.jwt.TokenRequestDto;
+import com.project.underline.common.jwt.refreshtoken.RefreshToken;
+import com.project.underline.common.jwt.refreshtoken.RefreshTokenRepository;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import com.project.underline.user.web.dto.LoginRequestDto;
@@ -25,6 +29,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     /**
      * TODO: 커스텀 예외 만들 지 다시 생각해봅시다.
@@ -51,6 +56,39 @@ public class UserService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .userId(authentication.getName())
+                .refreshValue(tokenDto.getRefreshToken())
+                .build();
+
+        refreshTokenRepository.save(refreshToken);
+
+        return tokenDto;
+    }
+
+    public TokenDto refresh(TokenRequestDto tokenRequestDto) {
+        // 1. Refresh token 검사
+        if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
+            throw new InvalidTokenException("유효하지 않은 Refresh Token 입니다. 로그인 하세요.");
+        }
+
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+        // 2. db에 토큰이 담겨있는지 검사
+        RefreshToken refreshToken = refreshTokenRepository.findById(authentication.getName())
+                .orElseThrow(
+                        () -> new InvalidTokenException("토큰 정보가 없습니다. 로그인 하세요.")
+                );
+
+        // 3. 요청 토큰, db 토큰이 일치하는지 검사
+        if (!refreshToken.getRefreshValue().equals(tokenRequestDto.getRefreshToken())) {
+            throw new InvalidTokenException("토큰이 일치하지 않습니다. 로그인 하세요.");
+        }
+
+        // 4. 1,2,3 검증 단계 이후 -> 신규 토큰 생성 후 리턴
+        TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+        RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
+        refreshTokenRepository.save(newRefreshToken);
 
         return tokenDto;
     }
