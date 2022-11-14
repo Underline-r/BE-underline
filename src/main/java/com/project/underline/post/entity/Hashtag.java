@@ -1,16 +1,14 @@
 package com.project.underline.post.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@RequiredArgsConstructor
-@AllArgsConstructor
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
-@Table(name = "HashTag")
+@Table(name = "Hashtag")
 public class Hashtag {
 
     @Id
@@ -23,4 +21,10 @@ public class Hashtag {
 
     @Column(name="HASHTAG_NAME")
     private String hashtagName;
+
+    @Builder
+    public Hashtag(Long postId,String hashtagName){
+        this.postId = postId;
+        this.hashtagName = hashtagName;
+    }
 }

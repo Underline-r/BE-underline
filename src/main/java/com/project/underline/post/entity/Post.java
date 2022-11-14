@@ -1,13 +1,11 @@
 package com.project.underline.post.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-@RequiredArgsConstructor
-@AllArgsConstructor
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
 @Table(name = "Post")
@@ -26,13 +24,18 @@ public class Post {
 
     @Column(name="CONTENT_TYPE")
     @Enumerated(EnumType.STRING)
-    private String contentType;
-
-    @Column(name="HASHTAG_ID")
-    private Long hashTagId;
+    private ContentType contentType;
 
     @Column(name="CONTENT")
+    @Lob
     private String content;
 
-
+    @Builder
+    public Post(Long userId,String title,ContentType contentType,String content){
+        this.userId = userId;
+        this.title = title;
+        this.contentType = contentType;
+        this.content = content;
+    }
 }
+
