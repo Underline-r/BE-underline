@@ -55,12 +55,15 @@ public class PostController {
                 DefaultResponse.builder()
                         .statusCode(StatusCode.OK)
                         .message(SUCCESS)
+
                         .build()
                 , HttpStatus.OK);
     }
 
     @DeleteMapping("/post/{postId}")
     public ResponseEntity deletePost(@PathVariable Long postId){
+
+        postService.deletePost(postId);
 
         return new ResponseEntity(
                 DefaultResponse.builder()

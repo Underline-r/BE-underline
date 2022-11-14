@@ -71,4 +71,16 @@ public class PostService {
         }
     }
 
+    public void deletePost(Long postId) {
+        try{
+            Post deletePost = postRepository.findByPostId(postId);
+
+            SecurityUtil.checkSameUser(deletePost.getUserId());
+
+            postRepository.delete(deletePost);
+
+        }catch (RuntimeException e){
+            throw e;
+        }
+    }
 }
