@@ -39,8 +39,23 @@ public class Post extends BaseTimeEntity {
     public Post(Long userId,String title,ContentType contentType,String content){
         this.userId = userId;
         this.title = title;
-        this.contentType = contentType;
+        this.contentType = contentSize();
         this.content = content;
+    }
+
+    public Post update(String title,String content){
+        // TO-DO. 컨텐츠 타입을 365자를 기준으로하는데 수정시 컨텐츠 타입이 변하는 경우는 어떻게 처리? -> 컨텐츠 타입이 바뀌어도 되는건가요?
+        this.title = title;
+        this.content = content;
+        this.contentType = contentSize();
+        return this;
+    }
+
+    public ContentType contentSize(){
+        if(content.length() > 365){
+            return ContentType.LONG;
+        }
+        return ContentType.SHORT;
     }
 }
 

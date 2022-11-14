@@ -29,7 +29,7 @@ public class PostService {
             Post registerNewPost = Post.builder()
                     .userId(SecurityUtil.getCurrentUserId())
                     .title(postRequest.getTitle())
-                    .contentType(postRequest.contentSize())
+                    .content(postRequest.getContent())
                     .build();
 
             postRepository.save(registerNewPost);
@@ -49,5 +49,12 @@ public class PostService {
     public PostDetailResponse inquiryPost(Long postId) {
         Post findPost = postRepository.findByPostId(postId);
         return new PostDetailResponse(findPost);
+    }
+
+    @Transactional
+    public void patchPost(Long postId, PostRequest postRequest) {
+        Post updatePost = postRepository.findByPostId(postId);
+        updatePost.update(postRequest.getTitle(), postRequest.getContent());
+        postRepository.save(updatePost);
     }
 }
