@@ -47,7 +47,9 @@ public class PostController {
 
     @PatchMapping("/post/{postId}")
     @PutMapping("/post/{postId}")
-    public ResponseEntity patchPost(@RequestBody PostRequest postRequest, @PathVariable String postId){
+    public ResponseEntity patchPost(@PathVariable Long postId, @RequestBody PostRequest postRequest){
+
+        postService.patchPost(postId,postRequest);
 
         return new ResponseEntity(
                 DefaultResponse.builder()
