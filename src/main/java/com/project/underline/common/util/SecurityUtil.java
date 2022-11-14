@@ -17,4 +17,10 @@ public class SecurityUtil {
         }
         return parseLong(authentication.getName());
     }
+
+    public static boolean checkSameUser(Long userId){
+        Long currentUserId = getCurrentUserId();
+        if(userId.equals(currentUserId))return true;
+        return false;
+    }
 }
