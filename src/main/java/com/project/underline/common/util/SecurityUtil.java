@@ -1,5 +1,6 @@
 package com.project.underline.common.util;
 
+import com.project.underline.common.exception.customexception.InvalidTokenException;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,9 +19,10 @@ public class SecurityUtil {
         return parseLong(authentication.getName());
     }
 
-    public static boolean checkSameUser(Long userId){
+    public static void checkSameUser(Long userId){
         Long currentUserId = getCurrentUserId();
-        if(userId.equals(currentUserId))return true;
-        return false;
+        if(!userId.equals(currentUserId)) {
+            throw new InvalidTokenException();
+        }
     }
 }

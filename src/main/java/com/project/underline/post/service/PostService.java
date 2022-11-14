@@ -1,5 +1,6 @@
 package com.project.underline.post.service;
 
+import com.project.underline.common.exception.customexception.InvalidTokenException;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.Hashtag;
 import com.project.underline.post.entity.Post;
@@ -47,14 +48,27 @@ public class PostService {
     }
 
     public PostDetailResponse inquiryPost(Long postId) {
-        Post findPost = postRepository.findByPostId(postId);
-        return new PostDetailResponse(findPost);
+        try{
+            Post findPost = postRepository.findByPostId(postId);
+            return new PostDetailResponse(findPost);
+        }catch (RuntimeException e){
+            throw e;
+        }
     }
 
     @Transactional
     public void patchPost(Long postId, PostRequest postRequest) {
-        Post updatePost = postRepository.findByPostId(postId);
-        updatePost.update(postRequest.getTitle(), postRequest.getContent());
-        postRepository.save(updatePost);
+        try{
+            Post updatePost = postRepository.findByPostId(postId);
+
+            // TO-DO. 리소스를 수정하려는 유저와 기존 리소스의 주인인 유저가 같은지 검사해주는 로직을 공통으로 뺄수있을까요? -> 리팩토링 완.
+            SecurityUtil.checkSameUser(updatePost.getUserId());
+
+            updatePost.update(postRequest.getTitle(), postRequest.getContent());
+            postRepository.save(updatePost);
+        }catch (RuntimeException e){
+            throw e;
+        }
     }
+
 }
