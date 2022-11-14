@@ -4,6 +4,7 @@ package com.project.underline.post.web.controller;
 import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.post.service.PostService;
+import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,12 +32,15 @@ public class PostController {
     }
 
     @GetMapping("/post-detail/{postId}")
-    public ResponseEntity inquiryPost(@PathVariable String postId){
+    public ResponseEntity inquiryPost(@PathVariable Long postId){
+
+        PostDetailResponse postDetailResponse = postService.inquiryPost(postId);
 
         return new ResponseEntity(
                 DefaultResponse.builder()
                         .statusCode(StatusCode.OK)
                         .message(SUCCESS)
+                        .data(postDetailResponse)
                         .build()
                 , HttpStatus.OK);
     }
@@ -54,7 +58,7 @@ public class PostController {
     }
 
     @DeleteMapping("/post/{postId}")
-    public ResponseEntity deletePost(@PathVariable String postId){
+    public ResponseEntity deletePost(@PathVariable Long postId){
 
         return new ResponseEntity(
                 DefaultResponse.builder()
