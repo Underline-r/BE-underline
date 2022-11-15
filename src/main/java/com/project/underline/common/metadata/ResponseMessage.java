@@ -10,4 +10,6 @@ public class ResponseMessage {
     public static final String DELETE_USER = "회원 탈퇴 성공";
 
     public static final String SUCCESS = "success";
+    public static final String FORBIDDEN = "권한이 없습니다.";
+    public static final String UNAUTHORIZED = "인증되지 않았습니다.";
 }
