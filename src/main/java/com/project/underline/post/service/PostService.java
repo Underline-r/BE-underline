@@ -35,12 +35,15 @@ public class PostService {
 
             postRepository.save(registerNewPost);
 
-            List<Hashtag> hashtags = new ArrayList<Hashtag>();
-            for(String eachHashtag : postRequest.getHashtag()){
-                hashtags.add(new Hashtag(registerNewPost.getPostId(),eachHashtag));
+            if(postRequest.getHashtag().size() > 0){
+                List<Hashtag> hashtags = new ArrayList<Hashtag>();
+                for(String eachHashtag : postRequest.getHashtag()){
+                    hashtags.add(new Hashtag(registerNewPost.getPostId(),eachHashtag));
+                }
+
+                hashtagRepository.saveAll(hashtags);
             }
 
-            hashtagRepository.saveAll(hashtags);
 
         }catch (RuntimeException e){
             throw e;
