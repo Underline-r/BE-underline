@@ -32,15 +32,13 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date timestamp;
 
     @Builder
-    public Post(Long userId,String title,ContentType contentType,String content){
+    public Post(Long userId,String title,String content){
         this.userId = userId;
         this.title = title;
-        this.contentType = contentSize();
         this.content = content;
+        this.contentType = contentSize();
     }
 
     public Post update(String title,String content){
