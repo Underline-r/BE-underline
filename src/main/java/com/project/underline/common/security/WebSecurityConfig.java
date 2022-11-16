@@ -50,6 +50,7 @@ public class WebSecurityConfig{
                 .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
                 .antMatchers(HttpMethod.POST, "/refresh").permitAll()
                 .antMatchers(HttpMethod.GET,"/category-list").permitAll()
+                .antMatchers(HttpMethod.GET,"/post-detail/**").permitAll()
                 /* 유저 권한 나눌 경우 사용
                 .antMatchers("/temp").hasRole("ADMIN")
                  */

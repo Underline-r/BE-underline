@@ -1,7 +1,6 @@
 package com.project.underline.post.web.controller;
 
 
-import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.post.service.PostService;
 import com.project.underline.post.web.dto.PostDetailResponse;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.project.underline.common.metadata.ResponseMessage.SUCCESS;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +25,7 @@ public class PostController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(OK.value())
                         .message(SUCCESS)
                         .build()
                 , HttpStatus.OK);
@@ -38,7 +38,7 @@ public class PostController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(OK.value())
                         .message(SUCCESS)
                         .data(postDetailResponse)
                         .build()
@@ -53,7 +53,7 @@ public class PostController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(OK.value())
                         .message(SUCCESS)
 
                         .build()
@@ -67,7 +67,7 @@ public class PostController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(OK.value())
                         .message(SUCCESS)
                         .build()
                 , HttpStatus.OK);
