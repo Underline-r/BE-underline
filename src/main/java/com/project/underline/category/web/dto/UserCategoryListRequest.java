@@ -5,6 +5,6 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class UserRegisterCategoryList {
+public class UserCategoryListRequest {
     private List<String> category;
 }
