@@ -1,6 +1,5 @@
 package com.project.underline.post.service;
 
-import com.project.underline.common.exception.customexception.InvalidTokenException;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.Hashtag;
 import com.project.underline.post.entity.Post;

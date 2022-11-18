@@ -1,6 +1,5 @@
 package com.project.underline.post.web.controller;
 
-
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.post.service.PostService;
 import com.project.underline.post.web.dto.PostDetailResponse;
