@@ -3,7 +3,6 @@ package com.project.underline.category.web.controller;
 import com.project.underline.category.metadata.CategoryList;
 import com.project.underline.category.service.CategoryService;
 import com.project.underline.category.web.dto.UserRegisterCategoryList;
-import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.entity.repository.UserRepository;
@@ -35,7 +34,7 @@ public class CategoryController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(HttpStatus.OK.value())
                         .message(SUCCESS)
                         .build()
                 , HttpStatus.OK
@@ -48,7 +47,7 @@ public class CategoryController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(HttpStatus.OK.value())
                         .message(SUCCESS)
                         .data(categoryList)
                         .build()
