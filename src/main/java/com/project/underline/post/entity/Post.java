@@ -1,10 +1,12 @@
 package com.project.underline.post.entity;
 
 import com.project.underline.common.util.BaseTimeEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.project.underline.category.metadata.CategoryList.categoryCodeList;
+
 @RequiredArgsConstructor
 @Service
 public class CategoryService {
@@ -19,10 +21,21 @@ public class CategoryService {
 
         /* To-do. 클라이언트에서 온 category가 Enum list에 있는 값이 아닐수도 있으니까 검증로직 추후 추가 */
         for (String eachCategory : category) {
+            checkCategoryConsistency(eachCategory);
             userLikedCategoryList.add(new UserCategoryRelation(userId,eachCategory));
         }
 
         userCategoryRelationRepository.saveAll(userLikedCategoryList);
+    }
+
+    private void checkCategoryConsistency(String category){
+        for(String str : categoryCodeList) {
+            if(str.equals(category)) {
+                return;
+            }
+        }
+        throw new IllegalArgumentException();
+
     }
 
 }
