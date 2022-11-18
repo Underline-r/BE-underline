@@ -35,7 +35,7 @@ public class CategoryController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(HttpStatus.OK.value())
                         .message(SUCCESS)
                         .build()
                 , HttpStatus.OK
@@ -48,7 +48,7 @@ public class CategoryController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(HttpStatus.OK.value())
                         .message(SUCCESS)
                         .data(categoryList)
                         .build()
