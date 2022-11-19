@@ -31,6 +31,7 @@ public class PostService {
                     .userId(SecurityUtil.getCurrentUserId())
                     .title(postRequest.getTitle())
                     .content(postRequest.getContent())
+                    .categoryCode(postRequest.getCategoryCode())
                     .build();
 
             postRepository.save(registerNewPost);
@@ -67,7 +68,7 @@ public class PostService {
             // TO-DO. 리소스를 수정하려는 유저와 기존 리소스의 주인인 유저가 같은지 검사해주는 로직을 공통으로 뺄수있을까요? -> 리팩토링 완.
             SecurityUtil.checkSameUser(updatePost.getUserId());
 
-            updatePost.update(postRequest.getTitle(), postRequest.getContent());
+            updatePost.update(postRequest.getTitle(), postRequest.getContent(),postRequest.getCategoryCode());
             postRepository.save(updatePost);
         }catch (RuntimeException e){
             throw e;
