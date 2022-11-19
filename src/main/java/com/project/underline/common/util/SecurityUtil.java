@@ -4,6 +4,7 @@ import com.project.underline.common.exception.customexception.InvalidTokenExcept
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import static java.lang.Long.parseLong;
 
 /**
@@ -11,6 +12,7 @@ import static java.lang.Long.parseLong;
  */
 @NoArgsConstructor
 public class SecurityUtil {
+
     public static Long getCurrentUserId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
@@ -25,4 +27,5 @@ public class SecurityUtil {
             throw new InvalidTokenException();
         }
     }
+
 }

@@ -13,4 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //중복 가입 방지
     boolean existsByEmail(String email);
 
+    User findByNickname(String userNickname);
 }
