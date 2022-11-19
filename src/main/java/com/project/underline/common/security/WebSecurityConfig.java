@@ -1,6 +1,8 @@
 package com.project.underline.common.security;
 
 
+import com.project.underline.common.exception.JwtAccessDeniedHandler;
+import com.project.underline.common.exception.JwtAuthenticationEntryPoint;
 import com.project.underline.common.jwt.JwtFilter;
 import com.project.underline.common.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig{
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     /**
      * Security Config 구현 시 WebSecurityConfigurerAdapter 가 deprecated 됨에 따라(Spring Security 5.4)
@@ -35,18 +39,20 @@ public class WebSecurityConfig{
                 .csrf().disable();
         http.headers().frameOptions().disable();
         http
-                /*핸들러 config 자리
+                // 구현한 401 403 handler 등록
                 .exceptionHandling()
-                .and()
-                */
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+
                 //jwt 토큰 인증이므로 세션은 사용하지 않겠다. stateless 로 설정
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 // request 권한 설정
                 .and()
                 .authorizeRequests()
-                .antMatchers("/sign-in").permitAll()
+                .antMatchers(HttpMethod.POST, "/sign-in").permitAll()
                 .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
                 .antMatchers(HttpMethod.POST, "/refresh").permitAll()
                 .antMatchers(HttpMethod.GET,"/category-list").permitAll()

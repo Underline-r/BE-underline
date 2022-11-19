@@ -3,7 +3,6 @@ package com.project.underline.user.web;
 import com.project.underline.common.jwt.TokenDto;
 import com.project.underline.common.jwt.TokenRequestDto;
 import com.project.underline.common.metadata.ResponseMessage;
-import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.user.service.UserService;
 import com.project.underline.user.web.dto.LoginRequestDto;
@@ -28,7 +27,7 @@ public class UserController {
     public ResponseEntity<Long> createUser(@RequestBody SignupRequestDto signupRequestDto) {
         Long createdUser = userService.createUser(signupRequestDto);
         return new ResponseEntity(
-                DefaultResponse.res(StatusCode.OK, ResponseMessage.CREATED_USER, createdUser), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(), ResponseMessage.CREATED_USER, createdUser), HttpStatus.OK
         );
     }
 
@@ -36,7 +35,7 @@ public class UserController {
     public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto){
         TokenDto tokenDto = userService.login(loginRequestDto);
         return new ResponseEntity(
-                DefaultResponse.res(StatusCode.OK, "로그인 되었습니다.", tokenDto), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(), "로그인 되었습니다.", tokenDto), HttpStatus.OK
         );
     }
 
@@ -49,7 +48,7 @@ public class UserController {
     public ResponseEntity<TokenDto> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
         TokenDto tokenDto = userService.refresh(tokenRequestDto);
         return new ResponseEntity(
-                DefaultResponse.res(StatusCode.OK, "토큰 갱신되었습니다.", tokenDto), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(), "토큰 갱신되었습니다.", tokenDto), HttpStatus.OK
         );
     }
 }

@@ -3,10 +3,8 @@ package com.project.underline.category.web.controller;
 import com.project.underline.category.metadata.CategoryList;
 import com.project.underline.category.service.CategoryService;
 import com.project.underline.category.web.dto.UserCategoryListRequest;
-import com.project.underline.common.metadata.StatusCode;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.common.util.SecurityUtil;
-import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +19,6 @@ import static com.project.underline.common.metadata.ResponseMessage.SUCCESS;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final UserRepository userRepository;
 
     @PostMapping("/category")
     @ResponseBody
@@ -35,7 +32,7 @@ public class CategoryController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(HttpStatus.OK.value())
                         .message(SUCCESS)
                         .build()
                 , HttpStatus.OK
@@ -48,7 +45,7 @@ public class CategoryController {
 
         return new ResponseEntity(
                 DefaultResponse.builder()
-                        .statusCode(StatusCode.OK)
+                        .statusCode(HttpStatus.OK.value())
                         .message(SUCCESS)
                         .data(categoryList)
                         .build()

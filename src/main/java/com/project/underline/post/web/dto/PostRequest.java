@@ -1,9 +1,6 @@
 package com.project.underline.post.web.dto;
 
-
-import com.project.underline.post.entity.ContentType;
 import lombok.Getter;
-
 import java.util.List;
 
 @Getter
