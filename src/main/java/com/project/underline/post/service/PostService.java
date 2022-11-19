@@ -9,8 +9,7 @@ import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +49,7 @@ public class PostService {
         }
     }
 
+    @Transactional(readOnly = true)
     public PostDetailResponse inquiryPost(Long postId) {
         try{
             Post findPost = postRepository.findByPostId(postId);
@@ -74,6 +74,7 @@ public class PostService {
         }
     }
 
+    @Transactional
     public void deletePost(Long postId) {
         try{
             Post deletePost = postRepository.findByPostId(postId);
