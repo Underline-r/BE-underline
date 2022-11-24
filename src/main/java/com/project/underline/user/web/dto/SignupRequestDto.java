@@ -2,10 +2,12 @@ package com.project.underline.user.web.dto;
 
 
 import com.project.underline.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
+@AllArgsConstructor
 public class SignupRequestDto {
 
     private String email;

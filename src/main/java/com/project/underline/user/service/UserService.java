@@ -93,4 +93,28 @@ public class UserService {
         return tokenDto;
     }
 
+    /**
+     * 팔로우 추가
+     * @param followingName : source
+     * @param followerName : target
+     */
+    public void addFollow(String followingName, String followerName) throws Exception {
+        User followingUser = userRepository.findByNickname(followingName)
+                .orElseThrow(() -> new Exception("없는 유저"));
+        User followerUser = userRepository.findByNickname(followerName)
+                .orElseThrow(() -> new Exception("없는 유저"));
+
+        followingUser.addFollowing(followerUser);
+    }
+
+    public void unFollow(String followingName, String followerName) throws Exception {
+        User followingUser = userRepository.findByNickname(followingName)
+                .orElseThrow(() -> new Exception("없는 유저"));
+
+        User followerUser = userRepository.findByNickname(followerName)
+                .orElseThrow(() -> new Exception("없는 유저"));
+
+        followingUser.unFollowing(followerUser);
+    }
+
 }
