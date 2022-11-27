@@ -18,11 +18,9 @@ public class Pick {
     @Column(name="PICK_ID")
     private Long pickId;
 
-    @Id
     @Column(name="POST_ID")
     private Long postId;
 
-    @Id
     @Column(name="USER_ID")
     private Long userId;
 
