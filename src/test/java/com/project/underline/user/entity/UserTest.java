@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -18,7 +19,7 @@ class UserTest {
     UserService userService;
 
     @Test
-//    @Rollback(value = false)
+    @Rollback(value = false)
     public void 유저_팔로우_테스트() throws Exception {
         //given
         SignupRequestDto signupRequestDto1 = new SignupRequestDto("email1", "nick", "123");
@@ -37,6 +38,8 @@ class UserTest {
         User checkFollower = userRepository.findByNickname("nick").orElseThrow(() -> new Exception("유저 존재하지 않음"));
         User checkFollowing1 = userRepository.findByNickname("followerNick1").orElseThrow(() -> new Exception("유저 존재하지 않음"));
         User checkFollowing2 = userRepository.findByNickname("followerNick2").orElseThrow(() -> new Exception("유저 존재하지 않음"));
+
+        System.out.println("checkFollower.getFollowerList().toString() = " + checkFollower.getFollowerList().toString());
 
         for (User user : checkFollower.getFollowerList()) {
             System.out.println("test1 = " + user.getNickname());

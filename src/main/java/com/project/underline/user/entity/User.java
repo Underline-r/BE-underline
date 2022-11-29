@@ -38,17 +38,17 @@ public class User extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn
-    private final User userFollowing = this;
+    private User userFollowing = this;
 
     @ManyToOne
     @JoinColumn
-    private final User userFollower = this;
+    private User userFollower = this;
 
     @OneToMany(mappedBy = "userFollowing")
-    private final List<User> followingList = new ArrayList<>();
+    private List<User> followingList = new ArrayList<>();
 
     @OneToMany(mappedBy = "userFollower")
-    private final List<User> followerList = new ArrayList<>();
+    private List<User> followerList = new ArrayList<>();
 
     public void addFollowing(User following) {
         this.followingList.add(following);
