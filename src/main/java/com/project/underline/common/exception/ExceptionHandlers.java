@@ -1,6 +1,6 @@
 package com.project.underline.common.exception;
 
-import com.project.underline.common.exception.customexception.InvalidTokenException;
+import com.project.underline.common.metadata.ErrorCode;
 import com.project.underline.common.payload.DefaultResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,15 +14,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionHandlers {
 
     @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<DefaultResponse> commonException(NullPointerException e) {
+    public ResponseEntity<DefaultResponse> nullPointerException(NullPointerException e) {
         return new ResponseEntity<DefaultResponse>(
                 DefaultResponse.errRes(HttpStatus.BAD_REQUEST.value(), e.getClass(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<DefaultResponse> invalidTokenException(InvalidTokenException e) {
+    @ExceptionHandler(UnderlineException.class)
+    public ResponseEntity<DefaultResponse> underlineException(UnderlineException e) {
+        ErrorCode errorCode = e.getErrorCode();
         return new ResponseEntity<DefaultResponse>(
-                DefaultResponse.errRes(HttpStatus.BAD_REQUEST.value(), e.getClass(), e.getMessage()), HttpStatus.BAD_REQUEST);
+                DefaultResponse.errRes(errorCode.getHttpStatus().value(),
+                        e.getClass(), errorCode.getMessage()), errorCode.getHttpStatus());
     }
 
 
