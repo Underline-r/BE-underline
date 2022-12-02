@@ -11,4 +11,10 @@ public interface FollowRelationRepository extends JpaRepository<UserFollowRelati
     @Modifying
     @Query("delete from UserFollowRelation where toUserId = :toUserId and fromUser.id = :fromUserId")
     void deleteByToUserIdAndFromUserId(@Param("toUserId") Long toUserId, @Param("fromUserId") Long fromUserId);
+
+    int countByToUserId(Long toUserId);
+
+    int countByFromUserId(Long fromUserId);
+
+    boolean existsByToUserIdAndFromUserId(Long toUserId, Long fromUserId);
 }
