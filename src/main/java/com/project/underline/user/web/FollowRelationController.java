@@ -23,10 +23,8 @@ public class FollowRelationController {
         followRelationService.follow(toUserId, SecurityUtil.getCurrentUserId());
 
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), ResponseMessage.FOLLOW, "팔로우 성공"), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(), ResponseMessage.FOLLOW), HttpStatus.OK
         );
-
-
     }
 
     @DeleteMapping("/unfollow/{toUserId}")
@@ -34,7 +32,7 @@ public class FollowRelationController {
         followRelationService.unfollow(toUserId, SecurityUtil.getCurrentUserId());
 
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), ResponseMessage.UNFOLLOW, "언팔로우 성공"), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(), ResponseMessage.UNFOLLOW), HttpStatus.OK
         );
     }
 }

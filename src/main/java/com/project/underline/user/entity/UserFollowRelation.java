@@ -10,9 +10,15 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        name="follow_relation_uk",
+                        columnNames = {"toUserId", "from_user_id"}
+                )
+        }
+)
 public class UserFollowRelation extends BaseTimeEntity {
-    // TODO : 유니크 제약조건 DDL 추가 : (to_user_id, from_user_id)
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,4 +28,9 @@ public class UserFollowRelation extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user_id")
     private User fromUser;
+
+    public UserFollowRelation(Long toUserId, User fromUser) {
+        this.toUserId = toUserId;
+        this.fromUser = fromUser;
+    }
 }
