@@ -3,6 +3,7 @@ package com.project.underline.notification.service;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.notification.entity.Notification;
 import com.project.underline.notification.entity.repository.NotificationRepository;
+import com.project.underline.notification.web.dto.NotificationCheckRequest;
 import com.project.underline.notification.web.dto.NotificationResponse;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +32,13 @@ public class NotificationService {
         }
 
         return notifications;
+    }
+
+    public void checkNotification(NotificationCheckRequest notificationCheckRequest) {
+
+        Notification updateTarget = notificationRepository.findByNotificationId(notificationCheckRequest.getNotificationId());
+        updateTarget.checkNotification();
+
+        notificationRepository.save(updateTarget);
     }
 }

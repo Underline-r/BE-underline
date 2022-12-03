@@ -43,6 +43,11 @@ public class Notification {
         this.guestId = guestId;
         this.postId = postId;
         this.notificationType = notificationType;
-        this.searchYn = searchYn;
+        this.searchYn = SearchYn.N; // 생성시 Default = N(안읽었음)
+    }
+
+    public Notification checkNotification(){
+        this.searchYn = SearchYn.Y;
+        return this;
     }
 }
