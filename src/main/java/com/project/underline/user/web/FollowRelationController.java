@@ -4,7 +4,7 @@ import com.project.underline.common.metadata.ResponseMessage;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.service.FollowRelationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class FollowRelationController {
 
-    @Autowired
-    FollowRelationService followRelationService;
+    private final FollowRelationService followRelationService;
 
     @PostMapping("/follow/{toUserId}")
     public ResponseEntity<String> follow(@PathVariable Long toUserId){

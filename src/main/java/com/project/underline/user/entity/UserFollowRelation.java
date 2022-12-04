@@ -14,7 +14,7 @@ import javax.persistence.*;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name="follow_relation_uk",
-                        columnNames = {"toUserId", "from_user_id"}
+                        columnNames = {"to_user_Id", "from_user_id"}
                 )
         }
 )
@@ -23,14 +23,16 @@ public class UserFollowRelation extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long toUserId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "to_user_id")
+    private User toUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user_id")
     private User fromUser;
 
-    public UserFollowRelation(Long toUserId, User fromUser) {
-        this.toUserId = toUserId;
+    public UserFollowRelation(User toUser, User fromUser) {
+        this.toUser = toUser;
         this.fromUser = fromUser;
     }
 }

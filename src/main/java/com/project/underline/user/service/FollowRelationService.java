@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+
 @Service
 @RequiredArgsConstructor
 public class FollowRelationService {
@@ -19,8 +21,8 @@ public class FollowRelationService {
 
     @Transactional
     public void follow(Long toUserId, Long fromUserId) {
-        User fromUser = checkUserExist(toUserId, fromUserId);
-        UserFollowRelation userFollowRelation = new UserFollowRelation(toUserId, fromUser);
+        ArrayList<User> users = checkUserExist(toUserId, fromUserId);
+        UserFollowRelation userFollowRelation = new UserFollowRelation(users.get(0), users.get(1));
         followRelationRepository.save(userFollowRelation);
 
     }
@@ -32,15 +34,19 @@ public class FollowRelationService {
     }
 
     /**
-     * UserFollowRelation 생성자 param 사용 위해 fromUser return
+     * UserFollowRelation 생성자 param 사용 위해 toUser, fromUser return
      */
-    private User checkUserExist(Long toUserId, Long fromUserId) {
+    private ArrayList<User> checkUserExist(Long toUserId, Long fromUserId) {
         User toUser = userRepository.findById(toUserId).orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER));
         User fromUser = userRepository.findById(fromUserId).orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER));
 
         if (toUser.equals(fromUser)) {
             throw new UnderlineException(ErrorCode.CANNOT_FOLLOW_MYSELF);
         }
-        return fromUser;
+
+        ArrayList<User> users = new ArrayList<>();
+        users.add(toUser);
+        users.add(fromUser);
+        return users;
     }
 }
