@@ -7,18 +7,24 @@ import com.project.underline.post.entity.repository.HashtagRepository;
 import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
+import com.project.underline.post.web.dto.UserCreatedPostListResponse;
+import com.project.underline.user.entity.User;
+import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final HashtagRepository hashtagRepository;
+
+    private final UserRepository userRepository;
 
     @Transactional
     public void registerPost(PostRequest postRequest) {
@@ -30,6 +36,7 @@ public class PostService {
                     .userId(SecurityUtil.getCurrentUserId())
                     .title(postRequest.getTitle())
                     .content(postRequest.getContent())
+                    .categoryCode(postRequest.getCategoryCode())
                     .build();
 
             postRepository.save(registerNewPost);
@@ -49,6 +56,7 @@ public class PostService {
         }
     }
 
+    @Transactional(readOnly = true)
     public PostDetailResponse inquiryPost(Long postId) {
         try{
             Post findPost = postRepository.findByPostId(postId);
@@ -66,13 +74,14 @@ public class PostService {
             // TO-DO. 리소스를 수정하려는 유저와 기존 리소스의 주인인 유저가 같은지 검사해주는 로직을 공통으로 뺄수있을까요? -> 리팩토링 완.
             SecurityUtil.checkSameUser(updatePost.getUserId());
 
-            updatePost.update(postRequest.getTitle(), postRequest.getContent());
+            updatePost.update(postRequest.getTitle(), postRequest.getContent(),postRequest.getCategoryCode());
             postRepository.save(updatePost);
         }catch (RuntimeException e){
             throw e;
         }
     }
 
+    @Transactional
     public void deletePost(Long postId) {
         try{
             Post deletePost = postRepository.findByPostId(postId);
@@ -84,5 +93,17 @@ public class PostService {
         }catch (RuntimeException e){
             throw e;
         }
+    }
+
+    public UserCreatedPostListResponse inquiryUserCreatedPost(String userNickname) {
+        List<Post> userCreatedPost = postRepository.findAllByUserId(returnUserId(userNickname));
+        UserCreatedPostListResponse userCreatedPostList = new UserCreatedPostListResponse(userCreatedPost);
+
+        return userCreatedPostList;
+    }
+
+    private Long returnUserId(String userNickname){
+        Optional<User> findUser = Optional.ofNullable(userRepository.findByNickname(userNickname));
+        return findUser.get().getId();
     }
 }

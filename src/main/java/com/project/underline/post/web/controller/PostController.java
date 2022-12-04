@@ -4,6 +4,7 @@ import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.post.service.PostService;
 import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
+import com.project.underline.post.web.dto.UserCreatedPostListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,4 +72,19 @@ public class PostController {
                         .build()
                 , HttpStatus.OK);
     }
+
+    @GetMapping("/post")
+    public ResponseEntity inquiryUserCreatedPost(@RequestParam("userNickname") String userNickname){
+        UserCreatedPostListResponse userCreatedPostList = postService.inquiryUserCreatedPost(userNickname);
+
+        return new ResponseEntity(
+                DefaultResponse.builder()
+                        .statusCode(OK.value())
+                        .message(SUCCESS)
+                        .data(userCreatedPostList)
+                        .build()
+                , HttpStatus.OK);
+    }
+
+
 }

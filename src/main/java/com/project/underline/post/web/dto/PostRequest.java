@@ -10,5 +10,6 @@ public class PostRequest {
     private String content;
     private String contentType;
     private List<String> hashtag;
+    private String categoryCode;
 
 }

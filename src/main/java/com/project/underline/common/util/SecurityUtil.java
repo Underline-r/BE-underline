@@ -5,6 +5,7 @@ import com.project.underline.common.metadata.ErrorCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import static java.lang.Long.parseLong;
 
 /**
@@ -12,6 +13,7 @@ import static java.lang.Long.parseLong;
  */
 @NoArgsConstructor
 public class SecurityUtil {
+
     public static Long getCurrentUserId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
@@ -26,4 +28,5 @@ public class SecurityUtil {
             throw new UnderlineException(ErrorCode.INVALID_TOKEN);
         }
     }
+
 }
