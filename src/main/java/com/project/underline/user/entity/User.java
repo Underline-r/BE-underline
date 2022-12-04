@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
@@ -22,6 +24,12 @@ public class User{
     private String password;
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    @OneToMany(mappedBy = "fromUser")
+    private List<UserFollowRelation> fromUserFollowRelations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUser")
+    private List<UserFollowRelation> toUserFollowRelations = new ArrayList<>();
 
     @Builder
     public User(Long id, String email, String nickname, String password) {
