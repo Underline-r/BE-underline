@@ -4,6 +4,7 @@ import com.project.underline.common.exception.UnderlineException;
 import com.project.underline.common.metadata.ErrorCode;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.entity.User;
+import com.project.underline.user.entity.repository.UserQueryRepository;
 import com.project.underline.user.entity.repository.UserRepository;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.UserProfileDto;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserProfileService {
 
     private final UserRepository userRepository;
+    private final UserQueryRepository queryRepository;
 
     @Transactional
     public UserProfileDto getUserProfile(Long profileUserId) {
@@ -29,7 +31,7 @@ public class UserProfileService {
         profileSearchCondition.setProfileUserId(profileUserId);
         profileSearchCondition.setLoginUserId(SecurityUtil.getCurrentUserId());
 
-        UserProfileDto profileDto = userRepository
+        UserProfileDto profileDto = queryRepository
                 .getUserProfile(profileSearchCondition);
 
         return profileDto;
