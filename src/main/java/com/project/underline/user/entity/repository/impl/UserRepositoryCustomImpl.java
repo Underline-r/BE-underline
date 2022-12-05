@@ -2,10 +2,7 @@ package com.project.underline.user.entity.repository.impl;
 
 import com.project.underline.user.entity.repository.UserRepositoryCustom;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
-import com.project.underline.user.web.dto.QUserDto;
-import com.project.underline.user.web.dto.QUserProfileDto;
-import com.project.underline.user.web.dto.UserDto;
-import com.project.underline.user.web.dto.UserProfileDto;
+import com.project.underline.user.web.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -30,6 +27,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .select(new QUserProfileDto(
                                 user.email,
                                 user.nickname,
+                                user.description,
                                 queryFactory
                                         .selectFrom(userFollowRelation)
                                         .where(toUserIdEq(condition.getProfileUserId())
@@ -46,10 +44,10 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<UserDto> getFollowingList(Long id) {
+    public List<FollowUserInfoDto> getFollowingList(Long id) {
         return queryFactory
                 .select(
-                        new QUserDto(
+                        new QFollowUserInfoDto(
                                 userFollowRelation.toUser.email,
                                 userFollowRelation.toUser.nickname)
                         )
@@ -59,10 +57,10 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<UserDto> getFollowerList(Long id) {
+    public List<FollowUserInfoDto> getFollowerList(Long id) {
         return queryFactory
                 .select(
-                        new QUserDto(
+                        new QFollowUserInfoDto(
                                 userFollowRelation.fromUser.email,
                                 userFollowRelation.fromUser.nickname)
                 )

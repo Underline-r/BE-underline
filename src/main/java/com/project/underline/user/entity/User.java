@@ -22,6 +22,8 @@ public class User{
     private String email;
     private String nickname;
     private String password;
+    private String description;
+
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
@@ -38,5 +40,10 @@ public class User{
         this.nickname = nickname;
         this.password = password;
         this.authority = Authority.USER;
+    }
+
+    public void changeProfile(String nickname, String description) {
+        this.nickname = nickname;
+        this.description = description;
     }
 }

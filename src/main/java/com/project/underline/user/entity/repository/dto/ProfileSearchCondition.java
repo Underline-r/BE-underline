@@ -6,4 +6,9 @@ import lombok.Data;
 public class ProfileSearchCondition {
     private Long profileUserId;
     private Long loginUserId;
+
+    public ProfileSearchCondition(Long profileUserId, Long currentUserId) {
+        this.profileUserId = profileUserId;
+        this.loginUserId = currentUserId;
+    }
 }
