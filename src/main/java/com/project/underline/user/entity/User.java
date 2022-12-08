@@ -1,5 +1,6 @@
 package com.project.underline.user.entity;
 
+import com.project.underline.category.entity.UserCategoryRelation;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +12,13 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Getter
-@Table(name = "users")
+@Table(name = "USERS")
 public class User{
     /* table 명 user -> users로 변경해둠 */
 
     @Id
     @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "USER_ID")
     private Long id;
     private String email;
     private String nickname;
@@ -32,6 +33,9 @@ public class User{
 
     @OneToMany(mappedBy = "toUser")
     private List<UserFollowRelation> toUserFollowRelations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<UserCategoryRelation> userCategoryRelations = new ArrayList<>();
 
     @Builder
     public User(Long id, String email, String nickname, String password) {

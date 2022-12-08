@@ -11,12 +11,12 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name="follow_relation_uk",
-                        columnNames = {"to_user_Id", "from_user_id"}
-                )
-        }
+    uniqueConstraints = {
+        @UniqueConstraint(
+                name="FOLLOW_RELATION_UK",
+                columnNames = {"TO_USER_ID", "FROM_USER_ID"}
+        )
+    }
 )
 public class UserFollowRelation extends BaseTimeEntity {
     @Id
@@ -24,11 +24,11 @@ public class UserFollowRelation extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "to_user_id")
+    @JoinColumn(name = "TO_USER_ID")
     private User toUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_user_id")
+    @JoinColumn(name = "FROM_USER_ID")
     private User fromUser;
 
     public UserFollowRelation(User toUser, User fromUser) {

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
-@Table(name = "Notification")
+@Table(name = "NOTIFICATION")
 public class Notification {
     @Id
     @GeneratedValue
