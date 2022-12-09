@@ -1,5 +1,7 @@
 package com.project.underline.post.service;
 
+import com.project.underline.common.exception.UnderlineException;
+import com.project.underline.common.metadata.ErrorCode;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.Hashtag;
 import com.project.underline.post.entity.Post;
@@ -33,7 +35,8 @@ public class PostService {
             // TO-DO. post 등록 -> hashtag 등록을 한개의 메소드(그리고 트랜잭션)내에서 해결했는데
 
             Post registerNewPost = Post.builder()
-                    .userId(SecurityUtil.getCurrentUserId())
+                    .user(userRepository.findById(SecurityUtil.getCurrentUserId())
+                            .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)))
                     .title(postRequest.getTitle())
                     .content(postRequest.getContent())
                     .categoryCode(postRequest.getCategoryCode())
@@ -72,7 +75,7 @@ public class PostService {
             Post updatePost = postRepository.findByPostId(postId);
 
             // TO-DO. 리소스를 수정하려는 유저와 기존 리소스의 주인인 유저가 같은지 검사해주는 로직을 공통으로 뺄수있을까요? -> 리팩토링 완.
-            SecurityUtil.checkSameUser(updatePost.getUserId());
+            SecurityUtil.checkSameUser(updatePost.getUser().getId());
 
             updatePost.update(postRequest.getTitle(), postRequest.getContent(),postRequest.getCategoryCode());
             postRepository.save(updatePost);
@@ -86,7 +89,7 @@ public class PostService {
         try{
             Post deletePost = postRepository.findByPostId(postId);
 
-            SecurityUtil.checkSameUser(deletePost.getUserId());
+            SecurityUtil.checkSameUser(deletePost.getUser().getId());
 
             postRepository.delete(deletePost);
 
