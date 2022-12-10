@@ -47,7 +47,7 @@ public class PostService {
             if(postRequest.getHashtag().size() > 0){
                 List<Hashtag> hashtags = new ArrayList<Hashtag>();
                 for(String eachHashtag : postRequest.getHashtag()){
-                    hashtags.add(new Hashtag(registerNewPost.getPostId(),eachHashtag));
+                    hashtags.add(new Hashtag(registerNewPost,eachHashtag));
                 }
 
                 hashtagRepository.saveAll(hashtags);

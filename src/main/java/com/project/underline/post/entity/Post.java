@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -39,8 +41,8 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @OneToMany(mappedBy = "Hashtag")
-//    List<Hashtag> hashtags = new ArrayList<Hashtag>();
+    @OneToMany(mappedBy = "post")
+    private List<Hashtag> hashtags = new ArrayList<Hashtag>();
 
 
     @Builder
