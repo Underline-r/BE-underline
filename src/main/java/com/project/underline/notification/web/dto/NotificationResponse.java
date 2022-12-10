@@ -15,11 +15,11 @@ public class NotificationResponse {
     private SearchYn searchYn;
 
     @Builder
-    public NotificationResponse(Notification notification, String guestNickname){
-        this.notificationId = notification.getNotificationId();
-        this.guestNickname = guestNickname;
-        this.postId = notification.getPostId();
-        this.notificationType = notification.getNotificationType();
-        this.searchYn = notification.getSearchYn();
+    public NotificationResponse(Notification notifications){
+        this.notificationId = notifications.getNotificationId();
+        this.guestNickname = notifications.getGuest().getNickname();
+        this.postId = notifications.getPost().getPostId();
+        this.notificationType = notifications.getNotificationType();
+        this.searchYn = notifications.getSearchYn();
     }
 }
