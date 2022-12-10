@@ -38,7 +38,7 @@ public class Post extends BaseTimeEntity {
     private String categoryCode;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @OneToMany(mappedBy = "post")

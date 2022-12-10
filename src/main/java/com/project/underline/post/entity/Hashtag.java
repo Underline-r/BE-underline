@@ -20,7 +20,7 @@ public class Hashtag {
     private String hashtagName;
 
     @ManyToOne
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "POST_ID")
     private Post post;
 
     @Builder
