@@ -11,7 +11,14 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Getter
-@Table(name = "UserCategoryRelation")
+@Table(
+    uniqueConstraints = {
+        @UniqueConstraint(
+                name="CATEGORY_RELATION_UK",
+                columnNames = {"USER_ID", "CATEGORY"}
+        )
+}
+)
 public class UserCategoryRelation {
 
     @Id
@@ -19,18 +26,25 @@ public class UserCategoryRelation {
     @Column(name="UCS_ID")
     private Long userCategoryRelationId;
 
-    @Column(name="USER_ID")
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @Column(name="CATEGORY")
     private String category;
 
-//    @ManyToOne
-//    @JoinColumn(name="user_id")
-//    private User user;
 
-    public UserCategoryRelation(Long userId, String category) {
-        this.userId = userId;
+    /**
+     * 연관관계 편의 메서드
+     */
+    public void addUser(User user) {
+        this.user = user;
+        if(!user.getUserCategoryRelations().contains(this)){
+            user.getUserCategoryRelations().add(this);
+        }
+    }
+
+    public UserCategoryRelation(String category) {
         this.category = category;
     }
 }

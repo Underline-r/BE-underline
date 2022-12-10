@@ -31,6 +31,7 @@ public class UserQueryRepository {
                 .select(new QUserProfileDto(
                         user.email,
                         user.nickname,
+                        user.description,
                         queryFactory
                                 .selectFrom(userFollowRelation)
                                 .where(toUserIdEq(condition.getProfileUserId())
