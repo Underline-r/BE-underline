@@ -22,8 +22,8 @@ public class UserProfileService {
     private final UserRepository userRepository;
 
     public UserProfileDto getUserProfile(Long profileUserId) {
-        existUser(profileUserId);
-        ProfileSearchCondition profileSearchCondition = new ProfileSearchCondition(profileUserId, SecurityUtil.getCurrentUserId());
+        User checkedUser = existUser(profileUserId);
+        ProfileSearchCondition profileSearchCondition = new ProfileSearchCondition(checkedUser.getId(), SecurityUtil.getCurrentUserId());
 
         UserProfileDto profileDto = userRepository
                 .getUserProfile(profileSearchCondition);
@@ -36,15 +36,13 @@ public class UserProfileService {
     }
 
     public List<FollowUserInfoDto> getFollowingList(Long profileUserId) {
-        existUser(profileUserId);
-        List<FollowUserInfoDto> followingList = userRepository.getFollowingList(profileUserId);
-        return followingList;
+        User checkedUser = existUser(profileUserId);
+        return userRepository.getFollowingList(checkedUser.getId());
     }
 
     public List<FollowUserInfoDto> getFollowerList(Long profileUserId) {
-        existUser(profileUserId);
-        List<FollowUserInfoDto> followerList = userRepository.getFollowerList(profileUserId);
-        return followerList;
+        User checkedUser = existUser(profileUserId);
+        return userRepository.getFollowerList(checkedUser.getId());
     }
 
     @Transactional
@@ -55,11 +53,9 @@ public class UserProfileService {
         userRepository.save(findUser);
     }
 
-    private User existUser(Long profileUserId) {
-        User findUser = userRepository.findById(profileUserId).orElseThrow(
+    private User existUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
                 () -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)
         );
-
-        return findUser;
     }
 }
