@@ -14,12 +14,16 @@ public class UserProfileDto {
     private boolean subscribeState;
     private int followerCount;
     private int followingCount;
-    private boolean myPage;
+    private boolean isMyPage;
     private String description;
 
     public UserProfileDto() {
     }
 
+    // Lombok 사용중 변수명 is가 자동으로 사라지는 이슈를 getter 직접 구현으로 해결
+    public boolean getIsMyPage() {
+        return isMyPage;
+    }
 
     public UserProfileDto EntityToDto(User user) {
         this.email = user.getEmail();
