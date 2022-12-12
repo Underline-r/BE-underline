@@ -12,6 +12,6 @@ public class PostDetailResponse {
     public PostDetailResponse(Post post){
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.userId = post.getUserId();
+        this.userId = post.getUser().getId();
     }
 }

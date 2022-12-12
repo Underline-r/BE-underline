@@ -1,6 +1,6 @@
 package com.project.underline.post.web.dto;
 
-import com.project.underline.user.entity.User;
+import com.project.underline.post.entity.Pick;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -11,13 +11,13 @@ public class PickedUserListResponse {
     private Long total;
     private List<String> userNicknameList;
 
-    public void pickUserListUp(List<User> userList){
+    public void pickUserListUp(List<Pick> pickedUserList){
         this.userNicknameList = new ArrayList<String>();
-        // 닉네임을 return 해야되니 Pick 객체 -> User 객체 변환은 서비스단에서 해결
-        for (User eachPicked : userList) {
-            this.userNicknameList.add(eachPicked.getNickname());
+
+        for (Pick eachPicked : pickedUserList) {
+            this.userNicknameList.add(eachPicked.getUser().getNickname());
         }
 
-        this.total = Long.valueOf(userList.size());
+        this.total = Long.valueOf(pickedUserList.size());
     }
 }

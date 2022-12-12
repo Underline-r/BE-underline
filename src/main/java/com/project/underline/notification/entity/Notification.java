@@ -2,6 +2,8 @@ package com.project.underline.notification.entity;
 
 import com.project.underline.common.metadata.SearchYn;
 import com.project.underline.notification.metadata.NotificationType;
+import com.project.underline.post.entity.Post;
+import com.project.underline.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,14 +21,17 @@ public class Notification {
     @Column(name="NOTIFICATION_ID")
     private Long notificationId;
 
-    @Column(name="HOST_ID")
-    private Long hostId;
+    @ManyToOne
+    @JoinColumn(name = "HOST_ID")
+    private User host;
 
-    @Column(name="GUEST_ID")
-    private Long guestId;
+    @ManyToOne
+    @JoinColumn(name = "GUEST_ID")
+    private User guest;
 
-    @Column(name="POST_ID")
-    private Long postId;
+    @ManyToOne
+    @JoinColumn(name = "POST_ID")
+    private Post post;
 
     @Column(name="NOTIFICATION_TYPE")
     @Enumerated(EnumType.STRING)
@@ -37,11 +42,11 @@ public class Notification {
     private SearchYn searchYn;
 
     @Builder
-    public Notification(Long notificationId,Long hostId,Long guestId,Long postId,NotificationType notificationType,SearchYn searchYn){
+    public Notification(Long notificationId,User host,User guest,Post post,NotificationType notificationType,SearchYn searchYn){
         this.notificationId = notificationId;
-        this.hostId = hostId;
-        this.guestId = guestId;
-        this.postId = postId;
+        this.host = host;
+        this.guest = guest;
+        this.post = post;
         this.notificationType = notificationType;
         this.searchYn = SearchYn.N; // 생성시 Default = N(안읽었음)
     }

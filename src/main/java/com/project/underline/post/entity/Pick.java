@@ -1,5 +1,6 @@
 package com.project.underline.post.entity;
 
+import com.project.underline.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,20 +22,21 @@ public class Pick {
     @Column(name="POST_ID")
     private Long postId;
 
-    @Column(name="USER_ID")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @Builder
-    public Pick(Long pickId,Long postId,Long userId){
+    public Pick(Long pickId,Long postId,User user){
         this.pickId = pickId;
         this.postId = postId;
-        this.userId = userId;
+        this.user = user;
     }
 
-    public Pick update(Long pickId,Long postId,Long userId){
+    public Pick update(Long pickId,Long postId,User user){
         this.pickId = pickId;
         this.postId = postId;
-        this.userId = userId;
+        this.user = user;
         return this;
     }
 }

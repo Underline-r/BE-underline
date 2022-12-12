@@ -16,15 +16,16 @@ public class Hashtag {
     @Column(name="HASHTAG_ID")
     private Long hashtagId;
 
-    @Column(name="POST_ID")
-    private Long postId;
-
     @Column(name="HASHTAG_NAME")
     private String hashtagName;
 
+    @ManyToOne
+    @JoinColumn(name = "POST_ID")
+    private Post post;
+
     @Builder
-    public Hashtag(Long postId,String hashtagName){
-        this.postId = postId;
+    public Hashtag(Post post,String hashtagName){
+        this.post = post;
         this.hashtagName = hashtagName;
     }
 }
