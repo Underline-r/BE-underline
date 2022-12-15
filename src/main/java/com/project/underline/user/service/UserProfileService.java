@@ -7,6 +7,7 @@ import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.FollowUserInfoDto;
+import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class UserProfileService {
         ProfileSearchCondition profileSearchCondition = new ProfileSearchCondition(checkedUser.getId(), SecurityUtil.getCurrentUserId());
 
         UserProfileDto profileDto = userRepository
-                .getUserProfile(profileSearchCondition);
+                .selectUserProfile(profileSearchCondition);
 
         if (profileUserId.equals(SecurityUtil.getCurrentUserId())) {
             profileDto.setMyPage(true);
@@ -37,12 +38,12 @@ public class UserProfileService {
 
     public List<FollowUserInfoDto> getFollowingList(Long profileUserId) {
         User checkedUser = existUser(profileUserId);
-        return userRepository.getFollowingList(checkedUser.getId());
+        return userRepository.selectFollowingList(checkedUser.getId());
     }
 
     public List<FollowUserInfoDto> getFollowerList(Long profileUserId) {
         User checkedUser = existUser(profileUserId);
-        return userRepository.getFollowerList(checkedUser.getId());
+        return userRepository.selectFollowerList(checkedUser.getId());
     }
 
     @Transactional
@@ -51,6 +52,12 @@ public class UserProfileService {
         findUser.changeProfile(dto.getNickname(), dto.getDescription());
 
         userRepository.save(findUser);
+    }
+
+
+    public List<UserPostDto> getUserPostList(Long profileUserId) {
+        User checkedUser = existUser(profileUserId);
+        return userRepository.selectUserPostList(checkedUser.getId());
     }
 
     private User existUser(Long userId) {
