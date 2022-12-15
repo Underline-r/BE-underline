@@ -6,9 +6,7 @@ import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
-import com.project.underline.user.web.dto.FollowUserInfoDto;
-import com.project.underline.user.web.dto.UserPostDto;
-import com.project.underline.user.web.dto.UserProfileDto;
+import com.project.underline.user.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,10 +52,19 @@ public class UserProfileService {
         userRepository.save(findUser);
     }
 
-
     public List<UserPostDto> getUserPostList(Long profileUserId) {
         User checkedUser = existUser(profileUserId);
         return userRepository.selectUserPostList(checkedUser.getId());
+    }
+
+    public List<String> getUserHashtagList(Long profileUserId) {
+        User checkedUser = existUser(profileUserId);
+        return userRepository.selectUserHashtagList(checkedUser.getId());
+    }
+
+    public List<String> getUserCategoryList(Long profileUserId) {
+        User checkedUser = existUser(profileUserId);
+        return userRepository.selectUserCategoryList(checkedUser.getId());
     }
 
     private User existUser(Long userId) {

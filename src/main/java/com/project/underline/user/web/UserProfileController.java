@@ -3,9 +3,7 @@ package com.project.underline.user.web;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.service.UserProfileService;
-import com.project.underline.user.web.dto.FollowUserInfoDto;
-import com.project.underline.user.web.dto.UserPostDto;
-import com.project.underline.user.web.dto.UserProfileDto;
+import com.project.underline.user.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,6 +57,22 @@ public class UserProfileController {
         List<UserPostDto> postList = userProfileService.getUserPostList(id);
         return new ResponseEntity(
                 DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", postList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/hashtag")
+    public ResponseEntity<String> getUserHashtagList(@PathVariable Long id) {
+        List<String> hashtagList = userProfileService.getUserHashtagList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", hashtagList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/category")
+    public ResponseEntity<String> getUserCategoryList(@PathVariable Long id) {
+        List<String> categoryList = userProfileService.getUserCategoryList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", categoryList), HttpStatus.OK
         );
     }
 }
