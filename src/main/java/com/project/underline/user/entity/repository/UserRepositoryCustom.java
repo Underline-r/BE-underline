@@ -1,16 +1,21 @@
 package com.project.underline.user.entity.repository;
 
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
-import com.project.underline.user.web.dto.FollowUserInfoDto;
-import com.project.underline.user.web.dto.UserProfileDto;
+import com.project.underline.user.web.dto.*;
 
 import java.util.List;
 
 public interface UserRepositoryCustom {
 
-    UserProfileDto getUserProfile(ProfileSearchCondition condition);
+    UserProfileDto selectUserProfile(ProfileSearchCondition condition);
 
-    List<FollowUserInfoDto> getFollowingList(Long id);
+    List<FollowUserInfoDto> selectFollowingList(Long id);
 
-    List<FollowUserInfoDto> getFollowerList(Long id);
+    List<FollowUserInfoDto> selectFollowerList(Long id);
+
+    List<UserPostDto> selectUserPostList(Long id);
+
+    List<String> selectUserHashtagList(Long id);
+
+    List<String> selectUserCategoryList(Long id);
 }

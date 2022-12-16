@@ -3,8 +3,7 @@ package com.project.underline.user.web;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.service.UserProfileService;
-import com.project.underline.user.web.dto.FollowUserInfoDto;
-import com.project.underline.user.web.dto.UserProfileDto;
+import com.project.underline.user.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +13,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user-profile")
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
-    @GetMapping("/user/profile/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<UserProfileDto> getUserProfile(@PathVariable Long id) {
         UserProfileDto profileDto = userProfileService.getUserProfile(id);
         return new ResponseEntity(
@@ -26,7 +26,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/following/{id}")
+    @GetMapping("/{id}/following")
     public ResponseEntity<FollowUserInfoDto> getFollowingList(@PathVariable Long id) {
         List<FollowUserInfoDto> followingList = userProfileService.getFollowingList(id);
         return new ResponseEntity(
@@ -34,7 +34,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/follower/{id}")
+    @GetMapping("/{id}/follower")
     public ResponseEntity<FollowUserInfoDto> getFollowerList(@PathVariable Long id) {
         List<FollowUserInfoDto> followerList = userProfileService.getFollowerList(id);
         return new ResponseEntity(
@@ -42,13 +42,37 @@ public class UserProfileController {
         );
     }
 
-    @PatchMapping("user-profile")
+    @PatchMapping()
     public ResponseEntity changeUserProfile(@RequestBody UserProfileDto profileDto) {
         Long currentUserId = SecurityUtil.getCurrentUserId();
 
         userProfileService.changeUserProfile(currentUserId, profileDto);
         return new ResponseEntity(
                 DefaultResponse.res(HttpStatus.OK.value(), "업데이트 성공."), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/post")
+    public ResponseEntity<UserPostDto> getUserPostList(@PathVariable Long id) {
+        List<UserPostDto> postList = userProfileService.getUserPostList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", postList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/hashtag")
+    public ResponseEntity<String> getUserHashtagList(@PathVariable Long id) {
+        List<String> hashtagList = userProfileService.getUserHashtagList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", hashtagList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/category")
+    public ResponseEntity<String> getUserCategoryList(@PathVariable Long id) {
+        List<String> categoryList = userProfileService.getUserCategoryList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", categoryList), HttpStatus.OK
         );
     }
 }

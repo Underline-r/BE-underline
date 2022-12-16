@@ -6,8 +6,7 @@ import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
-import com.project.underline.user.web.dto.FollowUserInfoDto;
-import com.project.underline.user.web.dto.UserProfileDto;
+import com.project.underline.user.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +21,11 @@ public class UserProfileService {
     private final UserRepository userRepository;
 
     public UserProfileDto getUserProfile(Long profileUserId) {
-        existUser(profileUserId);
-        ProfileSearchCondition profileSearchCondition = new ProfileSearchCondition(profileUserId, SecurityUtil.getCurrentUserId());
+        User checkedUser = existUser(profileUserId);
+        ProfileSearchCondition profileSearchCondition = new ProfileSearchCondition(checkedUser.getId(), SecurityUtil.getCurrentUserId());
 
         UserProfileDto profileDto = userRepository
-                .getUserProfile(profileSearchCondition);
+                .selectUserProfile(profileSearchCondition);
 
         if (profileUserId.equals(SecurityUtil.getCurrentUserId())) {
             profileDto.setMyPage(true);
@@ -36,15 +35,13 @@ public class UserProfileService {
     }
 
     public List<FollowUserInfoDto> getFollowingList(Long profileUserId) {
-        existUser(profileUserId);
-        List<FollowUserInfoDto> followingList = userRepository.getFollowingList(profileUserId);
-        return followingList;
+        User checkedUser = existUser(profileUserId);
+        return userRepository.selectFollowingList(checkedUser.getId());
     }
 
     public List<FollowUserInfoDto> getFollowerList(Long profileUserId) {
-        existUser(profileUserId);
-        List<FollowUserInfoDto> followerList = userRepository.getFollowerList(profileUserId);
-        return followerList;
+        User checkedUser = existUser(profileUserId);
+        return userRepository.selectFollowerList(checkedUser.getId());
     }
 
     @Transactional
@@ -55,11 +52,24 @@ public class UserProfileService {
         userRepository.save(findUser);
     }
 
-    private User existUser(Long profileUserId) {
-        User findUser = userRepository.findById(profileUserId).orElseThrow(
+    public List<UserPostDto> getUserPostList(Long profileUserId) {
+        User checkedUser = existUser(profileUserId);
+        return userRepository.selectUserPostList(checkedUser.getId());
+    }
+
+    public List<String> getUserHashtagList(Long profileUserId) {
+        User checkedUser = existUser(profileUserId);
+        return userRepository.selectUserHashtagList(checkedUser.getId());
+    }
+
+    public List<String> getUserCategoryList(Long profileUserId) {
+        User checkedUser = existUser(profileUserId);
+        return userRepository.selectUserCategoryList(checkedUser.getId());
+    }
+
+    private User existUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
                 () -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)
         );
-
-        return findUser;
     }
 }

@@ -9,6 +9,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.project.underline.category.entity.QUserCategoryRelation.userCategoryRelation;
+import static com.project.underline.post.entity.QHashtag.hashtag;
+import static com.project.underline.post.entity.QPost.post;
 import static com.project.underline.user.entity.QUser.user;
 import static com.project.underline.user.entity.QUserFollowRelation.userFollowRelation;
 
@@ -21,7 +24,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public UserProfileDto getUserProfile(ProfileSearchCondition condition) {
+    public UserProfileDto selectUserProfile(ProfileSearchCondition condition) {
 
         return queryFactory
                 .select(new QUserProfileDto(
@@ -44,7 +47,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<FollowUserInfoDto> getFollowingList(Long id) {
+    public List<FollowUserInfoDto> selectFollowingList(Long id) {
         return queryFactory
                 .select(
                         new QFollowUserInfoDto(
@@ -57,7 +60,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<FollowUserInfoDto> getFollowerList(Long id) {
+    public List<FollowUserInfoDto> selectFollowerList(Long id) {
         return queryFactory
                 .select(
                         new QFollowUserInfoDto(
@@ -66,6 +69,48 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 )
                 .from(userFollowRelation)
                 .where(toUserIdEq(id))
+                .fetch();
+    }
+
+    @Override
+    public List<UserPostDto> selectUserPostList(Long id) {
+
+        return queryFactory
+                .select(
+                        new QUserPostDto(
+                                post.title,
+                                post.content,
+                                post.modifiedDate
+                        )
+                )
+                .from(post)
+                .join(post.user, user)
+                .where(userIdEq(id))
+                .fetch();
+    }
+
+    @Override
+    public List<String> selectUserHashtagList(Long id) {
+        return queryFactory
+                .select(
+                        hashtag.hashtagName
+                )
+                .from(hashtag)
+                .join(hashtag.post, post)
+                .join(post.user, user)
+                .where(userIdEq(id))
+                .fetch();
+    }
+
+    @Override
+    public List<String> selectUserCategoryList(Long id) {
+        return queryFactory
+                .select(
+                        userCategoryRelation.category
+                )
+                .from(userCategoryRelation)
+                .join(userCategoryRelation.user, user)
+                .where(userIdEq(id))
                 .fetch();
     }
 
