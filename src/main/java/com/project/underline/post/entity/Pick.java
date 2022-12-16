@@ -1,5 +1,6 @@
 package com.project.underline.post.entity;
 
+import com.project.underline.common.util.BaseTimeEntity;
 import com.project.underline.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "PICK")
-public class Pick {
+public class Pick extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
