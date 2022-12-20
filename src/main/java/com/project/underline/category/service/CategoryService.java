@@ -7,6 +7,7 @@ import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class CategoryService {
     private final UserCategoryRelationRepository userCategoryRelationRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public void registerFavoriteCategory(List<String> category){
 
         Long currentUserId = SecurityUtil.getCurrentUserId();
@@ -34,7 +36,7 @@ public class CategoryService {
         }
     }
 
-    private void checkCategoryConsistency(String category){
+    public void checkCategoryConsistency(String category){
         for(String str : categoryCodeList) {
             if(str.equals(category)) {
                 return;

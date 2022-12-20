@@ -1,6 +1,8 @@
 package com.project.underline.user.service;
 
 import com.project.underline.category.entity.UserCategoryRelation;
+import com.project.underline.category.entity.repository.UserCategoryRelationRepository;
+import com.project.underline.category.service.CategoryService;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
@@ -19,6 +21,8 @@ public class MyInfoService {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final CategoryService categoryService;
+    private final UserCategoryRelationRepository userCategoryRelationRepository;
     private final PasswordEncoder passwordEncoder;
 
     public void changeUserProfile(UserProfileDto dto) {
@@ -34,8 +38,14 @@ public class MyInfoService {
         Long currentUserId = SecurityUtil.getCurrentUserId();
         User findUser = userService.existUser(currentUserId);
 
-        // TODO: category service 주입받지 말고 DDD로 개발하기
-        List<UserCategoryRelation> userCategoryRelations = findUser.getUserCategoryRelations();
+        userCategoryRelationRepository.deleteAllByUserId(currentUserId);
+
+        for (String eachCategory : category) {
+            categoryService.checkCategoryConsistency(eachCategory);
+            UserCategoryRelation userCategoryRelation = new UserCategoryRelation(eachCategory);
+            userCategoryRelation.addUser(findUser);
+            userCategoryRelationRepository.save(userCategoryRelation);
+        }
     }
 
     /**
