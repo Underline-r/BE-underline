@@ -50,4 +50,8 @@ public class User{
         this.nickname = nickname;
         this.description = description;
     }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
 }
