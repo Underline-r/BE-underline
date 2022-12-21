@@ -1,5 +1,6 @@
 package com.project.underline.post.entity;
 
+import com.project.underline.common.util.BaseTimeEntity;
 import com.project.underline.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,30 +13,30 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "PICK")
-public class Pick {
+public class Pick extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
     @Column(name="PICK_ID")
     private Long pickId;
 
-    @Column(name="POST_ID")
-    private Long postId;
-
+    @ManyToOne
+    @JoinColumn(name = "POST_ID")
+    private Post post;
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
     @Builder
-    public Pick(Long pickId,Long postId,User user){
+    public Pick(Long pickId,Post post,User user){
         this.pickId = pickId;
-        this.postId = postId;
+        this.post = post;
         this.user = user;
     }
 
-    public Pick update(Long pickId,Long postId,User user){
+    public Pick update(Long pickId,Post post,User user){
         this.pickId = pickId;
-        this.postId = postId;
+        this.post = post;
         this.user = user;
         return this;
     }

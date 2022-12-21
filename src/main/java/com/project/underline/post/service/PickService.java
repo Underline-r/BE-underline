@@ -5,6 +5,7 @@ import com.project.underline.common.metadata.ErrorCode;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.Pick;
 import com.project.underline.post.entity.repository.PickRepository;
+import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.post.web.dto.PickRequest;
 import com.project.underline.post.web.dto.PickedUserListResponse;
 import com.project.underline.user.entity.repository.UserRepository;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @Service
 public class PickService {
     private final PickRepository pickRepository;
+    private final PostRepository postRepository;
     private final UserRepository userRepository;
 
     public void checkUserPostPick(PickRequest pickRequest) {
@@ -32,7 +34,8 @@ public class PickService {
 
         pickRepository.save(
                 Pick.builder()
-                        .postId(pickRequest.getPostId())
+                        .post(postRepository.findById(pickRequest.getPostId())
+                                .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_POST)))
                         .user(userRepository.findById(SecurityUtil.getCurrentUserId())
                                 .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)))
                         .build()
