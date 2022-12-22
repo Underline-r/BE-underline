@@ -41,8 +41,13 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.ALL)
     private List<Hashtag> hashtags = new ArrayList<Hashtag>();
+
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<Comment>();
 
 
     @Builder
