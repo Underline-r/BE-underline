@@ -1,13 +1,18 @@
 package com.project.underline.user.web;
 
+import com.project.underline.common.metadata.ResponseMessage;
 import com.project.underline.common.payload.DefaultResponse;
-import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.service.UserProfileService;
-import com.project.underline.user.web.dto.*;
+import com.project.underline.user.web.dto.FollowUserInfoDto;
+import com.project.underline.user.web.dto.UserPostDto;
+import com.project.underline.user.web.dto.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -22,7 +27,7 @@ public class UserProfileController {
     public ResponseEntity<UserProfileDto> getUserProfile(@PathVariable Long id) {
         UserProfileDto profileDto = userProfileService.getUserProfile(id);
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", profileDto), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(), ResponseMessage.SUCCESS, profileDto), HttpStatus.OK
         );
     }
 
@@ -30,7 +35,7 @@ public class UserProfileController {
     public ResponseEntity<FollowUserInfoDto> getFollowingList(@PathVariable Long id) {
         List<FollowUserInfoDto> followingList = userProfileService.getFollowingList(id);
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", followingList), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, followingList), HttpStatus.OK
         );
     }
 
@@ -38,17 +43,7 @@ public class UserProfileController {
     public ResponseEntity<FollowUserInfoDto> getFollowerList(@PathVariable Long id) {
         List<FollowUserInfoDto> followerList = userProfileService.getFollowerList(id);
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", followerList), HttpStatus.OK
-        );
-    }
-
-    @PatchMapping()
-    public ResponseEntity changeUserProfile(@RequestBody UserProfileDto profileDto) {
-        Long currentUserId = SecurityUtil.getCurrentUserId();
-
-        userProfileService.changeUserProfile(currentUserId, profileDto);
-        return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), "업데이트 성공."), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, followerList), HttpStatus.OK
         );
     }
 
@@ -56,7 +51,7 @@ public class UserProfileController {
     public ResponseEntity<UserPostDto> getUserPostList(@PathVariable Long id) {
         List<UserPostDto> postList = userProfileService.getUserPostList(id);
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", postList), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, postList), HttpStatus.OK
         );
     }
 
@@ -64,7 +59,7 @@ public class UserProfileController {
     public ResponseEntity<String> getUserHashtagList(@PathVariable Long id) {
         List<String> hashtagList = userProfileService.getUserHashtagList(id);
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", hashtagList), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, hashtagList), HttpStatus.OK
         );
     }
 
@@ -72,7 +67,7 @@ public class UserProfileController {
     public ResponseEntity<String> getUserCategoryList(@PathVariable Long id) {
         List<String> categoryList = userProfileService.getUserCategoryList(id);
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), "조회되었습니다.", categoryList), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, categoryList), HttpStatus.OK
         );
     }
 }

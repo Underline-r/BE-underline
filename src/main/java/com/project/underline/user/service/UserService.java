@@ -94,4 +94,13 @@ public class UserService {
         return tokenDto;
     }
 
+    /**
+     * DB에 존재하는 유저인지 확인
+     */
+    public User existUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                () -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)
+        );
+    }
+
 }
