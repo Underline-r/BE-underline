@@ -58,7 +58,7 @@ public class HashtagSearchResponse {
             private String content;
             private String source;
             private Long pickCount;
-            private int commentCount;
+            private Long commentCount;
             private int textCount;
             private String title;
 
@@ -106,15 +106,15 @@ public class HashtagSearchResponse {
             private Long postId;
             private String content;
             private String source;
-            private int pickCount;
-            private int commentCount;
+            private Long pickCount;
+            private Long commentCount;
             private int textCount;
             private String title;
             private String userNickname;
             private String userProfileImage;
 
             @QueryProjection
-            public OtherHashtag(Long postId,int pickCount,String content,String title,String userNickname){  // TO-DO. source 생성되면 해당 생성자 삭제
+            public OtherHashtag(Long postId,Long pickCount,String content,String title,String userNickname){  // TO-DO. source 생성되면 해당 생성자 삭제
                 this.postId = postId;
                 this.pickCount = pickCount;
                 this.content = content;
