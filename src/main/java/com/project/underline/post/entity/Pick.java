@@ -23,6 +23,7 @@ public class Pick extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "POST_ID")
     private Post post;
+
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;

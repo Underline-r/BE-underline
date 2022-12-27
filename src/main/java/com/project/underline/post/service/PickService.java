@@ -11,17 +11,19 @@ import com.project.underline.post.web.dto.PickedUserListResponse;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class PickService {
     private final PickRepository pickRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public void checkUserPostPick(PickRequest pickRequest) {
         // 해당 게시글을 좋아요했는지 확인
         Optional<Pick> checkAlreadyPicked = pickRepository.findByPostIdAndUserId(pickRequest.getPostId(), SecurityUtil.getCurrentUserId());
