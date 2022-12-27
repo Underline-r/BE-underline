@@ -11,9 +11,10 @@ import java.util.List;
 import static com.project.underline.post.entity.QHashtag.hashtag;
 import static com.project.underline.post.entity.QPost.post;
 import static com.project.underline.post.entity.QPick.pick;
+import static com.project.underline.user.entity.QUser.user;
+import static com.project.underline.post.entity.QComment.comment;
 import static com.project.underline.post.web.dto.HashtagSearchResponse.OtherContent.OtherHashtag;
 import static com.project.underline.post.web.dto.HashtagSearchResponse.TargetContent.TargetHashtag;
-import static com.project.underline.user.entity.QUser.user;
 
 @Repository
 public class HashtagQueryRepository {
@@ -27,17 +28,19 @@ public class HashtagQueryRepository {
     public List<OtherHashtag> getHashtagListFromOther(String keyword){
         return queryFactory
                 .select(new QHashtagSearchResponse_OtherContent_OtherHashtag(
-                                post.postId,
-                                post.postId.count().as("pickCount"),
-                                post.content,
-                                post.title,
-                                user.nickname
+                        post.postId,
+                        post.content,
+                        post.title,
+                        user.nickname,
+                        pick.pickId.count().as("pickCount"),
+                        comment.commentId.count().as("commentCount")
                         )
                 )
                 .from(hashtag)
-                .join(hashtag.post, post)
-                .join(post.user, user)
-                .leftJoin(pick.post,post)
+                .leftJoin(post).on(post.postId.eq(hashtag.post.postId))
+                .leftJoin(pick).on(post.postId.eq(pick.post.postId))
+                .leftJoin(comment).on(post.postId.eq(comment.post.postId))
+                .leftJoin(user).on(post.user.id.eq(user.id))
                 .where(hashtag.hashtagName.eq(keyword))
                 .groupBy(post.postId)
                 .fetch();
@@ -48,16 +51,20 @@ public class HashtagQueryRepository {
         return queryFactory
                 .select(new QHashtagSearchResponse_TargetContent_TargetHashtag(
                         post.postId,
-                        post.postId.count().as("pickCount"),
                         post.content,
-                        post.title
+                        post.title,
+                        pick.pickId.count().as("pickCount"),
+                        comment.commentId.count().as("commentCount")
                 )
         )
-        .from(hashtag)
-        .join(hashtag.post, post) // Q. post 테이블 기준으로 짜면 에러메세지 나던데 왜그런거죠? -> hashtag.post is not a root path; nested exception is java.lang.illegalargumentexception: hashtag.post is not a root path
-        .leftJoin(pick.post,post)
-        .where(hashtag.hashtagName.eq(keyword), post.user.id.eq(userId))
-        .fetch();
+                .from(hashtag)
+                .leftJoin(post).on(post.postId.eq(hashtag.post.postId))
+                .leftJoin(pick).on(post.postId.eq(pick.post.postId))
+                .leftJoin(comment).on(post.postId.eq(comment.post.postId))
+                .leftJoin(user).on(post.user.id.eq(user.id))
+                .where(hashtag.hashtagName.eq(keyword), user.id.eq(userId))
+                .groupBy(post.postId)
+                .fetch();
     }
 
 }

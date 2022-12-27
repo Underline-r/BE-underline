@@ -63,20 +63,22 @@ public class HashtagSearchResponse {
             private String title;
 
             @QueryProjection
-            public TargetHashtag(Long postId,Long pickCount,String content,String source,String title){
+            public TargetHashtag(Long postId,String content,String source,String title,Long pickCount,Long commentCount){
                 this.postId = postId;
                 this.content = content;
                 this.source = source;
                 this.title = title;
+                this.commentCount = commentCount;
                 this.textCount = content.length();
             }
 
             @QueryProjection
-            public TargetHashtag(Long postId,Long pickCount,String content,String title){ // TO-DO. source 생성되면 해당 생성자 삭제
+            public TargetHashtag(Long postId,String content,String title,Long pickCount,Long commentCount){ // TO-DO. source 생성되면 해당 생성자 삭제
                 this.postId = postId;
                 this.pickCount = pickCount;
                 this.content = content;
                 this.title = title;
+                this.commentCount = commentCount;
                 this.textCount = content.length();
             }
         }
@@ -114,12 +116,13 @@ public class HashtagSearchResponse {
             private String userProfileImage;
 
             @QueryProjection
-            public OtherHashtag(Long postId,Long pickCount,String content,String title,String userNickname){  // TO-DO. source 생성되면 해당 생성자 삭제
+            public OtherHashtag(Long postId,String content,String title,String userNickname,Long pickCount,Long commentCount){  // TO-DO. source 생성되면 해당 생성자 삭제
                 this.postId = postId;
                 this.pickCount = pickCount;
                 this.content = content;
                 this.title = title;
                 this.userNickname = userNickname;
+                this.commentCount = commentCount;
                 this.textCount = content.length();
             }
         }
