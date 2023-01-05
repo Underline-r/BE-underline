@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class S3Uploader {
+public class S3Service {
 
     private final AmazonS3Client amazonS3Client;
 
@@ -66,5 +66,9 @@ public class S3Uploader {
         }
 
         return Optional.empty();
+    }
+
+    public String getFilePath(String path) {
+        return amazonS3Client.getUrl(bucket, path).toString();
     }
 }

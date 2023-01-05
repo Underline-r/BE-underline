@@ -16,6 +16,7 @@ public class UserProfileDto {
     private int followingCount;
     private boolean isMyPage;
     private String description;
+    private String imagePath;
 
     public UserProfileDto() {
     }
@@ -32,12 +33,13 @@ public class UserProfileDto {
     }
 
     @QueryProjection
-    public UserProfileDto(String email, String nickname, String description, boolean subscribeState, int followerCount, int followingCount) {
+    public UserProfileDto(String email, String nickname, String description, String image, boolean subscribeState, int followerCount, int followingCount) {
         this.email = email;
         this.nickname = nickname;
         this.description = description;
         this.subscribeState = subscribeState;
         this.followerCount = followerCount;
         this.followingCount = followingCount;
+        this.imagePath = image;
     }
 }

@@ -3,7 +3,7 @@ package com.project.underline.user.web;
 import com.project.underline.category.web.dto.UserCategoryListRequest;
 import com.project.underline.common.metadata.ResponseMessage;
 import com.project.underline.common.payload.DefaultResponse;
-import com.project.underline.common.util.S3Uploader;
+import com.project.underline.common.util.S3Service;
 import com.project.underline.user.service.MyInfoService;
 import com.project.underline.user.web.dto.SignupRequestDto;
 import com.project.underline.user.web.dto.UserProfileDto;
@@ -21,7 +21,7 @@ import java.io.IOException;
 public class MyInfoController {
 
     private final MyInfoService infoService;
-    private final S3Uploader s3Uploader;
+    private final S3Service s3Service;
 
     @PatchMapping()
     public ResponseEntity changeUserProfile(@RequestBody UserProfileDto profileDto) {
@@ -52,7 +52,7 @@ public class MyInfoController {
 
     @PostMapping("/image")
     public ResponseEntity regUserProfileImage(@RequestPart MultipartFile file) throws IOException {
-        s3Uploader.upload(file, "profile");
+        s3Service.upload(file, "profile");
 
         return new ResponseEntity(
                 DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS), HttpStatus.OK
