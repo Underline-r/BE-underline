@@ -60,7 +60,7 @@ public class Post extends BaseTimeEntity {
     }
 
     public Post update(String title,String content,String categoryCode){
-        // TO-DO. 컨텐츠 타입을 365자를 기준으로하는데 수정시 컨텐츠 타입이 변하는 경우는 어떻게 처리? -> 컨텐츠 타입이 바뀌어도 되는건가요?
+        // TODO. 컨텐츠 타입을 365자를 기준으로하는데 수정시 컨텐츠 타입이 변하는 경우는 어떻게 처리? -> 컨텐츠 타입이 바뀌어도 되는건가요?
         this.title = title;
         this.categoryCode = categoryCode;
         this.content = content;

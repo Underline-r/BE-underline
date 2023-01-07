@@ -22,7 +22,7 @@ public class HashtagService {
         // 요청왔던 데이터 그대로 return
         hashtagSearchResponse.setBasicInfo(keyword,userNickname);
 
-        // TO-DO. 이거 쿼리 한번만 나가게 리팩토링 가능할것같은데 (자바단에서 처리하도록)
+        // TODO. 이거 쿼리 한번만 나가게 리팩토링 가능할것같은데 (자바단에서 처리하도록)
 
         // 해당 해시태그 기준으로 target의 정보 set
         hashtagSearchResponse.setTargetContent(hashtagQueryRepository.getHashtagListFromTarget(keyword,targetUserId));
