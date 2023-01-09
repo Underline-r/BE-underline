@@ -37,7 +37,7 @@ public class Post extends BaseTimeEntity {
     @Column(name="CATEGORY_CODE")
     private String categoryCode;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID")
     private User user;
 
@@ -66,6 +66,10 @@ public class Post extends BaseTimeEntity {
         this.content = content;
         this.contentType = contentSize();
         return this;
+    }
+
+    public Post(Long id){
+        this.postId = id;
     }
 
     public ContentType contentSize(){
