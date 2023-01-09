@@ -16,9 +16,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class CommentService {
-    private CommentRepository commentRepository;
-    private PostRepository postRepository;
-    private UserService userService;
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final UserService userService;
 
     public void registerComments(Long postId, CommentRequest commentRequest) {
         commentRepository.save(new Comment(checkPostExistence(postId)

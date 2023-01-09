@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -37,14 +39,16 @@ public class Post extends BaseTimeEntity {
     @Column(name="CATEGORY_CODE")
     private String categoryCode;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "post",
             cascade = CascadeType.ALL)
     private List<Hashtag> hashtags = new ArrayList<Hashtag>();
 
+    @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "post",
             cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<Comment>();
