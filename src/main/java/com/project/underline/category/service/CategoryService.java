@@ -27,7 +27,7 @@ public class CategoryService {
 
         User findUser = userRepository.findById(currentUserId).get();
 
-        /* To-do. 클라이언트에서 온 category가 Enum list에 있는 값이 아닐수도 있으니까 검증로직 추후 추가 */
+        /* Todo. 클라이언트에서 온 category가 Enum list에 있는 값이 아닐수도 있으니까 검증로직 추후 추가 */
         for (String eachCategory : category) {
             checkCategoryConsistency(eachCategory);
             UserCategoryRelation userCategoryRelation = new UserCategoryRelation(eachCategory);

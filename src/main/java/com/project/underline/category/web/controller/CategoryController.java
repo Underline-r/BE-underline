@@ -24,7 +24,7 @@ public class CategoryController {
     public ResponseEntity registerFavoriteCategory(
                 @RequestBody UserCategoryListRequest category){
 
-        /* To-do. DB에 저장된 userId값이 필요한건데 name밖에 못가져옴 한방에 id값을 가져올 방법은?
+        /* Todo. DB에 저장된 userId값이 필요한건데 name밖에 못가져옴 한방에 id값을 가져올 방법은?
         *  re : Long currentUserId = SecurityUtil.getCurrentUserId(); 와 같은 방법으로 뽑아낼 수 있게 해둠
         *  */
         categoryService.registerFavoriteCategory(category.getCategory());

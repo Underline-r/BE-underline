@@ -47,6 +47,10 @@ public class User{
         this.authority = Authority.USER;
     }
 
+    public User(Long id){
+        this.id = id;
+    }
+
     public void changeProfile(String nickname, String description, String imagePath) {
         this.nickname = nickname;
         this.description = description;
