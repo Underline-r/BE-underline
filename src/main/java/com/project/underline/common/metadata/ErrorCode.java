@@ -16,6 +16,8 @@ public enum ErrorCode {
     MISMATCH_TOKEN(BAD_REQUEST, "토큰의 유저 정보가 일치하지 않습니다"),
     CANNOT_FOLLOW_MYSELF(BAD_REQUEST, "자기 자신은 팔로우 할 수 없습니다"),
     CANNOT_FOUND_USER(BAD_REQUEST, "해당 유저를 찾을 수 없습니다."),
+    CANNOT_FOUND_POST(BAD_REQUEST, "존재하지 않는 게시글입니다"),
+    WRONG_APPROACH(BAD_REQUEST,"잘못된 접근입니다.")
     ;
 
     private final HttpStatus httpStatus;

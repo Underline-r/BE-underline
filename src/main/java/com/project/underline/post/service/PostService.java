@@ -32,7 +32,7 @@ public class PostService {
     public void registerPost(PostRequest postRequest) {
         try{
 
-            // TO-DO. post 등록 -> hashtag 등록을 한개의 메소드(그리고 트랜잭션)내에서 해결했는데
+            // TODO. post 등록 -> hashtag 등록을 한개의 메소드(그리고 트랜잭션)내에서 해결했는데
 
             Post registerNewPost = Post.builder()
                     .user(userRepository.findById(SecurityUtil.getCurrentUserId())
