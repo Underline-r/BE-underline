@@ -24,6 +24,7 @@ public class User{
     private String nickname;
     private String password;
     private String description;
+    private String imagePath;
 
     @Enumerated(EnumType.STRING)
     private Authority authority;
@@ -50,9 +51,10 @@ public class User{
         this.id = id;
     }
 
-    public void changeProfile(String nickname, String description) {
+    public void changeProfile(String nickname, String description, String imagePath) {
         this.nickname = nickname;
         this.description = description;
+        this.imagePath = imagePath;
     }
 
     public void changePassword(String newPassword) {

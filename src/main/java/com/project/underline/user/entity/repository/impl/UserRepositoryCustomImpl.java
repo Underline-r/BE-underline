@@ -31,6 +31,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                                 user.email,
                                 user.nickname,
                                 user.description,
+                                user.imagePath,
                                 queryFactory
                                         .selectFrom(userFollowRelation)
                                         .where(toUserIdEq(condition.getProfileUserId())
