@@ -35,7 +35,6 @@ public class ExceptionHandlers {
 
     /*
     * SQL error handle
-    * TODO : 어떤 정보까지 클라이언트에게 공유하고, 서버에 남길 것인지 회의
     * */
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<DefaultResponse> sqlException(DataAccessException e) {
