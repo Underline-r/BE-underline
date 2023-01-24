@@ -1,6 +1,7 @@
 package com.project.underline.post.entity;
 
 import com.project.underline.common.util.BaseTimeEntity;
+import com.project.underline.reference.entity.Reference;
 import com.project.underline.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,6 +26,14 @@ public class Post extends BaseTimeEntity {
     @Column(name="POST_ID")
     private Long postId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REF_ID")
+    private Reference reference;
+
     @Column(name="TITLE")
     private String title;
 
@@ -39,9 +48,6 @@ public class Post extends BaseTimeEntity {
     @Column(name="CATEGORY_CODE")
     private String categoryCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
 
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "post",
@@ -63,6 +69,10 @@ public class Post extends BaseTimeEntity {
         this.contentType = contentSize();
     }
 
+    public Post(Long id){
+        this.postId = id;
+    }
+
     public Post update(String title,String content,String categoryCode){
         // TODO. 컨텐츠 타입을 365자를 기준으로하는데 수정시 컨텐츠 타입이 변하는 경우는 어떻게 처리? -> 컨텐츠 타입이 바뀌어도 되는건가요?
         this.title = title;
@@ -70,10 +80,6 @@ public class Post extends BaseTimeEntity {
         this.content = content;
         this.contentType = contentSize();
         return this;
-    }
-
-    public Post(Long id){
-        this.postId = id;
     }
 
     public ContentType contentSize(){
