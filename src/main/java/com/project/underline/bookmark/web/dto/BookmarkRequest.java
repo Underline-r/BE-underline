@@ -1,8 +1,8 @@
 package com.project.underline.bookmark.web.dto;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class BookmarkRequest {
-    private String test;
+    private Long postId;
 }
