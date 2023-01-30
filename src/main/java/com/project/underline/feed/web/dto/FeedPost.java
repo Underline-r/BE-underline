@@ -7,7 +7,6 @@ public class FeedPost {
     private String author;
     private String title;
     private String content;
-    private String contentType;
     private long likeCount;
     private long commentCount;
     private ArrayList<String> hashtags;

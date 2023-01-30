@@ -8,8 +8,8 @@ public class PostRequest {
 
     private String title;
     private String content;
-    private String contentType;
     private List<String> hashtag;
     private String categoryCode;
+    private String references;
 
 }
