@@ -16,8 +16,8 @@ import java.util.List;
 @Table(name = "REFERENCE")
 public class Reference {
     @Id
-    @Column(name = "ISBN13")
-    private Long isbn13;
+    @Column(name = "REFERENCE_ID")
+    private Long referenceId;
 
     @Column(name="TITLE")
     private String title;
@@ -30,8 +30,8 @@ public class Reference {
     private List<Post> posts = new ArrayList<Post>();
 
     @Builder
-    public Reference(Long isbn13, String title,String author){
-        this.isbn13 = isbn13;
+    public Reference(Long referenceId, String title,String author){
+        this.referenceId = referenceId;
         this.title = title;
         this.author = author;
     }
