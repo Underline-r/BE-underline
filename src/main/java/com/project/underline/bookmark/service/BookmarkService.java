@@ -12,8 +12,7 @@ import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,8 +29,8 @@ public class BookmarkService {
 
     @Transactional
     public BookmarkResponse inquiryBookmarks() {
-
-        return null;
+        BookmarkResponse bookmarkResponse = new BookmarkResponse(bookmarkRepository.findAllByUserId(SecurityUtil.getCurrentUserId()));
+        return bookmarkResponse;
     }
 
     private Post checkPostExistence(Long postId){
@@ -39,4 +38,8 @@ public class BookmarkService {
                 .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_POST));
     }
 
+    @Transactional
+    public void deleteBookmark(BookmarkRequest bookmarkRequest) {
+        bookmarkRepository.delete(new Bookmark(bookmarkRequest.getPostId()));
+    }
 }

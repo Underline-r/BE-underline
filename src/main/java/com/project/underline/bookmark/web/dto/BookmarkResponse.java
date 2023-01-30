@@ -1,5 +1,6 @@
 package com.project.underline.bookmark.web.dto;
 
+import com.project.underline.bookmark.entity.Bookmark;
 import com.project.underline.post.entity.Post;
 import lombok.Getter;
 
@@ -9,22 +10,22 @@ import java.util.List;
 @Getter
 public class BookmarkResponse {
 
-    private List<EachBookmarkedPost> bookmarkedPosts;
+    private List<EachBookmarkedPost> bookmarks;
 
-    public BookmarkResponse(List<Post> bookmarkedPosts){
-        this.bookmarkedPosts = new ArrayList<EachBookmarkedPost>();
+    public BookmarkResponse(List<Bookmark> bookmarkedPosts){
+        this.bookmarks = new ArrayList<EachBookmarkedPost>();
 
-        for(Post eachPost : bookmarkedPosts){
-            this.bookmarkedPosts.add(new EachBookmarkedPost(eachPost));
+        for(Bookmark eachPost : bookmarkedPosts){
+            this.bookmarks.add(new EachBookmarkedPost(eachPost.getPost()));
         }
     }
 
     @Getter
     public static class EachBookmarkedPost{
         private Long postId;
+        private String userNickname;
         private String title;
         private String content;
-        private String userNickname;
         private String referenceTitle;
 
         public EachBookmarkedPost(Post post){

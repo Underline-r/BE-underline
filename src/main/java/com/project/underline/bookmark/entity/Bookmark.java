@@ -32,4 +32,8 @@ public class Bookmark extends BaseTimeEntity {
         this.user = user;
         this.post = post;
     }
+
+    public Bookmark(Long bookmarkId){
+        this.bookmarkId = bookmarkId;
+    }
 }
