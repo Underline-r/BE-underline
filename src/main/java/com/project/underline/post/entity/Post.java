@@ -1,5 +1,6 @@
 package com.project.underline.post.entity;
 
+import com.project.underline.category.entity.PostCategoryRelation;
 import com.project.underline.common.util.BaseTimeEntity;
 import com.project.underline.reference.entity.Reference;
 import com.project.underline.user.entity.User;
@@ -41,9 +42,11 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
-    @Column(name="CATEGORY_CODE")
-    private String categoryCode;
 
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.ALL)
+    private List<PostCategoryRelation> categoryList = new ArrayList<PostCategoryRelation>();
 
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "post",
@@ -57,10 +60,9 @@ public class Post extends BaseTimeEntity {
 
 
     @Builder
-    public Post(User user,String title,String content,String categoryCode){
+    public Post(User user,String title,String content){
         this.user = user;
         this.title = title;
-        this.categoryCode = categoryCode;
         this.content = content;
     }
 
@@ -68,10 +70,15 @@ public class Post extends BaseTimeEntity {
         this.postId = id;
     }
 
-    public Post update(String title,String content,String categoryCode){
+    public Post update(String title,String content){
         this.title = title;
-        this.categoryCode = categoryCode;
         this.content = content;
+        return this;
+    }
+
+    public Post setHashtagsAndCategory(List<Hashtag> hashtags, List<PostCategoryRelation> postCategoryRelations){
+        this.hashtags = hashtags;
+        this.categoryList = postCategoryRelations;
         return this;
     }
 

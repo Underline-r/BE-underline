@@ -1,5 +1,6 @@
 package com.project.underline.post.service;
 
+import com.project.underline.category.entity.PostCategoryRelation;
 import com.project.underline.common.exception.UnderlineException;
 import com.project.underline.common.metadata.ErrorCode;
 import com.project.underline.common.util.SecurityUtil;
@@ -39,23 +40,13 @@ public class PostService {
                             .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)))
                     .title(postRequest.getTitle())
                     .content(postRequest.getContent())
-                    .categoryCode(postRequest.getCategoryCode())
                     .build();
 
+            registerNewPost = setHashtagsAndCategory(registerNewPost,postRequest);
+
             postRepository.save(registerNewPost);
-
-            if(postRequest.getHashtag().size() > 0){
-                List<Hashtag> hashtags = new ArrayList<Hashtag>();
-                for(String eachHashtag : postRequest.getHashtag()){
-                    hashtags.add(new Hashtag(registerNewPost,eachHashtag));
-                }
-
-                hashtagRepository.saveAll(hashtags);
-            }
-
-
         }catch (RuntimeException e){
-            throw e;
+             throw e;
         }
     }
 
@@ -73,11 +64,13 @@ public class PostService {
     public void patchPost(Long postId, PostRequest postRequest) {
         try{
             Post updatePost = postRepository.findByPostId(postId);
-
             SecurityUtil.checkSameUser(updatePost.getUser().getId());
 
-            updatePost.update(postRequest.getTitle(), postRequest.getContent(),postRequest.getCategoryCode());
+            updatePost.update(postRequest.getTitle(), postRequest.getContent());
+            updatePost = setHashtagsAndCategory(updatePost,postRequest);
+
             postRepository.save(updatePost);
+
         }catch (RuntimeException e){
             throw e;
         }
@@ -102,6 +95,29 @@ public class PostService {
         UserCreatedPostListResponse userCreatedPostList = new UserCreatedPostListResponse(userCreatedPost);
 
         return userCreatedPostList;
+    }
+
+    private Post setHashtagsAndCategory(Post registerPost, PostRequest postRequest){
+
+        List<Hashtag> hashtags = new ArrayList<Hashtag>();
+        List<PostCategoryRelation> postCategoryRelations = new ArrayList<PostCategoryRelation>();
+
+        if(postRequest.getHashtag().size() > 0){
+            for(String eachHashtag : postRequest.getHashtag()){
+                hashtags.add(new Hashtag(registerPost,eachHashtag));
+            }
+        }
+
+
+        if(postRequest.getCategory().size() > 0){
+            for(String eachCategory : postRequest.getCategory()){
+                postCategoryRelations.add(new PostCategoryRelation(registerPost,eachCategory));
+            }
+        }
+
+        registerPost.setHashtagsAndCategory(hashtags,postCategoryRelations);
+
+        return registerPost;
     }
 
     private Long returnUserId(String userNickname){

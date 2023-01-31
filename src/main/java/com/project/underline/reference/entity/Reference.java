@@ -25,10 +25,6 @@ public class Reference {
     @Column(name="AUTHOR")
     private String author;
 
-    // TODO.  ref기준으로 post가 많을텐데 그때마다 통으로 조회하는 쿼리가 나가면 안될듯함 -> 해당 속성을 쓰는 서비스단에서 잘 처리해야함
-    @OneToMany(mappedBy = "post")
-    private List<Post> posts = new ArrayList<Post>();
-
     @Builder
     public Reference(Long referenceId, String title,String author){
         this.referenceId = referenceId;
