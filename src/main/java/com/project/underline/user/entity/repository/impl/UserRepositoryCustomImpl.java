@@ -79,7 +79,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return queryFactory
                 .select(
                         new QUserPostDto(
-                                post.title,
                                 post.content,
                                 post.modifiedDate
                         )

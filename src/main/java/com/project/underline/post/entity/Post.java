@@ -32,11 +32,8 @@ public class Post extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REF_ID")
+    @JoinColumn(name = "REFERENCE_ID")
     private Reference reference;
-
-    @Column(name="TITLE")
-    private String title;
 
     @Column(name="CONTENT")
     @Lob
@@ -60,18 +57,17 @@ public class Post extends BaseTimeEntity {
 
 
     @Builder
-    public Post(User user,String title,String content){
+    public Post(User user,String content,Reference reference){
         this.user = user;
-        this.title = title;
         this.content = content;
+        this.reference = reference;
     }
 
     public Post(Long id){
         this.postId = id;
     }
 
-    public Post update(String title,String content){
-        this.title = title;
+    public Post update(String content){
         this.content = content;
         return this;
     }

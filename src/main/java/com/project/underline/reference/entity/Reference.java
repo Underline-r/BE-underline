@@ -15,7 +15,9 @@ import java.util.List;
 @Getter
 @Table(name = "REFERENCE")
 public class Reference {
+
     @Id
+    @GeneratedValue
     @Column(name = "REFERENCE_ID")
     private Long referenceId;
 
@@ -30,6 +32,10 @@ public class Reference {
         this.referenceId = referenceId;
         this.title = title;
         this.author = author;
+    }
+
+    public Reference(String title){
+        this.title = title;
     }
 
 }
