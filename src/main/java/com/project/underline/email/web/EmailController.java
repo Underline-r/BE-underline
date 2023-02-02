@@ -17,11 +17,17 @@ public class EmailController {
     private final EmailService emailService;
 
     @PostMapping("/verify-email")
-    public ResponseEntity<String> verifyEmail(@RequestBody MailDto dto) {
-        String checkNumber = emailService.sendSimpleMessage(dto);
-        return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(), ResponseMessage.SUCCESS, checkNumber), HttpStatus.OK
-        );
+    public ResponseEntity<DefaultResponse> verifyEmail(@RequestBody MailDto dto){
+        try {
+            String checkNumber = emailService.sendSimpleMessage(dto);
+            return new ResponseEntity(
+                    DefaultResponse.res(HttpStatus.OK.value(), ResponseMessage.SUCCESS, checkNumber), HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity(
+                    DefaultResponse.errRes(HttpStatus.BAD_REQUEST.value(),
+                            e.getClass(), e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
