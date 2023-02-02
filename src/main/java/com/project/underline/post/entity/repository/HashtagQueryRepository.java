@@ -30,7 +30,6 @@ public class HashtagQueryRepository {
                 .select(new QHashtagSearchResponse_OtherContent_OtherHashtag(
                         post.postId,
                         post.content,
-                        post.title,
                         user.nickname,
                         pick.pickId.count().as("pickCount"),
                         comment.commentId.count().as("commentCount")
@@ -52,7 +51,6 @@ public class HashtagQueryRepository {
                 .select(new QHashtagSearchResponse_TargetContent_TargetHashtag(
                         post.postId,
                         post.content,
-                        post.title,
                         pick.pickId.count().as("pickCount"),
                         comment.commentId.count().as("commentCount")
                 )

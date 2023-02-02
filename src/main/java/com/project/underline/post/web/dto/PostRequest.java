@@ -6,10 +6,9 @@ import java.util.List;
 @Getter
 public class PostRequest {
 
-    private String title;
     private String content;
-    private String contentType;
     private List<String> hashtag;
-    private String categoryCode;
+    private List<String> category;
+    private String references;
 
 }

@@ -60,24 +60,21 @@ public class HashtagSearchResponse {
             private Long pickCount;
             private Long commentCount;
             private int textCount;
-            private String title;
 
             @QueryProjection
-            public TargetHashtag(Long postId,String content,String source,String title,Long pickCount,Long commentCount){
+            public TargetHashtag(Long postId,String content,String source,Long pickCount,Long commentCount){
                 this.postId = postId;
                 this.content = content;
                 this.source = source;
-                this.title = title;
                 this.commentCount = commentCount;
                 this.textCount = content.length();
             }
 
             @QueryProjection
-            public TargetHashtag(Long postId,String content,String title,Long pickCount,Long commentCount){ // TO-DO. source 생성되면 해당 생성자 삭제
+            public TargetHashtag(Long postId,String content,Long pickCount,Long commentCount){ // TO-DO. source 생성되면 해당 생성자 삭제
                 this.postId = postId;
                 this.pickCount = pickCount;
                 this.content = content;
-                this.title = title;
                 this.commentCount = commentCount;
                 this.textCount = content.length();
             }
@@ -111,16 +108,14 @@ public class HashtagSearchResponse {
             private Long pickCount;
             private Long commentCount;
             private int textCount;
-            private String title;
             private String userNickname;
             private String userProfileImage;
 
             @QueryProjection
-            public OtherHashtag(Long postId,String content,String title,String userNickname,Long pickCount,Long commentCount){  // TO-DO. source 생성되면 해당 생성자 삭제
+            public OtherHashtag(Long postId,String content,String userNickname,Long pickCount,Long commentCount){  // TO-DO. source 생성되면 해당 생성자 삭제
                 this.postId = postId;
                 this.pickCount = pickCount;
                 this.content = content;
-                this.title = title;
                 this.userNickname = userNickname;
                 this.commentCount = commentCount;
                 this.textCount = content.length();

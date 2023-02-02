@@ -5,9 +5,7 @@ import java.util.ArrayList;
 public class FeedPost {
     // 그냥 post말고 feed에서 보여지기 위한 post
     private String author;
-    private String title;
     private String content;
-    private String contentType;
     private long likeCount;
     private long commentCount;
     private ArrayList<String> hashtags;

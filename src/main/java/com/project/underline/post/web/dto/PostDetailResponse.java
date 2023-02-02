@@ -5,12 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class PostDetailResponse {
-    private String title;
     private String content;
     private Long userId;
 
     public PostDetailResponse(Post post){
-        this.title = post.getTitle();
         this.content = post.getContent();
         this.userId = post.getUser().getId();
     }
