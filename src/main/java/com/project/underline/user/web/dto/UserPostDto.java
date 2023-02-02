@@ -8,13 +8,11 @@ import java.time.LocalDateTime;
 @Data
 public class UserPostDto {
 
-    private String title;
     private String content;
     private LocalDateTime modifiedDate;
 
     @QueryProjection
-    public UserPostDto(String title, String content, LocalDateTime modifiedDate) {
-        this.title = title;
+    public UserPostDto(String content, LocalDateTime modifiedDate) {
         this.content = content;
         this.modifiedDate = modifiedDate;
     }

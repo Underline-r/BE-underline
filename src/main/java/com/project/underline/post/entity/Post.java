@@ -1,6 +1,8 @@
 package com.project.underline.post.entity;
 
+import com.project.underline.category.entity.PostCategoryRelation;
 import com.project.underline.common.util.BaseTimeEntity;
+import com.project.underline.reference.entity.Reference;
 import com.project.underline.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,23 +27,23 @@ public class Post extends BaseTimeEntity {
     @Column(name="POST_ID")
     private Long postId;
 
-    @Column(name="TITLE")
-    private String title;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
-    @Column(name="CONTENT_TYPE")
-    @Enumerated(EnumType.STRING)
-    private ContentType contentType;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "REFERENCE_ID")
+    private Reference reference;
 
     @Column(name="CONTENT")
     @Lob
     private String content;
 
-    @Column(name="CATEGORY_CODE")
-    private String categoryCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.ALL)
+    private List<PostCategoryRelation> categoryList = new ArrayList<PostCategoryRelation>();
 
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "post",
@@ -55,28 +57,29 @@ public class Post extends BaseTimeEntity {
 
 
     @Builder
-    public Post(User user,String title,String content,String categoryCode){
+    public Post(User user,String content,Reference reference){
         this.user = user;
-        this.title = title;
-        this.categoryCode = categoryCode;
         this.content = content;
-        this.contentType = contentSize();
-    }
-
-    public Post update(String title,String content,String categoryCode){
-        // TODO. 컨텐츠 타입을 365자를 기준으로하는데 수정시 컨텐츠 타입이 변하는 경우는 어떻게 처리? -> 컨텐츠 타입이 바뀌어도 되는건가요?
-        this.title = title;
-        this.categoryCode = categoryCode;
-        this.content = content;
-        this.contentType = contentSize();
-        return this;
+        this.reference = reference;
     }
 
     public Post(Long id){
         this.postId = id;
     }
 
+    public Post update(String content){
+        this.content = content;
+        return this;
+    }
+
+    public Post setHashtagsAndCategory(List<Hashtag> hashtags, List<PostCategoryRelation> postCategoryRelations){
+        this.hashtags = hashtags;
+        this.categoryList = postCategoryRelations;
+        return this;
+    }
+
     public ContentType contentSize(){
+        // 기능 삭제
         if(content.length() > 365){
             return ContentType.LONG;
         }
