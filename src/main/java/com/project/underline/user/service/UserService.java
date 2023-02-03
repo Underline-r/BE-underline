@@ -20,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -33,16 +36,12 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     /**
-     * TODO: 커스텀 예외 만들 지 다시 생각해봅시다.
      * @param signupRequestDto
      * @return
      */
     public Long createUser(SignupRequestDto signupRequestDto) {
-        String validatedEmail = signupRequestDto.getEmail().replaceAll(" ", "");
-        if (userRepository.existsByEmail(validatedEmail)) {
-            throw new IllegalArgumentException("이미 사용 중인 이메일 입니다.");
-        }
-
+        String email = signupRequestDto.getEmail();
+        validationEmail(email);
         User user = signupRequestDto.toUser(passwordEncoder);
         return userRepository.save(user).getId();
     }
@@ -101,6 +100,26 @@ public class UserService {
         return userRepository.findById(userId).orElseThrow(
                 () -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)
         );
+    }
+
+    private void validationEmail(String email) {
+        if (!isValidEmail(email)) {
+            throw new UnderlineException(ErrorCode.INVALID_EMAIL);
+        }
+        if (userRepository.existsByEmail(email)) {
+            throw new UnderlineException(ErrorCode.DUP_EMAIL);
+        }
+    }
+
+    public boolean isValidEmail(String email) {
+        boolean ret = false;
+        String regex = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z]+$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(email);
+        if(m.matches()) {
+            ret = true;
+        }
+        return ret;
     }
 
 }

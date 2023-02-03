@@ -53,6 +53,7 @@ public class WebSecurityConfig{
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/sign-in").permitAll()
+                .antMatchers(HttpMethod.POST, "/verify-email").permitAll()
                 .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
                 .antMatchers(HttpMethod.POST, "/refresh").permitAll()
                 .antMatchers(HttpMethod.GET,"/category-list").permitAll()
