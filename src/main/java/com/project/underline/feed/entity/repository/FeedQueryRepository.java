@@ -23,7 +23,7 @@ public class FeedQueryRepository {
     public FeedQueryRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
-     public List<FeedPost> getCustomFeedInformation(Pageable pageable,List<String> categoryCode){
+    public List<FeedPost> getCustomFeedInformation(Pageable pageable,List<String> categoryCode){
         //TO-Do. 초반엔 구독중인 카테고리에 올라온 글들을 제공해주지만 mvp이후 팔로우한 사람들의 글도 섞어서 제공할 예정
 
         QPost p = QPost.post;
@@ -52,6 +52,35 @@ public class FeedQueryRepository {
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
+    }
 
+    public List<FeedPost> getDefaultFeedInformation(Pageable pageable){
+        //TO-Do. 초반엔 구독중인 카테고리에 올라온 글들을 제공해주지만 mvp이후 팔로우한 사람들의 글도 섞어서 제공할 예정
+
+        QPost p = QPost.post;
+        QUser u = QUser.user;
+        QPick pp = QPick.pick;
+        QComment c = QComment.comment;
+        QHashtag h = QHashtag.hashtag;
+        QPostCategoryRelation pcr = QPostCategoryRelation.postCategoryRelation;
+
+        return queryFactory.select(new QFeedPost(
+                        p.postId,
+                        u.nickname,
+                        p.content,
+                        c.commentId.countDistinct(),
+                        pp.pickId.countDistinct(),
+                        Expressions.simpleTemplate(String.class, "group_concat({0})", h.hashtagName)))
+                .from(p)
+                .join(u).on(p.user.eq(u))
+                .join(pcr).on(pcr.post.eq(p))
+                .leftJoin(pp).on(pp.post.eq(p))
+                .leftJoin(c).on(c.post.eq(p))
+                .leftJoin(h).on(h.post.eq(p))
+                .groupBy(p.postId)
+                .orderBy(p.createdDate.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
+                .fetch();
     }
 }

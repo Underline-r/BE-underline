@@ -25,7 +25,6 @@ public class WebFeedController {
     @GetMapping("/feed")
     public ResponseEntity giveTimeline(Pageable pageable){
 
-        // TODO. queryDsl로 리팩토링 필요
         List<FeedPost> webFeed =  webFeedService.makeWebFeed(pageable);
 
         return new ResponseEntity(
