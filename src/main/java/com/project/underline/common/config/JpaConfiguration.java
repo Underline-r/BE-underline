@@ -15,7 +15,7 @@ public class JpaConfiguration {
         adapter.setShowSql(true);
         adapter.setDatabase(Database.MYSQL);
         // package to CustomMysqlDialect
-        adapter.setDatabasePlatform("com.project.underline.common.config.MySQL57DialectConfig");
+        adapter.setDatabasePlatform("com.project.underline.common.config.MySQL8DialectConfig");
         adapter.setGenerateDdl(false);
         return adapter;
     }
