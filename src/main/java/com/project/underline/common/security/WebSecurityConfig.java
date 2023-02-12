@@ -59,6 +59,7 @@ public class WebSecurityConfig{
                 .antMatchers(HttpMethod.GET,"/category-list").permitAll()
                 .antMatchers(HttpMethod.GET,"/post-detail/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/post/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/feed/**").permitAll()
                 /* 유저 권한 나눌 경우 사용
                 .antMatchers("/temp").hasRole("ADMIN")
                  */
