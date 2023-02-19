@@ -68,6 +68,7 @@ public class WebSecurityConfig{
 //    }
 
     /**
+     * TODO
      * 아래 요청에 대해서는 Spring Security를 사용하지 않기 때문에 WARN이 나오지만,
      * 위처럼 인증 인가 필터 말고 다른 필터들을 적용해야할 이유가 있을지 궁금
      */

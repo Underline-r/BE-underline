@@ -2,6 +2,7 @@ package com.project.underline.common.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -87,8 +88,8 @@ public class JwtTokenProvider {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-            // SecurityException을 확장한 signature Exception은 더이상 사용되지 않고. 패키지가 바뀜 -> SecurityException으로 캐치 못함
-        } catch (SecurityException | MalformedJwtException | io.jsonwebtoken.security.SignatureException e) {
+            // SecurityException의 사용처 확인 - java.lang vs jwt
+        } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.", e);
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.", e);
