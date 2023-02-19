@@ -12,6 +12,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +28,61 @@ public class WebSecurityConfig{
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
+    /**
+     * 아래 WebSecurityCustomizer의 Tomcat Run 중 WARN Message
+     * warning : This is not recommended -- please use permitAll via HttpSecurity#authorizeHttpRequests instead.
+     *
+     * ->
+     * web ignoring 사용하지 않고 요청 권한 byPass 시키기
+     * https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
+     */
+
+    /** 2
+     * authorizeHttpRequests vs authorizedRequests
+     */
+//    @Bean
+//    @Order(0)
+//    public SecurityFilterChain bypassFilterChain(HttpSecurity http) throws Exception {
+//        http.cors();
+//        http.httpBasic().disable()
+//                .csrf().disable();
+//        http.headers().frameOptions().disable();
+//        http
+//                .requestMatchers((matchers) ->
+//                        matchers
+//                                .antMatchers(HttpMethod.POST, "/sign-in")
+//                                .antMatchers(HttpMethod.POST, "/verify-email")
+//                                .antMatchers(HttpMethod.POST, "/sign-up")
+//                                .antMatchers(HttpMethod.POST, "/refresh")
+//                                .antMatchers(HttpMethod.GET, "/category-list")
+//                                .antMatchers(HttpMethod.GET, "/post-detail/**")
+//                                .antMatchers(HttpMethod.GET, "/post/**")
+//                                .antMatchers(HttpMethod.GET, "/feed/**")
+//                )
+//                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
+//                .requestCache().disable()
+//                .securityContext().disable()
+//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        return http.build();
+//    }
+
+    /**
+     * 아래 요청에 대해서는 Spring Security를 사용하지 않기 때문에 WARN이 나오지만,
+     * 위처럼 인증 인가 필터 말고 다른 필터들을 적용해야할 이유가 있을지 궁금
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .antMatchers(HttpMethod.POST, "/sign-in")
+                .antMatchers(HttpMethod.POST, "/verify-email")
+                .antMatchers(HttpMethod.POST, "/sign-up")
+                .antMatchers(HttpMethod.POST, "/refresh")
+                .antMatchers(HttpMethod.GET, "/category-list")
+                .antMatchers(HttpMethod.GET, "/post-detail/**")
+                .antMatchers(HttpMethod.GET, "/post/**")
+                .antMatchers(HttpMethod.GET, "/feed/**");
+    }
 
     /**
      * Security Config 구현 시 WebSecurityConfigurerAdapter 가 deprecated 됨에 따라(Spring Security 5.4)
@@ -51,15 +107,7 @@ public class WebSecurityConfig{
 
                 // request 권한 설정
                 .and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/sign-in").permitAll()
-                .antMatchers(HttpMethod.POST, "/verify-email").permitAll()
-                .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
-                .antMatchers(HttpMethod.POST, "/refresh").permitAll()
-                .antMatchers(HttpMethod.GET,"/category-list").permitAll()
-                .antMatchers(HttpMethod.GET,"/post-detail/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/post/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/feed/**").permitAll()
+                .authorizeHttpRequests()
                 /* 유저 권한 나눌 경우 사용
                 .antMatchers("/temp").hasRole("ADMIN")
                  */

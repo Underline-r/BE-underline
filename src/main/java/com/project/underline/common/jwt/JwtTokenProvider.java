@@ -3,6 +3,7 @@ package com.project.underline.common.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,11 +30,8 @@ public class JwtTokenProvider {
 
     private final Key key;
 
-    public JwtTokenProvider() {
-        // TODO:테스트를 위해 남겨둠
-//        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        // 시크릿 키 자동 생성
-        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public JwtTokenProvider(@Value("${underline-config.secret-key}") String secretKey) {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -88,7 +87,8 @@ public class JwtTokenProvider {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        } catch (SecurityException | MalformedJwtException e) {
+            // SecurityException을 확장한 signature Exception은 더이상 사용되지 않고. 패키지가 바뀜 -> SecurityException으로 캐치 못함
+        } catch (SecurityException | MalformedJwtException | io.jsonwebtoken.security.SignatureException e) {
             log.info("잘못된 JWT 서명입니다.", e);
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.", e);
