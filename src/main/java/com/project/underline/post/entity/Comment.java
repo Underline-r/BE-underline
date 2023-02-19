@@ -19,7 +19,7 @@ public class Comment {
     @Column(name="COMMENT_ID")
     private Long commentId;
 
-    @Column(name="COTENT")
+    @Column(name="CONTENT")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

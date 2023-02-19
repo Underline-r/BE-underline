@@ -7,8 +7,11 @@ echo 프로젝트 빌드
 echo docker image 생성
 docker build -t infinity4869/underline-app .
 
-echo network 확인
-docker network inspect underline-network
+echo image push
+docker push infinity4869/underline-app
 
-echo 실행
-docker run -d -p 8080:8080 --name=underline-app --network=underline-network infinity4869/underline-app
+#echo network 확인
+#docker network inspect underline-network
+
+# local mount
+#docker run -d -p 8080:8080 -v /Users/wanjongth/dev/vol/underline:/var/underline:rw --name=underline-app --network=underline-network infinity4869/underline-app

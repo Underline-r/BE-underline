@@ -3,7 +3,6 @@ package com.project.underline.common.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -30,10 +28,11 @@ public class JwtTokenProvider {
 
     private final Key key;
 
-    public JwtTokenProvider(@Value("${underline-config.secret-key}") String secretKey) {
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        byte[] decodeByte = decoder.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(decodeByte);
+    public JwtTokenProvider() {
+        // TODO:테스트를 위해 남겨둠
+//        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
+        // 시크릿 키 자동 생성
+        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
 
     /**
