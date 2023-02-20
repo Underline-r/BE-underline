@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserCategoryRelationRepository extends JpaRepository<UserCategoryRelation, Long> {
-    List<UserCategoryRelation> findAllByUserId(Long userId);
+    Optional<List<UserCategoryRelation>> findAllByUserId(Long userId);
 
     @Modifying
     @Query("delete from UserCategoryRelation ucr where ucr.user.id = :userId")
