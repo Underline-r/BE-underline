@@ -21,8 +21,8 @@ public class FeedPost {
     private long likeCount;
     private long commentCount;
 
-    private boolean isPicked;
-    private boolean isBookmarked;
+    private Boolean isPicked;
+    private Boolean isBookmarked;
 
     // private ArrayList<String> hashtags;
 
@@ -40,14 +40,12 @@ public class FeedPost {
         this.isPicked = false;
     }
 
-    public FeedPost setPickYn(){
+    public void setIsPicked(){
         this.isPicked = true;
-        return this;
     }
 
-    public FeedPost setBookmarkYn(){
+    public void setIsBookmarked(){
         this.isBookmarked = true;
-        return this;
     }
 
     private ArrayList<String> stringToArr(String target){
