@@ -2,9 +2,10 @@ package com.project.underline.feed.service;
 
 import com.project.underline.category.entity.UserCategoryRelation;
 import com.project.underline.category.entity.repository.UserCategoryRelationRepository;
+import com.project.underline.common.exception.UnderlineException;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.feed.entity.repository.FeedQueryRepository;
-import com.project.underline.feed.web.dto.FeedPost;
+import com.project.underline.feed.web.dto.FeedResponse;
 import com.project.underline.post.entity.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,14 +24,25 @@ public class WebFeedService {
     private final FeedQueryRepository feedQueryRepository;
 
     @Transactional
-    public List<FeedPost> makeWebFeed(Pageable pageable) {
+    public FeedResponse makeWebFeed(Pageable pageable) {
+        FeedResponse feedResponse = new FeedResponse();
         try {
             // TODO. try-catch 말고 다른 예외처리로 로그인하지 않은 사용자가 요청할때 getDefaultFeedInformation로 넘어가도록 수정 (지금은 동작 자체는 합니다)
-            List<UserCategoryRelation> likedCategoryCodeList = userCategoryRelationRepository.findAllByUserId(SecurityUtil.getCurrentUserId());
-            return feedQueryRepository.getCustomFeedInformation(pageable, categoryListToString(likedCategoryCodeList));
-        }catch (RuntimeException e){
-            return feedQueryRepository.getDefaultFeedInformation(pageable);
+            Optional<List<UserCategoryRelation>> likedCategoryCodeList = userCategoryRelationRepository
+                    .findAllByUserId(SecurityUtil.getCurrentUserId());
+
+            if(likedCategoryCodeList.isEmpty()){
+                feedQueryRepository.getDefaultFeedInformation(feedResponse,pageable);
+            }
+            feedQueryRepository.getCustomFeedInformation(feedResponse,pageable, categoryListToString(likedCategoryCodeList.get()));
+            feedQueryRepository.setUserPickOrBookmark(feedResponse);
+        }catch (UnderlineException e){
+            feedQueryRepository.getDefaultFeedInformation(feedResponse,pageable);
         }
+
+        feedResponse.isLastCheck();
+
+        return feedResponse;
     }
 
     private List<String> categoryListToString(List<UserCategoryRelation> categoryList){
