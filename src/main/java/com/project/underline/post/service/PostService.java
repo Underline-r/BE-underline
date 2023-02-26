@@ -6,12 +6,10 @@ import com.project.underline.common.metadata.ErrorCode;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.Hashtag;
 import com.project.underline.post.entity.Post;
-import com.project.underline.post.entity.repository.HashtagRepository;
 import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
 import com.project.underline.post.web.dto.UserCreatedPostListResponse;
-import com.project.underline.reference.entity.Reference;
 import com.project.underline.reference.service.ReferenceService;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
@@ -39,6 +37,11 @@ public class PostService {
                     .user(userRepository.findById(SecurityUtil.getCurrentUserId())
                             .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)))
                     .content(postRequest.getContent())
+                    /*
+                    TODO
+                    문제 1. request에 출처 없을 시 NPE,
+                    문제 2. 출처 타이틀이 같을 때 author 다를 경우
+                     */
                     .reference(referenceService.checkExistReference(postRequest.getReferences()))
                     .build();
 

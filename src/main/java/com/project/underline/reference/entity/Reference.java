@@ -27,6 +27,10 @@ public class Reference {
     @Column(name="AUTHOR")
     private String author;
 
+    @OneToMany(mappedBy = "reference",
+            cascade = CascadeType.ALL)
+    private List<Post> postList = new ArrayList<Post>();
+
     @Builder
     public Reference(Long referenceId, String title,String author){
         this.referenceId = referenceId;
