@@ -61,6 +61,10 @@ public class Post extends BaseTimeEntity {
         this.user = user;
         this.content = content;
         this.reference = reference;
+
+        if(!reference.getPostList().contains(this)){
+            reference.getPostList().add(this);
+        }
     }
 
     public Post(Long id){
