@@ -55,7 +55,7 @@ public class WebSecurityConfig{
 //                                .antMatchers(HttpMethod.POST, "/verify-email")
 //                                .antMatchers(HttpMethod.POST, "/sign-up")
 //                                .antMatchers(HttpMethod.POST, "/refresh")
-//                                .antMatchers(HttpMethod.GET, "/category-list")
+//                                .antMatchers(HttpMethod.GET, "/categories")
 //                                .antMatchers(HttpMethod.GET, "/post-detail/**")
 //                                .antMatchers(HttpMethod.GET, "/post/**")
 //                                .antMatchers(HttpMethod.GET, "/feed/**")
@@ -79,7 +79,7 @@ public class WebSecurityConfig{
                 .antMatchers(HttpMethod.POST, "/verify-email")
                 .antMatchers(HttpMethod.POST, "/sign-up")
                 .antMatchers(HttpMethod.POST, "/refresh")
-                .antMatchers(HttpMethod.GET, "/category-list")
+                .antMatchers(HttpMethod.GET, "/categories")
                 .antMatchers(HttpMethod.GET, "/post-detail/**")
                 .antMatchers(HttpMethod.GET, "/post/**")
                 .antMatchers(HttpMethod.GET, "/feed/**");

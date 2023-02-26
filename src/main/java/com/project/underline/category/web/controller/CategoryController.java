@@ -38,7 +38,7 @@ public class CategoryController {
         );
     }
 
-    @GetMapping("/category-list")
+    @GetMapping("/categories")
     public ResponseEntity categoryList(){
         HashMap<String, String> categoryList = CategoryList.getCategoryList();
 

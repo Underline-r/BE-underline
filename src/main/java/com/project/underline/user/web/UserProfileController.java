@@ -40,7 +40,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/follower")
+    @GetMapping("/{id}/followers")
     public ResponseEntity<FollowUserInfoDto> getFollowerList(@PathVariable Long id) {
         List<FollowUserInfoDto> followerList = userProfileService.getFollowerList(id);
         return new ResponseEntity(
@@ -48,7 +48,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/post")
+    @GetMapping("/{id}/posts")
     public ResponseEntity<UserPostDto> getUserPostList(@PathVariable Long id) {
         List<UserPostDto> postList = userProfileService.getUserPostList(id);
         return new ResponseEntity(
@@ -56,7 +56,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/hashtag")
+    @GetMapping("/{id}/hashtags")
     public ResponseEntity<String> getUserHashtagList(@PathVariable Long id) {
         List<String> hashtagList = userProfileService.getUserHashtagList(id);
         return new ResponseEntity(
@@ -64,7 +64,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/category")
+    @GetMapping("/{id}/categories")
     public ResponseEntity<String> getUserCategoryList(@PathVariable Long id) {
         List<String> categoryList = userProfileService.getUserCategoryList(id);
         return new ResponseEntity(
@@ -72,7 +72,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/reference")
+    @GetMapping("/{id}/references")
     public ResponseEntity<String> getUserReferenceList(@PathVariable Long id) {
         List<UserReferenceDto> referenceList = userProfileService.getUserReferenceList(id);
         return new ResponseEntity(

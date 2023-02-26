@@ -21,7 +21,7 @@ public class NotificationController {
     private final NotificationService notificationService;
 
 
-    @GetMapping("/notification")
+    @GetMapping("/notifications")
     public ResponseEntity inquiryNotification(){
 
         NotificationListResponse notifications = notificationService.inquiryNotification();
