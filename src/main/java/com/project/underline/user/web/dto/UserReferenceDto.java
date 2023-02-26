@@ -8,11 +8,9 @@ public class UserReferenceDto {
 
     private String title;
 
-    private String author;
 
     @QueryProjection
-    public UserReferenceDto(String title, String author) {
+    public UserReferenceDto(String title) {
         this.title = title;
-        this.author = author;
     }
 }
