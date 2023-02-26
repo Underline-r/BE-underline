@@ -2,7 +2,9 @@ package com.project.underline.common.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SecurityException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,11 +31,8 @@ public class JwtTokenProvider {
 
     private final Key key;
 
-    public JwtTokenProvider() {
-        // TODO:테스트를 위해 남겨둠
-//        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        // 시크릿 키 자동 생성
-        this.key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public JwtTokenProvider(@Value("${underline-config.secret-key}") String secretKey) {
+        this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
@@ -88,6 +88,7 @@ public class JwtTokenProvider {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
+            // SecurityException의 사용처 확인 - java.lang vs jwt
         } catch (SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.", e);
         } catch (ExpiredJwtException e) {
