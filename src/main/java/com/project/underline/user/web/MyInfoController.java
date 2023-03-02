@@ -7,6 +7,7 @@ import com.project.underline.common.util.S3Service;
 import com.project.underline.post.web.dto.CommentResponse;
 import com.project.underline.user.service.MyInfoService;
 import com.project.underline.user.web.dto.SignupRequestDto;
+import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -68,11 +70,11 @@ public class MyInfoController {
         );
     }
 
-    /*@GetMapping("/like-posts")
+    @GetMapping("/like-posts")
     public ResponseEntity<UserPostDto> listLikePost() {
         List<UserPostDto> likePostList = infoService.listLikePost();
         return new ResponseEntity(
                 DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, likePostList), HttpStatus.OK
         );
-    }*/
+    }
 }

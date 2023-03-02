@@ -9,6 +9,7 @@ import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.post.web.dto.CommentResponse;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
+import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -75,10 +76,10 @@ public class MyInfoService {
         return new CommentResponse(commentRepository.findAllByUser(findUser));
     }
 
-    /*public List<UserPostDto> listLikePost() {
+    public List<UserPostDto> listLikePost() {
         Long currentUserId = SecurityUtil.getCurrentUserId();
         User findUser = userService.existUser(currentUserId);
 
         return postRepository.findAllByMyPick(findUser);
-    }*/
+    }
 }
