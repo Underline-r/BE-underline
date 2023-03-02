@@ -4,6 +4,7 @@ import com.project.underline.category.web.dto.UserCategoryListRequest;
 import com.project.underline.common.metadata.ResponseMessage;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.common.util.S3Service;
+import com.project.underline.post.web.dto.CommentResponse;
 import com.project.underline.user.service.MyInfoService;
 import com.project.underline.user.web.dto.SignupRequestDto;
 import com.project.underline.user.web.dto.UserProfileDto;
@@ -59,4 +60,19 @@ public class MyInfoController {
         );
     }
 
+    @GetMapping("/comments")
+    public ResponseEntity<CommentResponse> listComments() {
+        CommentResponse commentList = infoService.listComments();
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, commentList), HttpStatus.OK
+        );
+    }
+
+    /*@GetMapping("/like-posts")
+    public ResponseEntity<UserPostDto> listLikePost() {
+        List<UserPostDto> likePostList = infoService.listLikePost();
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, likePostList), HttpStatus.OK
+        );
+    }*/
 }

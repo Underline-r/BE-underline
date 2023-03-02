@@ -21,10 +21,12 @@ public class CommentResponse {
     @Getter
     public static class EachComment{
         private Long userId;
+        private Long postId;
         private String comment;
 
         public EachComment(Comment comment){
             this.userId = comment.getUser().getId();
+            this.postId = comment.getPost().getPostId();
             this.comment = comment.getContent();
         }
     }
