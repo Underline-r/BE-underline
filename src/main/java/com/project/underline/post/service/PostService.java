@@ -27,6 +27,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ReferenceService referenceService;
+    private final PostViewService postViewService;
 
     @Transactional
     public void registerPost(PostRequest postRequest) {
@@ -48,6 +49,8 @@ public class PostService {
             registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
 
             postRepository.save(registerNewPost);
+            postViewService.setViewCount(registerNewPost.getPostId());
+
         } catch (RuntimeException e) {
             throw e;
         }

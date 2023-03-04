@@ -7,6 +7,7 @@ import lombok.Getter;
 public class PostDetailResponse {
     private String content;
     private Long userId;
+    private Long viewCount;
 
     public PostDetailResponse(Post post){
         this.content = post.getContent();
