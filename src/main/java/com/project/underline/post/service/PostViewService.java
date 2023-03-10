@@ -1,44 +1,39 @@
 package com.project.underline.post.service;
 
+import com.project.underline.post.entity.PostTemp;
+import com.project.underline.post.entity.repository.PostRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class PostViewService {
-    private final StringRedisTemplate stringRedisTemplate;
+    private final RedisTemplate redisTemplate;
+    private final PostRedisRepository postRedisRepository;
 
     public Long getViewCount(Long postId){
-
-        return null;
+        Optional<PostTemp> postTemp = postRedisRepository.findById(postId);
+        return postTemp.get().getPostView();
     }
 
     public void setViewCount(Long postId){
 
-        HashOperations<String, Object, Object> hashOps = stringRedisTemplate.opsForHash();
-
-        String key = UUID.randomUUID().toString();
-
-        Map<String, Object> values = new HashMap<>();
-        values.put("postId", postId.toString()); // TODO. redis에 value값을 무조건 String으로만 저장 가능한지
-        values.put("postView", "0");
-
-        hashOps.putAll(key, values);
+        PostTemp postTemp = new PostTemp(postId, 0L);
+        postRedisRepository.save(postTemp);
     }
 
     private String makeKey(){
-        String key = "testHash" + stringRedisTemplate.randomKey();
+        String key = "testHash" + redisTemplate.randomKey();
         return key;
     }
 }

@@ -13,4 +13,10 @@ public class PostDetailResponse {
         this.content = post.getContent();
         this.userId = post.getUser().getId();
     }
+
+    public PostDetailResponse(Post post, Long viewCount){
+        this.content = post.getContent();
+        this.userId = post.getUser().getId();
+        this.viewCount = viewCount;
+    }
 }

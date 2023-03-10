@@ -59,8 +59,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostDetailResponse inquiryPost(Long postId) {
         try {
-            Post findPost = postRepository.findByPostId(postId);
-            return new PostDetailResponse(findPost);
+            return new PostDetailResponse(postRepository.findByPostId(postId).get(), postViewService.getViewCount(postId));
         } catch (RuntimeException e) {
             throw e;
         }
@@ -69,7 +68,7 @@ public class PostService {
     @Transactional
     public void patchPost(Long postId, PostRequest postRequest) {
         try {
-            Post updatePost = postRepository.findByPostId(postId);
+            Post updatePost = postRepository.findByPostId(postId).get();
             SecurityUtil.checkSameUser(updatePost.getUser().getId());
 
             updatePost.update(postRequest.getContent());
@@ -85,7 +84,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId) {
         try {
-            Post deletePost = postRepository.findByPostId(postId);
+            Post deletePost = postRepository.findByPostId(postId).get();
 
             SecurityUtil.checkSameUser(deletePost.getUser().getId());
 
