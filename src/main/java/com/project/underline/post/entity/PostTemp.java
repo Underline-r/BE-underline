@@ -23,4 +23,8 @@ public class PostTemp {
         this.postView = postView;
     }
 
+    public PostTemp viewIncrease(){
+        this.postView += 1;
+        return this;
+    }
 }

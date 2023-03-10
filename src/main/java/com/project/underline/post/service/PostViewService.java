@@ -2,6 +2,7 @@ package com.project.underline.post.service;
 
 import com.project.underline.post.entity.PostTemp;
 import com.project.underline.post.entity.repository.PostRedisRepository;
+import com.sun.jdi.event.ExceptionEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,12 +19,21 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class PostViewService {
-    private final RedisTemplate redisTemplate;
     private final PostRedisRepository postRedisRepository;
 
     public Long getViewCount(Long postId){
-        Optional<PostTemp> postTemp = postRedisRepository.findById(postId);
-        return postTemp.get().getPostView();
+        try {
+            Optional<PostTemp> postTemp = postRedisRepository.findById(postId);
+            viewIncrease(postTemp.get());
+            return postTemp.get().getPostView();
+        }catch (RuntimeException e){
+            throw e;
+        }
+    }
+
+    public void viewIncrease(PostTemp postTemp){
+        postTemp.viewIncrease();
+        postRedisRepository.save(postTemp);
     }
 
     public void setViewCount(Long postId){
@@ -32,8 +42,4 @@ public class PostViewService {
         postRedisRepository.save(postTemp);
     }
 
-    private String makeKey(){
-        String key = "testHash" + redisTemplate.randomKey();
-        return key;
-    }
 }
