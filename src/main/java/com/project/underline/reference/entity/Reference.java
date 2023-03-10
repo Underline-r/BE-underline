@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class Reference {
     private Long referenceId;
 
     @Column(name="TITLE")
+    @NotNull
     private String title;
 
     @Column(name="AUTHOR")

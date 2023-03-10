@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.project.underline.common.metadata.ResponseMessage.SUCCESS;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -19,7 +21,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/post")
-    public ResponseEntity registerPost(@RequestBody PostRequest postRequest){
+    public ResponseEntity registerPost(@Valid @RequestBody PostRequest postRequest){
 
         postService.registerPost(postRequest);
 

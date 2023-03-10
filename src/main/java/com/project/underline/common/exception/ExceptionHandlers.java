@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -45,5 +46,11 @@ public class ExceptionHandlers {
                         e.getClass(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<DefaultResponse> contentValidException(MethodArgumentNotValidException e) {
+        return new ResponseEntity<DefaultResponse>(
+                DefaultResponse.errRes(HttpStatus.BAD_REQUEST.value(),
+                        e.getClass(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
+    }
 
 }

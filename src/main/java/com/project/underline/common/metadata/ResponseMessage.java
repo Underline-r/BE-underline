@@ -9,4 +9,6 @@ public class ResponseMessage {
     public static final String UNAUTHORIZED = "인증되지 않았습니다.";
     public static final String FOLLOW = "팔로우 성공.";
     public static final String UNFOLLOW = "언팔로우 성공.";
+
+    public static final String INVALID_CONTENT = "해당 값을 올바르게 작성해주세요.";
 }
