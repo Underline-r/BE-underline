@@ -5,8 +5,10 @@ import com.project.underline.category.entity.repository.UserCategoryRelationRepo
 import com.project.underline.common.exception.UnderlineException;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.feed.entity.repository.FeedQueryRepository;
+import com.project.underline.feed.web.dto.FeedPost;
 import com.project.underline.feed.web.dto.FeedResponse;
 import com.project.underline.post.entity.repository.PostRepository;
+import com.project.underline.post.service.PostViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,9 +21,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class WebFeedService {
-    private final PostRepository postRepository;
     private final UserCategoryRelationRepository userCategoryRelationRepository;
     private final FeedQueryRepository feedQueryRepository;
+    private final PostViewService postViewService;
 
     @Transactional
     public FeedResponse makeWebFeed(Pageable pageable) {
@@ -41,8 +43,13 @@ public class WebFeedService {
         }
 
         feedResponse.isLastCheck();
+        postViewIncrease(feedResponse.getFeed());
 
         return feedResponse;
+    }
+
+    private void postViewIncrease(List<FeedPost> feedPosts){
+        postViewService.postListViewIncrease(feedPosts);
     }
 
     private List<String> categoryListToString(List<UserCategoryRelation> categoryList){
