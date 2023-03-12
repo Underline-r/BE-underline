@@ -33,7 +33,8 @@ public class PostTempSerializer implements RedisSerializer<PostTemp> {
     @Override
     public PostTemp deserialize(byte[] bytes) throws SerializationException {
         try {
-            Map<String, Object> hash = new ObjectMapper().readValue(new String(bytes, CHARSET), new TypeReference<Map<String, Object>>() {});
+            Map<String, Object> hash = new ObjectMapper().readValue(new String(bytes, CHARSET), new TypeReference<Map<String, Object>>() {
+            });
             Long postId = Long.parseLong(hash.get(HASH_KEY_POST_ID).toString());
             Long postView = Long.parseLong(hash.get(HASH_KEY_POST_VIEW).toString());
             return new PostTemp(postId, postView);

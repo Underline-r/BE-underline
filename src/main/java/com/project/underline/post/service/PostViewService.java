@@ -41,6 +41,8 @@ public class PostViewService {
 
     public void postListViewIncrease(List<FeedPost> postList) {
         try {
+            // redisTemplate을 안쓰고 싶었는데 repository를 쓴다면 find한뒤에 update해줘야하기때문에 -> 한번 왔다갔다해야한다는뜻
+            // TODO. reditTemplate을 안쓰도록 개선
             for (FeedPost post : postList) {
                 String key = "PostTemp:" + post.getPostId();
                 redisTemplate.opsForHash().increment(key, "postView", 1L);
