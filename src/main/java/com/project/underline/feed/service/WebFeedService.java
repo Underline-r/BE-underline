@@ -27,14 +27,17 @@ public class WebFeedService {
     public FeedResponse makeWebFeed(Pageable pageable) {
         FeedResponse feedResponse = new FeedResponse();
         try {
+            Long userId = SecurityUtil.getCurrentUserId();
+
             // TODO. try-catch 말고 다른 예외처리로 로그인하지 않은 사용자가 요청할때 getDefaultFeedInformation로 넘어가도록 수정 (지금은 동작 자체는 합니다)
             Optional<List<UserCategoryRelation>> likedCategoryCodeList = userCategoryRelationRepository
-                    .findAllByUserId(SecurityUtil.getCurrentUserId());
+                    .findAllByUserId(userId);
 
-            if(likedCategoryCodeList.isEmpty()){
+            if(likedCategoryCodeList==null || likedCategoryCodeList.get().size() < 1){
                 feedQueryRepository.getDefaultFeedInformation(feedResponse,pageable);
+            }else{
+                feedQueryRepository.getCustomFeedInformation(feedResponse,pageable, categoryListToString(likedCategoryCodeList.get()));
             }
-            feedQueryRepository.getCustomFeedInformation(feedResponse,pageable, categoryListToString(likedCategoryCodeList.get()));
             feedQueryRepository.setUserPickOrBookmark(feedResponse);
         }catch (UnderlineException e){
             feedQueryRepository.getDefaultFeedInformation(feedResponse,pageable);
