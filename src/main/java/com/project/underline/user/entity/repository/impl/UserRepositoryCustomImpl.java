@@ -124,12 +124,11 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return queryFactory
                 .select(
                         new QUserReferenceDto(
-                                reference.title,
-                                reference.author
+                                reference.title
                         )
                 )
                 .from(reference)
-                .groupBy(reference.title, reference.author)
+                .groupBy(reference.title)
                 .join(reference.postList, post)
                 .join(post.user, user)
                 .on(userIdEq(id))

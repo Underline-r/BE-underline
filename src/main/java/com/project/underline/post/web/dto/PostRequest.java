@@ -14,7 +14,7 @@ public class PostRequest {
     private List<String> category;
 
     @NotNull(message = ResponseMessage.INVALID_CONTENT)
-    private String references;
+    private String reference;
 
     @NotNull(message = ResponseMessage.INVALID_CONTENT)
     private String content;
