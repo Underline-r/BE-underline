@@ -12,6 +12,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,20 +30,24 @@ public class Post extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
+    @NotNull
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REFERENCE_ID")
+    @NotNull
     private Reference reference;
 
     @Column(name="CONTENT")
     @Lob
+    @NotNull
     private String content;
 
 
     @Fetch(FetchMode.SUBSELECT)
     @OneToMany(mappedBy = "post",
             cascade = CascadeType.ALL)
+    @NotNull
     private List<PostCategoryRelation> categoryList = new ArrayList<PostCategoryRelation>();
 
     @Fetch(FetchMode.SUBSELECT)
@@ -61,6 +66,10 @@ public class Post extends BaseTimeEntity {
         this.user = user;
         this.content = content;
         this.reference = reference;
+
+        if(!reference.getPostList().contains(this)){
+            reference.getPostList().add(this);
+        }
     }
 
     public Post(Long id){

@@ -6,6 +6,7 @@ import com.project.underline.user.service.UserProfileService;
 import com.project.underline.user.web.dto.FollowUserInfoDto;
 import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
+import com.project.underline.user.web.dto.UserReferenceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/follower")
+    @GetMapping("/{id}/followers")
     public ResponseEntity<FollowUserInfoDto> getFollowerList(@PathVariable Long id) {
         List<FollowUserInfoDto> followerList = userProfileService.getFollowerList(id);
         return new ResponseEntity(
@@ -47,7 +48,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/post")
+    @GetMapping("/{id}/posts")
     public ResponseEntity<UserPostDto> getUserPostList(@PathVariable Long id) {
         List<UserPostDto> postList = userProfileService.getUserPostList(id);
         return new ResponseEntity(
@@ -55,7 +56,7 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/hashtag")
+    @GetMapping("/{id}/hashtags")
     public ResponseEntity<String> getUserHashtagList(@PathVariable Long id) {
         List<String> hashtagList = userProfileService.getUserHashtagList(id);
         return new ResponseEntity(
@@ -63,11 +64,19 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/category")
+    @GetMapping("/{id}/categories")
     public ResponseEntity<String> getUserCategoryList(@PathVariable Long id) {
         List<String> categoryList = userProfileService.getUserCategoryList(id);
         return new ResponseEntity(
                 DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, categoryList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{id}/references")
+    public ResponseEntity<String> getUserReferenceList(@PathVariable Long id) {
+        List<UserReferenceDto> referenceList = userProfileService.getUserReferenceList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, referenceList), HttpStatus.OK
         );
     }
 }

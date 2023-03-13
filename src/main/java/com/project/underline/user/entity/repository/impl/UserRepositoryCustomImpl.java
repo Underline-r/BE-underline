@@ -12,6 +12,7 @@ import java.util.List;
 import static com.project.underline.category.entity.QUserCategoryRelation.userCategoryRelation;
 import static com.project.underline.post.entity.QHashtag.hashtag;
 import static com.project.underline.post.entity.QPost.post;
+import static com.project.underline.reference.entity.QReference.reference;
 import static com.project.underline.user.entity.QUser.user;
 import static com.project.underline.user.entity.QUserFollowRelation.userFollowRelation;
 
@@ -111,6 +112,26 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .from(userCategoryRelation)
                 .join(userCategoryRelation.user, user)
                 .where(userIdEq(id))
+                .fetch();
+    }
+
+    /**
+     * TODO : from 절 subquery가 안되기 때문에, 최적화 위해
+     * @Subselct 사용한 Entity 이용 모수 줄이는 방법 있음
+     */
+    @Override
+    public List<UserReferenceDto> selectUserReferenceList(Long id) {
+        return queryFactory
+                .select(
+                        new QUserReferenceDto(
+                                reference.title
+                        )
+                )
+                .from(reference)
+                .groupBy(reference.title)
+                .join(reference.postList, post)
+                .join(post.user, user)
+                .on(userIdEq(id))
                 .fetch();
     }
 

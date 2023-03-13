@@ -13,6 +13,8 @@ import com.project.underline.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -24,6 +26,14 @@ public class CommentService {
         commentRepository.save(new Comment(checkPostExistence(postId)
                 ,userService.existUser(SecurityUtil.getCurrentUserId())
                 ,commentRequest.getComment()));
+    }
+
+    public void patchComment(Long postId, CommentRequest commentRequest) {
+        Optional<Comment> updateComment = commentRepository.findById(commentRequest.getCommentId());
+        SecurityUtil.checkSameUser(updateComment.get().getUser().getId());
+
+        updateComment.get().update(commentRequest.getComment());
+        commentRepository.save(updateComment.get());
     }
 
     public CommentResponse inquiryComments(Long postId) {

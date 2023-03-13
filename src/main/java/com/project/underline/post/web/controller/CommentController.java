@@ -4,6 +4,7 @@ import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.post.service.CommentService;
 import com.project.underline.post.web.dto.CommentRequest;
 import com.project.underline.post.web.dto.CommentResponse;
+import com.project.underline.post.web.dto.PostRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,6 @@ public class CommentController {
     }
 
     @PostMapping("/{postId}/comments")
-    @PatchMapping("/{postId}/comments")
     public ResponseEntity registerComments(@PathVariable Long postId, @RequestBody CommentRequest commentRequest){
 
         commentService.registerComments(postId,commentRequest);
@@ -41,6 +41,20 @@ public class CommentController {
                 DefaultResponse.builder()
                         .statusCode(OK.value())
                         .message(SUCCESS)
+                        .build()
+                , HttpStatus.OK);
+    }
+
+    @PatchMapping("/{postId}/comments")
+    public ResponseEntity patchPost(@PathVariable Long postId, @RequestBody CommentRequest commentRequest){
+
+        commentService.patchComment(postId,commentRequest);
+
+        return new ResponseEntity(
+                DefaultResponse.builder()
+                        .statusCode(OK.value())
+                        .message(SUCCESS)
+
                         .build()
                 , HttpStatus.OK);
     }
