@@ -24,18 +24,14 @@ public class Reference {
     @Column(name="TITLE")
     private String title;
 
-    @Column(name="AUTHOR")
-    private String author;
-
     @OneToMany(mappedBy = "reference",
             cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<Post>();
 
     @Builder
-    public Reference(Long referenceId, String title,String author){
+    public Reference(Long referenceId, String title){
         this.referenceId = referenceId;
         this.title = title;
-        this.author = author;
     }
 
     public Reference(String title){

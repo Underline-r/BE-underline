@@ -42,7 +42,7 @@ public class PostService {
                     문제 1. request에 출처 없을 시 NPE,
                     문제 2. 출처 타이틀이 같을 때 author 다를 경우
                      */
-                    .reference(referenceService.checkExistReference(postRequest.getReferences()))
+                    .reference(referenceService.checkExistReference(postRequest.getReference()))
                     .build();
 
             registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);

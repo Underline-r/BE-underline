@@ -36,4 +36,9 @@ public class Comment {
         this.user = user;
         this.content = content;
     }
+
+    public Comment update(String content){
+        this.content = content;
+        return this;
+    }
 }

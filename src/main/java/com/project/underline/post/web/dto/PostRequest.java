@@ -9,6 +9,6 @@ public class PostRequest {
     private String content;
     private List<String> hashtag;
     private List<String> category;
-    private String references;
+    private String reference;
 
 }
