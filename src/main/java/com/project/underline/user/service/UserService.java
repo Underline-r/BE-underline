@@ -102,7 +102,7 @@ public class UserService {
         );
     }
 
-    private void validationEmail(String email) {
+    public void validationEmail(String email) {
         if (!isValidEmail(email)) {
             throw new UnderlineException(ErrorCode.INVALID_EMAIL);
         }
