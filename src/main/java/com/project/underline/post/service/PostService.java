@@ -106,12 +106,14 @@ public class PostService {
         List<PostCategoryRelation> postCategoryRelations = new ArrayList<PostCategoryRelation>();
 
         List<String> requestHashtags = postRequest.getHashtag();
-        if (requestHashtags != null && !requestHashtags.isEmpty()) {
+
+        registerPost.removeAllHashtagsAndCategory();
+
+        if (requestHashtags != null && !requestHashtags.isEmpty() || registerPost.getHashtags()!= null) {
             for (String eachHashtag : requestHashtags) {
                 hashtags.add(new Hashtag(registerPost, eachHashtag));
             }
         }
-
 
         if (postRequest.getCategory().size() > 0) {
             for (String eachCategory : postRequest.getCategory()) {

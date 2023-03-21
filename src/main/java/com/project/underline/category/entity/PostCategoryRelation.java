@@ -2,10 +2,7 @@ package com.project.underline.category.entity;
 
 
 import com.project.underline.post.entity.Post;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
+@Setter
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(
