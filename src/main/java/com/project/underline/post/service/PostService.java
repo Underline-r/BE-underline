@@ -1,17 +1,22 @@
 package com.project.underline.post.service;
 
+import com.project.underline.bookmark.entity.repository.BookmarkRepository;
 import com.project.underline.category.entity.PostCategoryRelation;
 import com.project.underline.common.exception.UnderlineException;
 import com.project.underline.common.metadata.ErrorCode;
 import com.project.underline.common.util.SecurityUtil;
+import com.project.underline.post.entity.Comment;
 import com.project.underline.post.entity.Hashtag;
 import com.project.underline.post.entity.Post;
+import com.project.underline.post.entity.repository.CommentRepository;
+import com.project.underline.post.entity.repository.PickRepository;
 import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
 import com.project.underline.post.web.dto.UserCreatedPostListResponse;
 import com.project.underline.reference.service.ReferenceService;
 import com.project.underline.user.entity.User;
+import com.project.underline.user.entity.repository.FollowRelationRepository;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,10 @@ import java.util.Optional;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final PickRepository pickRepository;
+    private final BookmarkRepository bookmarkRepository;
+    private final FollowRelationRepository followRelationRepository;
+    private final CommentRepository commentRepository;
     private final ReferenceService referenceService;
 
     @Transactional
@@ -57,11 +66,38 @@ public class PostService {
     public PostDetailResponse inquiryPost(Long postId) {
         try {
             Post findPost = postRepository.findByPostId(postId);
-            return new PostDetailResponse(findPost);
+            PostDetailResponse detailResponse = new PostDetailResponse(findPost);
+            setUserStatus(detailResponse);
+            setPostCountOption(detailResponse);
+            return detailResponse;
         } catch (RuntimeException e) {
             throw e;
         }
     }
+
+    @Transactional(readOnly = true)
+    public PostDetailResponse setUserStatus(PostDetailResponse postDetailResponse){
+        boolean isFollwed = followRelationRepository.existsByToUserIdAndFromUserId(SecurityUtil.getCurrentUserId(), postDetailResponse.getUserId());
+        boolean isBookmarked = bookmarkRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(),SecurityUtil.getCurrentUserId());
+        boolean isPicked = pickRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(),SecurityUtil.getCurrentUserId());
+
+        postDetailResponse.setUserCheck(isPicked,isBookmarked,isFollwed);
+
+        return postDetailResponse;
+    }
+
+    @Transactional(readOnly = true)
+    public PostDetailResponse setPostCountOption(PostDetailResponse postDetailResponse){
+        Long pickCount = pickRepository.countAllByPost_PostId(postDetailResponse.getPostId());
+        Optional<List<Comment>> comments = commentRepository.findAllByPost_PostId(postDetailResponse.getPostId());
+        if(comments.isPresent() && comments.get().size() > 0){
+            postDetailResponse.setCountOption(pickCount,(long) comments.get().size(),comments.get().get(0).getContent());
+        }else{
+            postDetailResponse.setCountOption(pickCount,null,null);
+        }
+        return postDetailResponse;
+    }
+
 
     @Transactional
     public void patchPost(Long postId, PostRequest postRequest) {

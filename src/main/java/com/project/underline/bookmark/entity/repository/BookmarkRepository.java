@@ -8,4 +8,5 @@ import java.util.List;
 public interface BookmarkRepository extends JpaRepository<Bookmark,Long> {
 
     List<Bookmark> findAllByUserId(Long userId);
+    Boolean existsByPost_PostIdAndUser_Id(Long postId, Long userId);
 }
