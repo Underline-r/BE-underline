@@ -80,8 +80,7 @@ public class WebSecurityConfig{
                 .antMatchers(HttpMethod.POST, "/sign-up")
                 .antMatchers(HttpMethod.POST, "/refresh")
                 .antMatchers(HttpMethod.GET, "/categories")
-                .antMatchers(HttpMethod.GET, "/post/**")
-                .antMatchers(HttpMethod.GET, "/feed/**");
+                .antMatchers(HttpMethod.GET, "/post/**");
     }
 
     /**
