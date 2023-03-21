@@ -105,8 +105,9 @@ public class PostService {
         List<Hashtag> hashtags = new ArrayList<Hashtag>();
         List<PostCategoryRelation> postCategoryRelations = new ArrayList<PostCategoryRelation>();
 
-        if (postRequest.getHashtag().size() > 0) {
-            for (String eachHashtag : postRequest.getHashtag()) {
+        List<String> requestHashtags = postRequest.getHashtag();
+        if (requestHashtags != null && !requestHashtags.isEmpty()) {
+            for (String eachHashtag : requestHashtags) {
                 hashtags.add(new Hashtag(registerPost, eachHashtag));
             }
         }
