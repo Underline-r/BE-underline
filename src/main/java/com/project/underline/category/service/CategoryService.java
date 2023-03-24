@@ -46,4 +46,9 @@ public class CategoryService {
 
     }
 
+    @Transactional
+    public void reorganizeFavoriteCategory(List<String> category) {
+        userCategoryRelationRepository.deleteAllByUserId(SecurityUtil.getCurrentUserId());
+        registerFavoriteCategory(category);
+    }
 }

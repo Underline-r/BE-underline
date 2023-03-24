@@ -44,7 +44,8 @@ public class FeedQueryRepository {
                         p.content,
                         c.commentId.countDistinct(),
                         pp.pickId.countDistinct(),
-                        ref.title)
+                        ref.title,
+                        p.createdDate)
                         )
                 .from(p)
                 .where(pcr.categoryCode.in(categoryCode))
@@ -114,7 +115,8 @@ public class FeedQueryRepository {
                         p.content,
                         c.commentId.countDistinct(),
                         pp.pickId.countDistinct(),
-                        ref.title)
+                        ref.title,
+                        p.createdDate)
                 )
                 .from(p)
                 .join(u).on(p.user.eq(u))

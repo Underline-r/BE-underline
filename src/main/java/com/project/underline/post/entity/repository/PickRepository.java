@@ -13,4 +13,7 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
     List<Pick> findAllByPost(Post post);
 
     Optional<Pick> findByPostAndUser(Post post, User user);
+    Boolean existsByPost_PostIdAndUser_Id(Long postId, Long userId);
+
+    Long countAllByPost_PostId(Long postId);
 }

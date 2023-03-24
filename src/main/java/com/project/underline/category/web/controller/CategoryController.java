@@ -38,6 +38,22 @@ public class CategoryController {
         );
     }
 
+    @PatchMapping("/category")
+    @ResponseBody
+    public ResponseEntity reorganizeFavoriteCategory(
+            @RequestBody UserCategoryListRequest category){
+
+        categoryService.reorganizeFavoriteCategory(category.getCategory());
+
+        return new ResponseEntity(
+                DefaultResponse.builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message(SUCCESS)
+                        .build()
+                , HttpStatus.OK
+        );
+    }
+
     @GetMapping("/categories")
     public ResponseEntity categoryList(){
         HashMap<String, String> categoryList = CategoryList.getCategoryList();
