@@ -2,33 +2,41 @@ package com.project.underline.post.service;
 
 import com.project.underline.feed.web.dto.FeedPost;
 import com.project.underline.post.entity.PostTemp;
+import com.project.underline.post.entity.PostView;
 import com.project.underline.post.entity.repository.PostRedisRepository;
-import lombok.RequiredArgsConstructor;
+import com.project.underline.post.entity.repository.PostViewRepository;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class PostViewService {
     private final PostRedisRepository postRedisRepository;
+    private final PostViewRepository postViewRepository;
     private final RedisTemplate<String, Object> redisTemplate;
 
-    public PostViewService(PostRedisRepository postRedisRepository, RedisTemplate<String, Object> redisTemplate) {
+    public PostViewService(PostRedisRepository postRedisRepository, PostViewRepository postViewRepository, RedisTemplate<String, Object> redisTemplate) {
         this.postRedisRepository = postRedisRepository;
+        this.postViewRepository = postViewRepository;
         this.redisTemplate = redisTemplate;
     }
 
     public Long getViewCount(Long postId) {
         try {
             Optional<PostTemp> postTemp = postRedisRepository.findById(postId);
-            viewIncrease(postTemp.get());
-            return postTemp.get().getPostView();
+
+            if(postTemp.isPresent()){
+                viewIncrease(postTemp.get());
+                return postTemp.get().getPostView();
+            }else {
+                return postViewRepository.findByPost_PostId(postId)
+                        .map(PostView::getViewCount)
+                        .orElseGet(() -> {
+                            return setViewCount(postId);
+                        });
+            }
         } catch (RuntimeException e) {
             throw e;
         }
@@ -53,9 +61,10 @@ public class PostViewService {
     }
 
 
-    public void setViewCount(Long postId) {
+    public long setViewCount(Long postId) {
         PostTemp postTemp = new PostTemp(postId, 0L);
         postRedisRepository.save(postTemp);
+        return 1L;
     }
 
 }
