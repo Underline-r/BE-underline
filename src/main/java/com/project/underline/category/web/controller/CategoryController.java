@@ -2,6 +2,7 @@ package com.project.underline.category.web.controller;
 
 import com.project.underline.category.metadata.CategoryList;
 import com.project.underline.category.service.CategoryService;
+import com.project.underline.category.web.dto.CategoryResponse;
 import com.project.underline.category.web.dto.UserCategoryListRequest;
 import com.project.underline.common.payload.DefaultResponse;
 import lombok.RequiredArgsConstructor;
@@ -56,7 +57,7 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public ResponseEntity categoryList(){
-        HashMap<String, String> categoryList = CategoryList.getCategoryList();
+        CategoryResponse categoryList = CategoryList.getCategoryList();
 
         return new ResponseEntity(
                 DefaultResponse.builder()
