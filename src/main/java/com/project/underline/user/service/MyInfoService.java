@@ -4,8 +4,12 @@ import com.project.underline.category.entity.UserCategoryRelation;
 import com.project.underline.category.entity.repository.UserCategoryRelationRepository;
 import com.project.underline.category.service.CategoryService;
 import com.project.underline.common.util.SecurityUtil;
+import com.project.underline.post.entity.repository.CommentRepository;
+import com.project.underline.post.entity.repository.PostRepository;
+import com.project.underline.post.web.dto.CommentResponse;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
+import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +28,8 @@ public class MyInfoService {
     private final CategoryService categoryService;
     private final UserCategoryRelationRepository userCategoryRelationRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
 
     public void changeUserProfile(UserProfileDto dto) {
         Long currentUserId = SecurityUtil.getCurrentUserId();
@@ -62,5 +68,18 @@ public class MyInfoService {
         Long currentUserId = SecurityUtil.getCurrentUserId();
 
         User findUser = userService.existUser(currentUserId);
+    }
+
+    public CommentResponse listComments() {
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        User findUser = userService.existUser(currentUserId);
+        return new CommentResponse(commentRepository.findAllByUser(findUser));
+    }
+
+    public List<UserPostDto> listLikePost() {
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        User findUser = userService.existUser(currentUserId);
+
+        return postRepository.findAllByMyPick(findUser);
     }
 }

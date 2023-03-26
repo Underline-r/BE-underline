@@ -8,6 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
+@Setter
 @Table(name = "HASHTAG")
 public class Hashtag {
 

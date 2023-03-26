@@ -94,5 +94,21 @@ public class Post extends BaseTimeEntity {
         }
         return ContentType.SHORT;
     }
+
+    public void removeAllHashtagsAndCategory() {
+        for (Hashtag hashtag : this.hashtags) {
+            hashtag.setPost(null);
+        }
+
+        this.hashtags.clear();
+
+        for (PostCategoryRelation category : this.categoryList) {
+            category.setPost(null);
+        }
+
+        this.categoryList.clear();
+
+
+    }
 }
 
