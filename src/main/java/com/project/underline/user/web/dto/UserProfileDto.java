@@ -33,6 +33,14 @@ public class UserProfileDto {
     }
 
     @QueryProjection
+    public UserProfileDto(String email, String nickname, String description, String imagePath) {
+        this.email = email;
+        this.nickname = nickname;
+        this.description = description;
+        this.imagePath = imagePath;
+    }
+
+    @QueryProjection
     public UserProfileDto(String email, String nickname, String description, String image, boolean subscribeState, int followerCount, int followingCount) {
         this.email = email;
         this.nickname = nickname;

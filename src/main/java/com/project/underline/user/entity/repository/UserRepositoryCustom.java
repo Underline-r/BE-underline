@@ -23,4 +23,6 @@ public interface UserRepositoryCustom {
     List<String> selectUserCategoryList(Long id);
 
     List<UserReferenceDto> selectUserReferenceList(Long id);
+
+    List<UserProfileDto> searchUserProfile(String keyword);
 }

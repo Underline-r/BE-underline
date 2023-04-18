@@ -135,6 +135,22 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .fetch();
     }
 
+    @Override
+    public List<UserProfileDto> searchUserProfile(String keyword) {
+        return queryFactory
+                .select(
+                        new QUserProfileDto(
+                                user.email,
+                                user.nickname,
+                                user.description,
+                                user.imagePath
+                        )
+                )
+                .from(user)
+                .fetch();
+//        return null;
+    }
+
     private BooleanExpression toUserIdEq(Long toUserId) {
         return toUserId != null ? userFollowRelation.toUser.id.eq(toUserId) : null;
     }
