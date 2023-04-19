@@ -22,6 +22,7 @@ import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.FollowRelationRepository;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -172,12 +173,16 @@ public class PostService {
     }
 
     public void externalSharingCount(ShareRequest shareRequest) {
+        try{
         Optional<PostExternalShareAttempts> findByPost_PostId = postExternalShareAttemptsRepository.findByPost_PostIdAndShareTarget(shareRequest.getPostId(),shareRequest.getShareTarget());
         if(findByPost_PostId.isPresent()){
             findByPost_PostId.get().update();
             postExternalShareAttemptsRepository.save(findByPost_PostId.get());
         }else {
             postExternalShareAttemptsRepository.save(new PostExternalShareAttempts(shareRequest.getPostId(),shareRequest.getShareTarget(),1L));
+        }
+        }catch (DataAccessException e){
+            throw new UnderlineException(ErrorCode.WRONG_APPROACH);
         }
     }
 }
