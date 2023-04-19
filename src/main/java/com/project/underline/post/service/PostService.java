@@ -8,11 +8,14 @@ import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.Comment;
 import com.project.underline.post.entity.Hashtag;
 import com.project.underline.post.entity.Post;
+import com.project.underline.post.entity.PostExternalShareAttempts;
 import com.project.underline.post.entity.repository.CommentRepository;
 import com.project.underline.post.entity.repository.PickRepository;
+import com.project.underline.post.entity.repository.PostExternalShareAttemptsRepository;
 import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
+import com.project.underline.post.web.dto.ShareRequest;
 import com.project.underline.post.web.dto.UserCreatedPostListResponse;
 import com.project.underline.reference.service.ReferenceService;
 import com.project.underline.user.entity.User;
@@ -34,6 +37,7 @@ public class PostService {
     private final PickRepository pickRepository;
     private final BookmarkRepository bookmarkRepository;
     private final FollowRelationRepository followRelationRepository;
+    private final PostExternalShareAttemptsRepository postExternalShareAttemptsRepository;
     private final CommentRepository commentRepository;
     private final ReferenceService referenceService;
 
@@ -165,5 +169,15 @@ public class PostService {
     private Long returnUserId(String userNickname) {
         Optional<User> findUser = Optional.ofNullable(userRepository.findByNickname(userNickname));
         return findUser.get().getId();
+    }
+
+    public void externalSharingCount(ShareRequest shareRequest) {
+        Optional<PostExternalShareAttempts> findByPost_PostId = postExternalShareAttemptsRepository.findByPost_PostIdAndShareTarget(shareRequest.getPostId(),shareRequest.getShareTarget());
+        if(findByPost_PostId.isPresent()){
+            findByPost_PostId.get().update();
+            postExternalShareAttemptsRepository.save(findByPost_PostId.get());
+        }else {
+            postExternalShareAttemptsRepository.save(new PostExternalShareAttempts(shareRequest.getPostId(),shareRequest.getShareTarget(),1L));
+        }
     }
 }
