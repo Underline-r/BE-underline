@@ -4,6 +4,7 @@ import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.post.service.PostService;
 import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
+import com.project.underline.post.web.dto.ShareRequest;
 import com.project.underline.post.web.dto.UserCreatedPostListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -83,6 +84,18 @@ public class PostController {
                         .statusCode(OK.value())
                         .message(SUCCESS)
                         .data(userCreatedPostList)
+                        .build()
+                , HttpStatus.OK);
+    }
+
+    @PostMapping("/external-sharing/try-count")
+    public ResponseEntity externalSharingCount(@Valid @RequestBody ShareRequest shareRequest){
+        postService.externalSharingCount(shareRequest);
+
+        return new ResponseEntity(
+                DefaultResponse.builder()
+                        .statusCode(OK.value())
+                        .message(SUCCESS)
                         .build()
                 , HttpStatus.OK);
     }
