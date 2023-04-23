@@ -1,5 +1,6 @@
 package com.project.underline.user.entity.repository;
 
+import com.project.underline.search.web.dto.SearchUserDto;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.FollowUserInfoDto;
 import com.project.underline.user.web.dto.UserPostDto;
@@ -24,5 +25,5 @@ public interface UserRepositoryCustom {
 
     List<UserReferenceDto> selectUserReferenceList(Long id);
 
-    List<UserProfileDto> searchUserProfile(String keyword);
+    List<SearchUserDto> searchUserProfile(String keyword);
 }

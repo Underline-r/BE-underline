@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface ReferenceRepository extends JpaRepository<Reference,Long> {
+public interface ReferenceRepository extends JpaRepository<Reference,Long>, ReferenceRepositoryCustom {
     Optional<Reference> findByTitle(String title);
 }

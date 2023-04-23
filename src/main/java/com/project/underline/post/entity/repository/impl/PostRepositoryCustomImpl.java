@@ -1,8 +1,8 @@
 package com.project.underline.post.entity.repository.impl;
 
 import com.project.underline.post.entity.repository.PostRepositoryCustom;
-import com.project.underline.post.web.dto.PostSearchDto;
-import com.project.underline.post.web.dto.QPostSearchDto;
+import com.project.underline.search.web.dto.QSearchPostDto;
+import com.project.underline.search.web.dto.SearchPostDto;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.web.dto.QUserPostDto;
 import com.project.underline.user.web.dto.UserPostDto;
@@ -43,13 +43,14 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<PostSearchDto> searchPostList(String keyword) {
+    public List<SearchPostDto> searchPostList(String keyword) {
         return queryFactory
                 .select(
-                        new QPostSearchDto(
+                        new QSearchPostDto(
                                 post.postId,
                                 post.content,
-                                post.createdDate
+                                post.reference.title,
+                                post.user.nickname
                         )
                 )
                 .from(post)

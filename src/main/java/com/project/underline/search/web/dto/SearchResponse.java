@@ -11,8 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 public class SearchResponse<T> {
 
-    public List<T> userResult;
-    public List<T> postResult;
-    public List<T> referenceResult;
-    public List<T> hashtagResult;
+    public List<T> underliners;
+    public List<T> underlines;
+    public List<T> sources;
+    public List<T> hashtags;
 }

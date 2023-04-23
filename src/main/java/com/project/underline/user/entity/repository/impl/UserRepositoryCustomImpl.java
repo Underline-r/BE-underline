@@ -1,5 +1,7 @@
 package com.project.underline.user.entity.repository.impl;
 
+import com.project.underline.search.web.dto.QSearchUserDto;
+import com.project.underline.search.web.dto.SearchUserDto;
 import com.project.underline.user.entity.repository.UserRepositoryCustom;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.*;
@@ -136,14 +138,17 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<UserProfileDto> searchUserProfile(String keyword) {
+    public List<SearchUserDto> searchUserProfile(String keyword) {
         return queryFactory
                 .select(
-                        new QUserProfileDto(
-                                user.email,
-                                user.nickname,
-                                user.description,
-                                user.imagePath
+                        new QSearchUserDto(
+                                user.id,
+                                user.imagePath,
+                                user.nickname
+//                                , queryFactory
+//                                        .selectFrom(userFollowRelation)
+//                                        .where(toUserIdEq(condition.getProfileUserId())
+//                                                .and(fromUserIdEq(condition.getLoginUserId()))).exists(),
                         )
                 )
                 .from(user)

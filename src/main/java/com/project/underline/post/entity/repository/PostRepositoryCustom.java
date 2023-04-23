@@ -1,6 +1,6 @@
 package com.project.underline.post.entity.repository;
 
-import com.project.underline.post.web.dto.PostSearchDto;
+import com.project.underline.search.web.dto.SearchPostDto;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.web.dto.UserPostDto;
 
@@ -10,5 +10,5 @@ public interface PostRepositoryCustom {
 
     List<UserPostDto> findAllByMyPick(User findUser);
 
-    List<PostSearchDto> searchPostList(String keyword);
+    List<SearchPostDto> searchPostList(String keyword);
 }
