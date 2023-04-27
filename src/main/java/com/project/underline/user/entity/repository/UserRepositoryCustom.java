@@ -6,6 +6,7 @@ import com.project.underline.user.web.dto.FollowUserInfoDto;
 import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
 import com.project.underline.user.web.dto.UserReferenceDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,5 +26,5 @@ public interface UserRepositoryCustom {
 
     List<UserReferenceDto> selectUserReferenceList(Long id);
 
-    List<SearchUserDto> searchUserProfile(String keyword);
+    List<SearchUserDto> searchUserProfile(String keyword, Pageable pageable);
 }

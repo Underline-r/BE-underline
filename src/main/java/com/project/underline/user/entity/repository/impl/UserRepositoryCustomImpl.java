@@ -7,6 +7,7 @@ import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -138,7 +139,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<SearchUserDto> searchUserProfile(String keyword) {
+    public List<SearchUserDto> searchUserProfile(String keyword, Pageable pageable) {
+        String likeKeyword = "%" + keyword + "%";
         return queryFactory
                 .select(
                         new QSearchUserDto(
@@ -152,6 +154,9 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                         )
                 )
                 .from(user)
+                .where(user.nickname.like(likeKeyword))
+                .offset(pageable.getOffset())
+                .limit(10)
                 .fetch();
 //        return null;
     }
