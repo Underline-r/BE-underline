@@ -1,10 +1,13 @@
 package com.project.underline.user.entity.repository.impl;
 
+import com.project.underline.search.web.dto.QSearchUserDto;
+import com.project.underline.search.web.dto.SearchUserDto;
 import com.project.underline.user.entity.repository.UserRepositoryCustom;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -133,6 +136,29 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .join(post.user, user)
                 .on(userIdEq(id))
                 .fetch();
+    }
+
+    @Override
+    public List<SearchUserDto> searchUserProfile(String keyword, Pageable pageable) {
+        String likeKeyword = "%" + keyword + "%";
+        return queryFactory
+                .select(
+                        new QSearchUserDto(
+                                user.id,
+                                user.imagePath,
+                                user.nickname
+//                                , queryFactory
+//                                        .selectFrom(userFollowRelation)
+//                                        .where(toUserIdEq(condition.getProfileUserId())
+//                                                .and(fromUserIdEq(condition.getLoginUserId()))).exists(),
+                        )
+                )
+                .from(user)
+                .where(user.nickname.like(likeKeyword))
+                .offset(pageable.getOffset())
+                .limit(10)
+                .fetch();
+//        return null;
     }
 
     private BooleanExpression toUserIdEq(Long toUserId) {

@@ -11,4 +11,5 @@ public class ResponseMessage {
     public static final String UNFOLLOW = "언팔로우 성공.";
 
     public static final String INVALID_CONTENT = "해당 값을 올바르게 작성해주세요.";
+    public static final String INVALID_SHARE_TARGET = "옳지 않은 공유 대상입니다.";
 }
