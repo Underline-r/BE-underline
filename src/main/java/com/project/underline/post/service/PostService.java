@@ -45,24 +45,22 @@ public class PostService {
     @Transactional
     public void registerPost(PostRequest postRequest) {
         try {
+            if(postRequest.getSources() !=null){
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent(),referenceService.checkExistReference(postRequest.getSources()));
+                registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
+                postRepository.save(registerNewPost);
+            }else {
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent());
 
-            // TODO. post 등록 -> hashtag 등록을 한개의 메소드(그리고 트랜잭션)내에서 해결했는데
-            Post registerNewPost = Post.builder()
-                    .user(userRepository.findById(SecurityUtil.getCurrentUserId())
-                            .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)))
-                    .content(postRequest.getContent())
-                    /*
-                    TODO
-                    문제 1. request에 출처 없을 시 NPE,
-                    문제 2. 출처 타이틀이 같을 때 author 다를 경우
-                     */
-                    .reference(referenceService.checkExistReference(postRequest.getReference()))
-                    .build();
+                if (postRequest.getCategory() != null) {
+                    registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
+                }
 
-            registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
+                postRepository.save(registerNewPost);
+            }
 
-            postRepository.save(registerNewPost);
-        } catch (RuntimeException e) {
+
+        }catch (RuntimeException e) {
             throw e;
         }
     }
@@ -146,18 +144,18 @@ public class PostService {
         List<Hashtag> hashtags = new ArrayList<Hashtag>();
         List<PostCategoryRelation> postCategoryRelations = new ArrayList<PostCategoryRelation>();
 
-        List<String> requestHashtags = postRequest.getHashtag();
-
         registerPost.removeAllHashtagsAndCategory();
 
-        if (requestHashtags != null && !requestHashtags.isEmpty() || registerPost.getHashtags()!= null) {
+        if (postRequest.getHashtag() != null) {
+            List<String> requestHashtags = postRequest.getHashtag();
             for (String eachHashtag : requestHashtags) {
                 hashtags.add(new Hashtag(registerPost, eachHashtag));
             }
         }
 
-        if (postRequest.getCategory().size() > 0) {
-            for (String eachCategory : postRequest.getCategory()) {
+        if (postRequest.getCategory() != null) {
+            List<String> requestCategory = postRequest.getCategory();
+            for (String eachCategory : requestCategory) {
                 postCategoryRelations.add(new PostCategoryRelation(registerPost, eachCategory));
             }
         }

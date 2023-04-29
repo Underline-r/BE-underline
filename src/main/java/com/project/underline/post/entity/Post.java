@@ -35,7 +35,6 @@ public class Post extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REFERENCE_ID")
-    @NotNull
     private Reference reference;
 
     @Column(name="CONTENT")
@@ -70,6 +69,11 @@ public class Post extends BaseTimeEntity {
         if(!reference.getPostList().contains(this)){
             reference.getPostList().add(this);
         }
+    }
+    @Builder
+    public Post(User user,String content){
+        this.user = user;
+        this.content = content;
     }
 
     public Post(Long id){
