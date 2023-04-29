@@ -20,7 +20,8 @@ public enum ErrorCode {
     CANNOT_FOUND_POST(BAD_REQUEST, "존재하지 않는 게시글입니다"),
     WRONG_APPROACH(BAD_REQUEST,"잘못된 접근입니다."),
     DUP_EMAIL(BAD_REQUEST,"이미 사용 중인 이메일 입니다."),
-    INVALID_EMAIL(BAD_REQUEST,"이메일 형식이 올바르지 않습니다..")
+    INVALID_EMAIL(BAD_REQUEST,"이메일 형식이 올바르지 않습니다.."),
+    CATEGORY_LIMIT(BAD_REQUEST, "카테고리는 3개까지만 등록 가능합니다.");
     ;
 
     private final HttpStatus httpStatus;
