@@ -80,7 +80,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostDetailResponse setUserStatus(PostDetailResponse postDetailResponse){
-        boolean isFollwed = followRelationRepository.existsByToUserIdAndFromUserId(SecurityUtil.getCurrentUserId(), postDetailResponse.getUserId());
+        boolean isFollwed = followRelationRepository.existsByToUserIdAndFromUserId(postDetailResponse.getUserId(), SecurityUtil.getCurrentUserId());
         boolean isBookmarked = bookmarkRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(),SecurityUtil.getCurrentUserId());
         boolean isPicked = pickRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(),SecurityUtil.getCurrentUserId());
 
