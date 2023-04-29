@@ -21,10 +21,16 @@ public class BookmarkService {
     private final PostRepository postRepository;
     private final UserService userService;
 
+    @Transactional
     public void registerBookmark(BookmarkRequest bookmarkRequest) {
-        bookmarkRepository.save(new Bookmark(userService.existUser(SecurityUtil.getCurrentUserId())
-                ,checkPostExistence(bookmarkRequest.getPostId()))
-        );
+        Boolean bookmarkExist = bookmarkRepository.existsByPost_PostIdAndUser_Id(bookmarkRequest.getPostId(),SecurityUtil.getCurrentUserId());
+        if(bookmarkExist){
+            bookmarkRepository.deleteBookmarkByPost_PostIdAndUser_Id(bookmarkRequest.getPostId(),SecurityUtil.getCurrentUserId());
+        }else{
+            bookmarkRepository.save(new Bookmark(userService.existUser(SecurityUtil.getCurrentUserId())
+                    ,checkPostExistence(bookmarkRequest.getPostId()))
+            );
+        }
     }
 
     @Transactional
@@ -38,8 +44,4 @@ public class BookmarkService {
                 .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_POST));
     }
 
-    @Transactional
-    public void deleteBookmark(BookmarkRequest bookmarkRequest) {
-        bookmarkRepository.delete(new Bookmark(bookmarkRequest.getPostId()));
-    }
 }
