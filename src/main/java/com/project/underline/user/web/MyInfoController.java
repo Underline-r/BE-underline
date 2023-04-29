@@ -37,7 +37,7 @@ public class MyInfoController {
 
     @PatchMapping("/category")
     public ResponseEntity changeUserCategory(@RequestBody UserCategoryListRequest category) {
-        infoService.changeUserCategory(category.getCategory());
+        infoService.changeUserCategory(category.getCodes());
 
         return new ResponseEntity(
                 DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS), HttpStatus.OK
