@@ -65,7 +65,7 @@ create table post
     created_date  datetime(6),
     modified_date datetime(6),
     content       longtext not null,
-    reference_id  bigint   not null,
+    reference_id  bigint,
     user_id       bigint   not null,
     primary key (post_id)
 ) engine = InnoDB;
