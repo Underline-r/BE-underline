@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class PostDetailResponse {
     private Long postId;
     private String content;
-    private String reference;
+    private String source;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
@@ -28,15 +28,15 @@ public class PostDetailResponse {
 
     private Boolean isPicked;
     private Boolean isBookmarked;
-    private Boolean isFollwed;
+    private Boolean isFollowed;
 
     private List<String> hashtags;
     private String oldestComment;
 
-    public PostDetailResponse setUserCheck(Boolean isPicked,Boolean isBookmarked,Boolean isFollwed){
+    public PostDetailResponse setUserCheck(Boolean isPicked,Boolean isBookmarked,Boolean isFollowed){
         this.isPicked = isPicked;
         this.isBookmarked = isBookmarked;
-        this.isFollwed = isFollwed;
+        this.isFollowed = isFollowed;
         return this;
     }
 
@@ -50,7 +50,7 @@ public class PostDetailResponse {
     public PostDetailResponse(Post post){
         this.postId = post.getPostId();
         this.content = post.getContent();
-        this.reference = post.getReference().getTitle();
+        this.source = post.getReference().getTitle();
         this.createdDate = post.getCreatedDate();
 
         this.userId = post.getUser().getId();
