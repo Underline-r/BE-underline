@@ -10,10 +10,12 @@ create table bookmark
 
 create table comment
 (
-    comment_id bigint not null auto_increment,
-    content     varchar(255),
-    post_id    bigint,
-    user_id    bigint,
+    comment_id    bigint not null auto_increment,
+    created_date  datetime(6),
+    modified_date datetime(6),
+    content       varchar(255),
+    post_id       bigint,
+    user_id       bigint,
     primary key (comment_id)
 ) engine = InnoDB;
 
@@ -59,12 +61,12 @@ create table pick
 
 create table post
 (
-    post_id       bigint not null auto_increment,
+    post_id       bigint   not null auto_increment,
     created_date  datetime(6),
     modified_date datetime(6),
-    content       longtext,
-    reference_id  bigint,
-    user_id       bigint,
+    content       longtext not null,
+    reference_id  bigint   not null,
+    user_id       bigint   not null,
     primary key (post_id)
 ) engine = InnoDB;
 
@@ -78,9 +80,8 @@ create table post_category_relation
 
 create table reference
 (
-    reference_id bigint not null auto_increment,
-    author       varchar(255),
-    title        varchar(255),
+    reference_id bigint       not null auto_increment,
+    title        varchar(255) not null,
     primary key (reference_id)
 ) engine = InnoDB;
 

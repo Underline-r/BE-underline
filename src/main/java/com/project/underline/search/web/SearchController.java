@@ -23,8 +23,6 @@ public class SearchController {
     public ResponseEntity<SearchResponse> search(@RequestParam String keyword, String filterType, Pageable pageable) {
         SearchResponse searchResponse = new SearchResponse<>();
 
-        System.out.println("pageable = " + pageable);
-
         // TODO: null 조건 프론트랑 재확인
         if(filterType == null || "".equals(filterType)) {
             filterType = "WHOLE";
