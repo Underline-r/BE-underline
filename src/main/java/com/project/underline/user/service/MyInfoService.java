@@ -76,7 +76,7 @@ public class MyInfoService {
         return new CommentResponse(commentRepository.findAllByUser(findUser));
     }
 
-    public List<UserPostDto> listLikePost() {
+    public List<UserPostDto> listPickPost() {
         Long currentUserId = SecurityUtil.getCurrentUserId();
         User findUser = userService.existUser(currentUserId);
 

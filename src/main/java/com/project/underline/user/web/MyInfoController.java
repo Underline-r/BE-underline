@@ -70,11 +70,11 @@ public class MyInfoController {
         );
     }
 
-    @GetMapping("/like-posts")
-    public ResponseEntity<UserPostDto> listLikePost() {
-        List<UserPostDto> likePostList = infoService.listLikePost();
+    @GetMapping("/pick-posts")
+    public ResponseEntity<UserPostDto> listPickPost() {
+        List<UserPostDto> pickPostList = infoService.listPickPost();
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, likePostList), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, pickPostList), HttpStatus.OK
         );
     }
 }
