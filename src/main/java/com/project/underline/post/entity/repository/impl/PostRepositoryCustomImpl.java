@@ -15,7 +15,7 @@ import java.util.List;
 import static com.project.underline.post.entity.QHashtag.hashtag;
 import static com.project.underline.post.entity.QPick.pick;
 import static com.project.underline.post.entity.QPost.post;
-import static com.project.underline.reference.entity.QReference.reference;
+import static com.project.underline.source.entity.QSource.source;
 import static com.project.underline.user.entity.QUser.user;
 
 public class PostRepositoryCustomImpl implements PostRepositoryCustom {
@@ -53,7 +53,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                         new QSearchPostDto(
                                 post.postId,
                                 post.content,
-                                post.reference.title,
+                                post.source.title,
                                 post.user.nickname
                         )
                 )
@@ -65,20 +65,20 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<SearchReferenceDto> searchReferenceList(String keyword) {
+    public List<SearchSourceDto> searchSourceList(String keyword) {
         String likeKeyword = "%" + keyword + "%";
 
         return queryFactory
                 .select(
-                        new QSearchReferenceDto(
+                        new QSearchSourceDto(
                                 post.postId,
-                                post.reference.title,
+                                post.source.title,
                                 post.user.id
                         )
                 )
                 .from(post)
-                .join(post.reference, reference)
-                .where(reference.title.like(likeKeyword))
+                .join(post.source, source)
+                .where(source.title.like(likeKeyword))
                 .fetch();
     }
 

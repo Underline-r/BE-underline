@@ -65,7 +65,7 @@ create table post
     created_date  datetime(6),
     modified_date datetime(6),
     content       longtext not null,
-    reference_id  bigint,
+    source_id  bigint,
     user_id       bigint   not null,
     primary key (post_id)
 ) engine = InnoDB;
@@ -78,11 +78,11 @@ create table post_category_relation
     primary key (pcr_id)
 ) engine = InnoDB;
 
-create table reference
+create table source
 (
-    reference_id bigint       not null auto_increment,
-    title        varchar(255) not null,
-    primary key (reference_id)
+    source_id bigint       not null auto_increment,
+    title     varchar(255) not null,
+    primary key (source_id)
 ) engine = InnoDB;
 
 create table refresh_token
@@ -162,7 +162,7 @@ alter table pick
     add constraint PICK_USERS_FK foreign key (user_id) references users (user_id);
 
 alter table post
-    add constraint POST_REFER_FK foreign key (reference_id) references reference (reference_id);
+    add constraint POST_SOURCE_FK foreign key (source_id) references source (source_id);
 
 alter table post
     add constraint POST_USERS_FK foreign key (user_id) references users (user_id);
