@@ -34,7 +34,7 @@ public class Post extends BaseTimeEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "REFERENCE_ID")
+    @JoinColumn(name = "SOURCE_ID")
     private Source source;
 
     @Column(name="CONTENT")
@@ -61,7 +61,7 @@ public class Post extends BaseTimeEntity {
 
 
     @Builder
-    public Post(User user,String content,Source source){
+    public Post(User user, String content, Source source){
         this.user = user;
         this.content = content;
         this.source = source;

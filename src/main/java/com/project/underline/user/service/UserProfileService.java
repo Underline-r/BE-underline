@@ -66,7 +66,7 @@ public class UserProfileService {
         return userRepository.selectUserCategoryList(checkedUser.getId());
     }
 
-    public List<UserSourceDto> getUserReferenceList(Long profileUserId) {
+    public List<UserSourceDto> getUserSourceList(Long profileUserId) {
         User checkedUser = userService.existUser(profileUserId);
         return userRepository.selectUserSourceList(checkedUser.getId());
     }

@@ -65,12 +65,12 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<SearchReferenceDto> searchReferenceList(String keyword) {
+    public List<SearchSourceDto> searchSourceList(String keyword) {
         String likeKeyword = "%" + keyword + "%";
 
         return queryFactory
                 .select(
-                        new QSearchReferenceDto(
+                        new QSearchSourceDto(
                                 post.postId,
                                 post.source.title,
                                 post.user.id

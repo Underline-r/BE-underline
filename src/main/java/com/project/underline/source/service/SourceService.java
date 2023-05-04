@@ -14,10 +14,10 @@ public class SourceService {
 
     public Source checkExistSource(String title){
 
-        Optional<Source> existReference = sourceRepository.findByTitle(title);
+        Optional<Source> existSource = sourceRepository.findByTitle(title);
 
-        if(existReference.isPresent()){
-            return existReference.get();
+        if(existSource.isPresent()){
+            return existSource.get();
         }
 
         Source newSource = sourceRepository.save(new Source(title));

@@ -46,7 +46,7 @@ public class PostService {
     public void registerPost(PostRequest postRequest) {
         try {
             if(postRequest.getSources() !=null){
-                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent(), sourceService.checkExistSource(postRequest.getSources()));
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent(),sourceService.checkExistSource(postRequest.getSources()));
                 registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
                 postRepository.save(registerNewPost);
             }else {

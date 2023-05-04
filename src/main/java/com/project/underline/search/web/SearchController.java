@@ -31,7 +31,7 @@ public class SearchController {
             case "WHOLE":
                 searchResponse.setUnderliners(searchService.selectUser(keyword, pageable));
                 searchResponse.setUnderlines(searchService.selectPostTitle(keyword, pageable));
-                searchResponse.setSources(searchService.selectReference(keyword));
+                searchResponse.setSources(searchService.selectSource(keyword));
                 searchResponse.setHashtags(searchService.selectHashTag(keyword));
                 break;
             case "USER_NAME":
@@ -40,8 +40,8 @@ public class SearchController {
             case "TITLE":
                 searchResponse.setUnderlines(searchService.selectPostTitle(keyword, pageable));
                 break;
-            case "REFERENCE":
-                searchResponse.setSources(searchService.selectReference(keyword));
+            case "SOURCE":
+                searchResponse.setSources(searchService.selectSource(keyword));
                 break;
             case "HASHTAG":
                 searchResponse.setHashtags(searchService.selectHashTag(keyword));

@@ -3,7 +3,7 @@ package com.project.underline.search.service;
 import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.search.web.dto.SearchHashtagDto;
 import com.project.underline.search.web.dto.SearchPostDto;
-import com.project.underline.search.web.dto.SearchReferenceDto;
+import com.project.underline.search.web.dto.SearchSourceDto;
 import com.project.underline.search.web.dto.SearchUserDto;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,8 @@ public class SearchService {
         return postRepository.searchPostList(keyword, pageable);
     }
 
-    public List<SearchReferenceDto> selectReference(String keyword) {
-        return postRepository.searchReferenceList(keyword);
+    public List<SearchSourceDto> selectSource(String keyword) {
+        return postRepository.searchSourceList(keyword);
     }
 
     public List<SearchHashtagDto> selectHashTag(String keyword) {

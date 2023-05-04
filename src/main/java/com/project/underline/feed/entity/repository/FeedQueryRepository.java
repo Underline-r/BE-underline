@@ -33,7 +33,7 @@ public class FeedQueryRepository {
         QPick pp = QPick.pick;
         QComment c = QComment.comment;
         QPostCategoryRelation pcr = QPostCategoryRelation.postCategoryRelation;
-        QSource sc = QSource.source;
+        QSource source = QSource.source;
 
         feedResponse.setFeedPosts(
                 queryFactory.select(new QFeedPost(
@@ -44,7 +44,7 @@ public class FeedQueryRepository {
                         p.content,
                         c.commentId.countDistinct(),
                         pp.pickId.countDistinct(),
-                        sc.title,
+                        source.title,
                         p.createdDate)
                         )
                 .from(p)
@@ -53,7 +53,7 @@ public class FeedQueryRepository {
                 .leftJoin(pcr).on(pcr.post.eq(p))
                 .leftJoin(pp).on(pp.post.eq(p))
                 .leftJoin(c).on(c.post.eq(p))
-                .leftJoin(sc).on(p.source.eq(sc))
+                .leftJoin(source).on(p.source.eq(source))
                 .groupBy(p.postId)
                 .orderBy(p.createdDate.desc())
                 .limit(10)
@@ -105,7 +105,7 @@ public class FeedQueryRepository {
         QPick pp = QPick.pick;
         QComment c = QComment.comment;
         QPostCategoryRelation pcr = QPostCategoryRelation.postCategoryRelation;
-        QSource sc = QSource.source;
+        QSource source = QSource.source;
 
         feedResponse.setFeedPosts(queryFactory.select(new QFeedPost(
                         p.postId,
@@ -115,7 +115,7 @@ public class FeedQueryRepository {
                         p.content,
                         c.commentId.countDistinct(),
                         pp.pickId.countDistinct(),
-                        sc.title,
+                        source.title,
                         p.createdDate)
                 )
                 .from(p)
@@ -123,7 +123,7 @@ public class FeedQueryRepository {
                 .leftJoin(pcr).on(pcr.post.eq(p))
                 .leftJoin(pp).on(pp.post.eq(p))
                 .leftJoin(c).on(c.post.eq(p))
-                .leftJoin(sc).on(p.source.eq(sc))
+                .leftJoin(source).on(p.source.eq(source))
                 .groupBy(p.postId)
                 .orderBy(p.createdDate.desc())
                 .limit(10)

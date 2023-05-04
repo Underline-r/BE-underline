@@ -73,10 +73,10 @@ public class UserProfileController {
     }
 
     @GetMapping("/{id}/sources")
-    public ResponseEntity<String> getUserReferenceList(@PathVariable Long id) {
-        List<UserSourceDto> referenceList = userProfileService.getUserReferenceList(id);
+    public ResponseEntity<String> getUserSourceList(@PathVariable Long id) {
+        List<UserSourceDto> sourceList = userProfileService.getUserSourceList(id);
         return new ResponseEntity(
-                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, referenceList), HttpStatus.OK
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, sourceList), HttpStatus.OK
         );
     }
 }
