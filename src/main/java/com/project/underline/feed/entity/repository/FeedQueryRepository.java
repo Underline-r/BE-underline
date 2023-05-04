@@ -8,7 +8,7 @@ import com.project.underline.feed.web.dto.QFeedPost;
 import com.project.underline.post.entity.QComment;
 import com.project.underline.post.entity.QPick;
 import com.project.underline.post.entity.QPost;
-import com.project.underline.reference.entity.QReference;
+import com.project.underline.source.entity.QSource;
 import com.project.underline.user.entity.QUser;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +33,7 @@ public class FeedQueryRepository {
         QPick pp = QPick.pick;
         QComment c = QComment.comment;
         QPostCategoryRelation pcr = QPostCategoryRelation.postCategoryRelation;
-        QReference ref = QReference.reference;
+        QSource sc = QSource.source;
 
         feedResponse.setFeedPosts(
                 queryFactory.select(new QFeedPost(
@@ -44,7 +44,7 @@ public class FeedQueryRepository {
                         p.content,
                         c.commentId.countDistinct(),
                         pp.pickId.countDistinct(),
-                        ref.title,
+                        sc.title,
                         p.createdDate)
                         )
                 .from(p)
@@ -53,7 +53,7 @@ public class FeedQueryRepository {
                 .leftJoin(pcr).on(pcr.post.eq(p))
                 .leftJoin(pp).on(pp.post.eq(p))
                 .leftJoin(c).on(c.post.eq(p))
-                .leftJoin(ref).on(p.reference.eq(ref))
+                .leftJoin(sc).on(p.source.eq(sc))
                 .groupBy(p.postId)
                 .orderBy(p.createdDate.desc())
                 .limit(10)
@@ -105,7 +105,7 @@ public class FeedQueryRepository {
         QPick pp = QPick.pick;
         QComment c = QComment.comment;
         QPostCategoryRelation pcr = QPostCategoryRelation.postCategoryRelation;
-        QReference ref = QReference.reference;
+        QSource sc = QSource.source;
 
         feedResponse.setFeedPosts(queryFactory.select(new QFeedPost(
                         p.postId,
@@ -115,7 +115,7 @@ public class FeedQueryRepository {
                         p.content,
                         c.commentId.countDistinct(),
                         pp.pickId.countDistinct(),
-                        ref.title,
+                        sc.title,
                         p.createdDate)
                 )
                 .from(p)
@@ -123,7 +123,7 @@ public class FeedQueryRepository {
                 .leftJoin(pcr).on(pcr.post.eq(p))
                 .leftJoin(pp).on(pp.post.eq(p))
                 .leftJoin(c).on(c.post.eq(p))
-                .leftJoin(ref).on(p.reference.eq(ref))
+                .leftJoin(sc).on(p.source.eq(sc))
                 .groupBy(p.postId)
                 .orderBy(p.createdDate.desc())
                 .limit(10)

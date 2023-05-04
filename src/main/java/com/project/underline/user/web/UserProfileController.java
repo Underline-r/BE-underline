@@ -6,7 +6,7 @@ import com.project.underline.user.service.UserProfileService;
 import com.project.underline.user.web.dto.FollowUserInfoDto;
 import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
-import com.project.underline.user.web.dto.UserReferenceDto;
+import com.project.underline.user.web.dto.UserSourceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,9 +72,9 @@ public class UserProfileController {
         );
     }
 
-    @GetMapping("/{id}/references")
+    @GetMapping("/{id}/sources")
     public ResponseEntity<String> getUserReferenceList(@PathVariable Long id) {
-        List<UserReferenceDto> referenceList = userProfileService.getUserReferenceList(id);
+        List<UserSourceDto> referenceList = userProfileService.getUserReferenceList(id);
         return new ResponseEntity(
                 DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, referenceList), HttpStatus.OK
         );

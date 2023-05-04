@@ -2,7 +2,7 @@ package com.project.underline.post.entity;
 
 import com.project.underline.category.entity.PostCategoryRelation;
 import com.project.underline.common.util.BaseTimeEntity;
-import com.project.underline.reference.entity.Reference;
+import com.project.underline.source.entity.Source;
 import com.project.underline.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,7 +35,7 @@ public class Post extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "REFERENCE_ID")
-    private Reference reference;
+    private Source source;
 
     @Column(name="CONTENT")
     @Lob
@@ -61,13 +61,13 @@ public class Post extends BaseTimeEntity {
 
 
     @Builder
-    public Post(User user,String content,Reference reference){
+    public Post(User user,String content,Source source){
         this.user = user;
         this.content = content;
-        this.reference = reference;
+        this.source = source;
 
-        if(!reference.getPostList().contains(this)){
-            reference.getPostList().add(this);
+        if(!source.getPostList().contains(this)){
+            source.getPostList().add(this);
         }
     }
     @Builder

@@ -25,13 +25,13 @@ public class BookmarkResponse {
         private Long postId;
         private String userNickname;
         private String content;
-        private String referenceTitle;
+        private String sourceTitle;
 
         public EachBookmarkedPost(Post post){
             this.postId = post.getPostId();
             this.content = post.getContent();
             this.userNickname = post.getUser().getNickname();
-            this.referenceTitle = post.getReference().getTitle();
+            this.sourceTitle = post.getSource().getTitle();
         }
     }
 }
