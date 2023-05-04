@@ -17,7 +17,7 @@ import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
 import com.project.underline.post.web.dto.ShareRequest;
 import com.project.underline.post.web.dto.UserCreatedPostListResponse;
-import com.project.underline.reference.service.ReferenceService;
+import com.project.underline.source.service.SourceService;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.FollowRelationRepository;
 import com.project.underline.user.entity.repository.UserRepository;
@@ -40,13 +40,13 @@ public class PostService {
     private final FollowRelationRepository followRelationRepository;
     private final PostExternalShareAttemptsRepository postExternalShareAttemptsRepository;
     private final CommentRepository commentRepository;
-    private final ReferenceService referenceService;
+    private final SourceService sourceService;
 
     @Transactional
     public void registerPost(PostRequest postRequest) {
         try {
             if(postRequest.getSources() !=null){
-                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent(),referenceService.checkExistReference(postRequest.getSources()));
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent(),sourceService.checkExistSource(postRequest.getSources()));
                 registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
                 postRepository.save(registerNewPost);
             }else {

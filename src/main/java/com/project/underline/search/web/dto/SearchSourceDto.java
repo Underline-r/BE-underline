@@ -6,14 +6,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SearchReferenceDto {
+public class SearchSourceDto {
 
     private Long postId;
     private String source;
     private Long userId;
 
     @QueryProjection
-    public SearchReferenceDto(Long postId, String source, Long userId) {
+    public SearchSourceDto(Long postId, String source, Long userId) {
         this.postId = postId;
         this.source = source;
         this.userId = userId;

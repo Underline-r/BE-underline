@@ -8,7 +8,7 @@ import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.FollowUserInfoDto;
 import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
-import com.project.underline.user.web.dto.UserReferenceDto;
+import com.project.underline.user.web.dto.UserSourceDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,8 +66,8 @@ public class UserProfileService {
         return userRepository.selectUserCategoryList(checkedUser.getId());
     }
 
-    public List<UserReferenceDto> getUserReferenceList(Long profileUserId) {
+    public List<UserSourceDto> getUserSourceList(Long profileUserId) {
         User checkedUser = userService.existUser(profileUserId);
-        return userRepository.selectUserReferenceList(checkedUser.getId());
+        return userRepository.selectUserSourceList(checkedUser.getId());
     }
 }
