@@ -20,7 +20,7 @@ public class FeedPost {
     private String content;
 
     private String source;
-    private long likeCount;
+    private long pickCount;
     private long commentCount;
 
     private Boolean isPicked;
@@ -32,13 +32,13 @@ public class FeedPost {
     // private ArrayList<String> hashtags;
 
     @QueryProjection
-    public FeedPost(long postId,String userNickname,String userProfileImage, long userId, String content, long likeCount, long commentCount,String source,LocalDateTime createdDate){
+    public FeedPost(long postId,String userNickname,String userProfileImage, long userId, String content, long pickCount, long commentCount,String source,LocalDateTime createdDate){
         this.postId = postId;
         this.userNickname = userNickname;
         this.userProfileImage = userProfileImage;
         this.userId = userId;
         this.content = content;
-        this.likeCount = likeCount;
+        this.pickCount = pickCount;
         this.commentCount = commentCount;
         this.source = source;
         this.isBookmarked = false;
