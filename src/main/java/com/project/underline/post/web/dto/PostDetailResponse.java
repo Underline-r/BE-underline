@@ -50,7 +50,14 @@ public class PostDetailResponse {
     public PostDetailResponse(Post post){
         this.postId = post.getPostId();
         this.content = post.getContent();
-        this.source = post.getSource().getTitle();
+
+        // npe
+        if(post.getSource() != null) {
+            this.source = post.getSource().getTitle();
+        }else {
+            this.source = null;
+        }
+
         this.createdDate = post.getCreatedDate();
 
         this.userId = post.getUser().getId();
