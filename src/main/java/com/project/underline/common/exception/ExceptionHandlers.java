@@ -19,6 +19,7 @@ public class ExceptionHandlers {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<DefaultResponse> nullPointerException(NullPointerException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<DefaultResponse>(
                 DefaultResponse.errRes(HttpStatus.BAD_REQUEST.value(), e.getClass(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }
@@ -48,6 +49,7 @@ public class ExceptionHandlers {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<DefaultResponse> contentValidException(MethodArgumentNotValidException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<DefaultResponse>(
                 DefaultResponse.errRes(HttpStatus.BAD_REQUEST.value(),
                         e.getClass(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage()), HttpStatus.BAD_REQUEST);
