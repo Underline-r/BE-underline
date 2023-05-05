@@ -24,8 +24,8 @@ public class CommentResponse {
     public static class EachComment{
         private Long commentId;
         private Long userId;
-        private String nickename;
-        private String imagePath;
+        private String userNickname;
+        private String userProfileImage;
         private String comment;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         private LocalDateTime modifiedDate;
@@ -33,8 +33,8 @@ public class CommentResponse {
         public EachComment(Comment comment){
             this.commentId = comment.getCommentId();
             this.userId = comment.getUser().getId();
-            this.nickename = comment.getUser().getNickname();
-            this.imagePath = comment.getUser().getImagePath();
+            this.userNickname = comment.getUser().getNickname();
+            this.userProfileImage = comment.getUser().getImagePath();
             this.comment = comment.getContent();
             this.modifiedDate = comment.getModifiedDate();
         }
