@@ -19,7 +19,8 @@ public class ExceptionHandlers {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<DefaultResponse> nullPointerException(NullPointerException e) {
-        log.error(e.getMessage());
+        //npe stacktrace
+        log.error(e.getMessage(), e);
         return new ResponseEntity<DefaultResponse>(
                 DefaultResponse.errRes(HttpStatus.BAD_REQUEST.value(), e.getClass(), e.getMessage()), HttpStatus.BAD_REQUEST);
     }

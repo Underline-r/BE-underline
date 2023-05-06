@@ -30,6 +30,7 @@ public class SearchController {
     @GetMapping()
     public ResponseEntity<SearchResponse> search(@RequestParam String keyword, Integer filterType, Pageable pageable) {
         SearchResponse searchResponse = new SearchResponse<>();
+        keyword = keyword.trim();
 
         switch (filterType) {
             case 0:
