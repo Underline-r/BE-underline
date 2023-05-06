@@ -19,31 +19,35 @@ import org.springframework.web.bind.annotation.RestController;
 public class SearchController {
     private final SearchService searchService;
 
+    /**
+     * @param filterType
+     * 0 : 전체
+     * 1 : underline
+     * 2 : underliner
+     * 3 : source
+     * 4 : hashtag
+     */
     @GetMapping()
-    public ResponseEntity<SearchResponse> search(@RequestParam String keyword, String filterType, Pageable pageable) {
+    public ResponseEntity<SearchResponse> search(@RequestParam String keyword, Integer filterType, Pageable pageable) {
         SearchResponse searchResponse = new SearchResponse<>();
 
-        // TODO: null 조건 프론트랑 재확인
-        if(filterType == null || "".equals(filterType)) {
-            filterType = "WHOLE";
-        }
         switch (filterType) {
-            case "WHOLE":
-                searchResponse.setUnderliners(searchService.selectUser(keyword, pageable));
+            case 0:
                 searchResponse.setUnderlines(searchService.selectPostTitle(keyword, pageable));
+                searchResponse.setUnderliners(searchService.selectUser(keyword, pageable));
                 searchResponse.setSources(searchService.selectSource(keyword));
                 searchResponse.setHashtags(searchService.selectHashTag(keyword));
                 break;
-            case "USER_NAME":
-                searchResponse.setUnderliners(searchService.selectUser(keyword, pageable));
-                break;
-            case "TITLE":
+            case 1:
                 searchResponse.setUnderlines(searchService.selectPostTitle(keyword, pageable));
                 break;
-            case "SOURCE":
+            case 2:
+                searchResponse.setUnderliners(searchService.selectUser(keyword, pageable));
+                break;
+            case 3:
                 searchResponse.setSources(searchService.selectSource(keyword));
                 break;
-            case "HASHTAG":
+            case 4:
                 searchResponse.setHashtags(searchService.selectHashTag(keyword));
                 break;
         }
