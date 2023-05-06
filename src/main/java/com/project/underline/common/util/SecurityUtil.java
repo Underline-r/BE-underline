@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static java.lang.Long.parseLong;
 
 /**
@@ -26,6 +29,15 @@ public class SecurityUtil {
         Long currentUserId = getCurrentUserId();
         if(!userId.equals(currentUserId)) {
             throw new UnderlineException(ErrorCode.INVALID_TOKEN);
+        }
+    }
+
+    public static void checkValidPassword(String password) {
+        String regex = "^(?=.*[a-z])(?=.*\\d)[a-zA-Z\\d~!@#$%^&*(){}:;',./\\-+\"?><]{8,}$";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(password);
+        if(!m.matches()) {
+            throw new UnderlineException(ErrorCode.INVALID_PASSWORD);
         }
     }
 

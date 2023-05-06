@@ -10,10 +10,12 @@ create table bookmark
 
 create table comment
 (
-    comment_id bigint not null auto_increment,
-    content     varchar(255),
-    post_id    bigint,
-    user_id    bigint,
+    comment_id    bigint not null auto_increment,
+    created_date  datetime(6),
+    modified_date datetime(6),
+    content       varchar(255),
+    post_id       bigint,
+    user_id       bigint,
     primary key (comment_id)
 ) engine = InnoDB;
 
@@ -59,12 +61,12 @@ create table pick
 
 create table post
 (
-    post_id       bigint not null auto_increment,
+    post_id       bigint   not null auto_increment,
     created_date  datetime(6),
     modified_date datetime(6),
-    content       longtext,
-    reference_id  bigint,
-    user_id       bigint,
+    content       longtext not null,
+    source_id  bigint,
+    user_id       bigint   not null,
     primary key (post_id)
 ) engine = InnoDB;
 
@@ -76,12 +78,11 @@ create table post_category_relation
     primary key (pcr_id)
 ) engine = InnoDB;
 
-create table reference
+create table source
 (
-    reference_id bigint not null auto_increment,
-    author       varchar(255),
-    title        varchar(255),
-    primary key (reference_id)
+    source_id bigint       not null auto_increment,
+    title     varchar(255) not null,
+    primary key (source_id)
 ) engine = InnoDB;
 
 create table refresh_token
@@ -161,7 +162,7 @@ alter table pick
     add constraint PICK_USERS_FK foreign key (user_id) references users (user_id);
 
 alter table post
-    add constraint POST_REFER_FK foreign key (reference_id) references reference (reference_id);
+    add constraint POST_SOURCE_FK foreign key (source_id) references source (source_id);
 
 alter table post
     add constraint POST_USERS_FK foreign key (user_id) references users (user_id);

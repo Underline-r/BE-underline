@@ -1,10 +1,12 @@
 package com.project.underline.user.entity.repository;
 
+import com.project.underline.search.web.dto.SearchUserDto;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.FollowUserInfoDto;
 import com.project.underline.user.web.dto.UserPostDto;
 import com.project.underline.user.web.dto.UserProfileDto;
-import com.project.underline.user.web.dto.UserReferenceDto;
+import com.project.underline.user.web.dto.UserSourceDto;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -22,5 +24,7 @@ public interface UserRepositoryCustom {
 
     List<String> selectUserCategoryList(Long id);
 
-    List<UserReferenceDto> selectUserReferenceList(Long id);
+    List<UserSourceDto> selectUserSourceList(Long id);
+
+    List<SearchUserDto> searchUserProfile(String keyword, Pageable pageable);
 }

@@ -8,17 +8,21 @@ import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.Comment;
 import com.project.underline.post.entity.Hashtag;
 import com.project.underline.post.entity.Post;
+import com.project.underline.post.entity.PostExternalShareAttempts;
 import com.project.underline.post.entity.repository.CommentRepository;
 import com.project.underline.post.entity.repository.PickRepository;
+import com.project.underline.post.entity.repository.PostExternalShareAttemptsRepository;
 import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.post.web.dto.PostDetailResponse;
 import com.project.underline.post.web.dto.PostRequest;
+import com.project.underline.post.web.dto.ShareRequest;
 import com.project.underline.post.web.dto.UserCreatedPostListResponse;
-import com.project.underline.reference.service.ReferenceService;
+import com.project.underline.source.service.SourceService;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.FollowRelationRepository;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,30 +38,29 @@ public class PostService {
     private final PickRepository pickRepository;
     private final BookmarkRepository bookmarkRepository;
     private final FollowRelationRepository followRelationRepository;
+    private final PostExternalShareAttemptsRepository postExternalShareAttemptsRepository;
     private final CommentRepository commentRepository;
-    private final ReferenceService referenceService;
+    private final SourceService sourceService;
 
     @Transactional
     public void registerPost(PostRequest postRequest) {
         try {
+            if(postRequest.getSources() !=null){
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent(),sourceService.checkExistSource(postRequest.getSources()));
+                registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
+                postRepository.save(registerNewPost);
+            }else {
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent());
 
-            // TODO. post 등록 -> hashtag 등록을 한개의 메소드(그리고 트랜잭션)내에서 해결했는데
-            Post registerNewPost = Post.builder()
-                    .user(userRepository.findById(SecurityUtil.getCurrentUserId())
-                            .orElseThrow(() -> new UnderlineException(ErrorCode.CANNOT_FOUND_USER)))
-                    .content(postRequest.getContent())
-                    /*
-                    TODO
-                    문제 1. request에 출처 없을 시 NPE,
-                    문제 2. 출처 타이틀이 같을 때 author 다를 경우
-                     */
-                    .reference(referenceService.checkExistReference(postRequest.getReference()))
-                    .build();
+                if (postRequest.getCategory() != null) {
+                    registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
+                }
 
-            registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
+                postRepository.save(registerNewPost);
+            }
 
-            postRepository.save(registerNewPost);
-        } catch (RuntimeException e) {
+
+        }catch (RuntimeException e) {
             throw e;
         }
     }
@@ -77,7 +80,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostDetailResponse setUserStatus(PostDetailResponse postDetailResponse){
-        boolean isFollwed = followRelationRepository.existsByToUserIdAndFromUserId(SecurityUtil.getCurrentUserId(), postDetailResponse.getUserId());
+        boolean isFollwed = followRelationRepository.existsByToUserIdAndFromUserId(postDetailResponse.getUserId(), SecurityUtil.getCurrentUserId());
         boolean isBookmarked = bookmarkRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(),SecurityUtil.getCurrentUserId());
         boolean isPicked = pickRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(),SecurityUtil.getCurrentUserId());
 
@@ -141,18 +144,18 @@ public class PostService {
         List<Hashtag> hashtags = new ArrayList<Hashtag>();
         List<PostCategoryRelation> postCategoryRelations = new ArrayList<PostCategoryRelation>();
 
-        List<String> requestHashtags = postRequest.getHashtag();
-
         registerPost.removeAllHashtagsAndCategory();
 
-        if (requestHashtags != null && !requestHashtags.isEmpty() || registerPost.getHashtags()!= null) {
+        if (postRequest.getHashtag() != null) {
+            List<String> requestHashtags = postRequest.getHashtag();
             for (String eachHashtag : requestHashtags) {
                 hashtags.add(new Hashtag(registerPost, eachHashtag));
             }
         }
 
-        if (postRequest.getCategory().size() > 0) {
-            for (String eachCategory : postRequest.getCategory()) {
+        if (postRequest.getCategory() != null) {
+            List<String> requestCategory = postRequest.getCategory();
+            for (String eachCategory : requestCategory) {
                 postCategoryRelations.add(new PostCategoryRelation(registerPost, eachCategory));
             }
         }
@@ -165,5 +168,19 @@ public class PostService {
     private Long returnUserId(String userNickname) {
         Optional<User> findUser = Optional.ofNullable(userRepository.findByNickname(userNickname));
         return findUser.get().getId();
+    }
+
+    public void externalSharingCount(ShareRequest shareRequest) {
+        try{
+        Optional<PostExternalShareAttempts> findByPost_PostId = postExternalShareAttemptsRepository.findByPost_PostIdAndShareTarget(shareRequest.getPostId(),shareRequest.getShareTarget());
+        if(findByPost_PostId.isPresent()){
+            findByPost_PostId.get().update();
+            postExternalShareAttemptsRepository.save(findByPost_PostId.get());
+        }else {
+            postExternalShareAttemptsRepository.save(new PostExternalShareAttempts(shareRequest.getPostId(),shareRequest.getShareTarget(),1L));
+        }
+        }catch (DataAccessException e){
+            throw new UnderlineException(ErrorCode.WRONG_APPROACH);
+        }
     }
 }

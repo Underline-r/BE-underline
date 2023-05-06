@@ -6,5 +6,5 @@ import java.util.List;
 
 @Getter
 public class UserCategoryListRequest {
-    private List<String> category;
+    private List<String> codes;
 }

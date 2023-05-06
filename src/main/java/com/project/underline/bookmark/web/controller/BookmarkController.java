@@ -43,17 +43,4 @@ public class BookmarkController {
                 , HttpStatus.OK);
     }
 
-    @DeleteMapping("/bookmark")
-    public ResponseEntity deleteBookmark(@RequestBody BookmarkRequest bookmarkRequest){
-
-        bookmarkService.deleteBookmark(bookmarkRequest);
-
-        return new ResponseEntity(
-                DefaultResponse.builder()
-                        .statusCode(OK.value())
-                        .message(SUCCESS)
-                        .build()
-                , HttpStatus.OK);
-    }
-
 }

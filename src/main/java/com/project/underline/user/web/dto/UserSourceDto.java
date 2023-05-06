@@ -4,13 +4,13 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Getter;
 
 @Getter
-public class UserReferenceDto {
+public class UserSourceDto {
 
     private String title;
 
 
     @QueryProjection
-    public UserReferenceDto(String title) {
+    public UserSourceDto(String title) {
         this.title = title;
     }
 }

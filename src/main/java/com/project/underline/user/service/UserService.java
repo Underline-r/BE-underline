@@ -7,6 +7,7 @@ import com.project.underline.common.jwt.TokenRequestDto;
 import com.project.underline.common.jwt.refreshtoken.RefreshToken;
 import com.project.underline.common.jwt.refreshtoken.RefreshTokenRepository;
 import com.project.underline.common.metadata.ErrorCode;
+import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import com.project.underline.user.web.dto.LoginRequestDto;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,12 +43,24 @@ public class UserService {
      */
     public Long createUser(SignupRequestDto signupRequestDto) {
         String email = signupRequestDto.getEmail();
+        String password = signupRequestDto.getPassword();
+        SecurityUtil.checkValidPassword(password);
         validationEmail(email);
         User user = signupRequestDto.toUser(passwordEncoder);
         return userRepository.save(user).getId();
     }
 
     public TokenDto login(LoginRequestDto loginRequestDto) {
+        Optional<User> findUser = userRepository.findByEmail(loginRequestDto.getEmail());
+        boolean isFirst = false;
+        if (findUser.isPresent()){
+            if (refreshTokenRepository.findById(findUser.get().getId().toString()).isEmpty()){
+                isFirst = true;
+            }
+        } else {
+            throw new UnderlineException(ErrorCode.NO_SUCH_USER);
+        }
+
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = loginRequestDto.toAuthentication();
@@ -56,6 +70,7 @@ public class UserService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+        tokenDto.setInitialLogin(isFirst);
 
         RefreshToken refreshToken = RefreshToken.builder()
                 .userId(authentication.getName())

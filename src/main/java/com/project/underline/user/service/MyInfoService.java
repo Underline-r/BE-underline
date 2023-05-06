@@ -35,7 +35,8 @@ public class MyInfoService {
         Long currentUserId = SecurityUtil.getCurrentUserId();
 
         User findUser = userService.existUser(currentUserId);
-        findUser.changeProfile(dto.getNickname(), dto.getDescription(), dto.getImagePath());
+        String path = "profile/" + currentUserId + "/" +  dto.getImagePath();
+        findUser.changeProfile(dto.getNickname(), dto.getDescription(), path);
 
         userRepository.save(findUser);
     }
@@ -60,6 +61,7 @@ public class MyInfoService {
     public void changeUserPassword(String newPassword) {
         Long currentUserId = SecurityUtil.getCurrentUserId();
         User findUser = userService.existUser(currentUserId);
+        SecurityUtil.checkValidPassword(newPassword);
         findUser.changePassword(passwordEncoder.encode(newPassword));
         userRepository.save(findUser);
     }
@@ -76,7 +78,7 @@ public class MyInfoService {
         return new CommentResponse(commentRepository.findAllByUser(findUser));
     }
 
-    public List<UserPostDto> listLikePost() {
+    public List<UserPostDto> listPickPost() {
         Long currentUserId = SecurityUtil.getCurrentUserId();
         User findUser = userService.existUser(currentUserId);
 

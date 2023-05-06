@@ -1,5 +1,6 @@
 package com.project.underline.post.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.underline.post.entity.Comment;
 import lombok.Getter;
 
@@ -21,14 +22,19 @@ public class CommentResponse {
 
     @Getter
     public static class EachComment{
+        private Long commentId;
         private Long userId;
-        private Long postId;
+        private String userNickname;
+        private String userProfileImage;
         private String comment;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         private LocalDateTime modifiedDate;
 
         public EachComment(Comment comment){
+            this.commentId = comment.getCommentId();
             this.userId = comment.getUser().getId();
-            this.postId = comment.getPost().getPostId();
+            this.userNickname = comment.getUser().getNickname();
+            this.userProfileImage = comment.getUser().getImagePath();
             this.comment = comment.getContent();
             this.modifiedDate = comment.getModifiedDate();
         }

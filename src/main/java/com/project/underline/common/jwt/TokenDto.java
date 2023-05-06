@@ -10,7 +10,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 public class TokenDto {
+    private Boolean isInitialLogin;
     private String grantType;
     private String accessToken;
     private String refreshToken;
+
+    public boolean getIsInitialLogin() {
+        return isInitialLogin;
+    }
+
+    public void setInitialLogin(Boolean initialLogin) {
+        isInitialLogin = initialLogin;
+    }
 }

@@ -1,4 +1,4 @@
-package com.project.underline.reference.entity;
+package com.project.underline.source.entity;
 
 import com.project.underline.post.entity.Post;
 import lombok.AccessLevel;
@@ -14,29 +14,29 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
-@Table(name = "REFERENCE")
-public class Reference {
+@Table(name = "SOURCE")
+public class Source {
 
     @Id
     @GeneratedValue
-    @Column(name = "REFERENCE_ID")
-    private Long referenceId;
+    @Column(name = "SOURCE_ID")
+    private Long sourceId;
 
     @Column(name="TITLE")
     @NotNull
     private String title;
 
-    @OneToMany(mappedBy = "reference",
+    @OneToMany(mappedBy = "source",
             cascade = CascadeType.ALL)
     private List<Post> postList = new ArrayList<Post>();
 
     @Builder
-    public Reference(Long referenceId, String title){
-        this.referenceId = referenceId;
+    public Source(Long sourceId, String title){
+        this.sourceId = sourceId;
         this.title = title;
     }
 
-    public Reference(String title){
+    public Source(String title){
         this.title = title;
     }
 

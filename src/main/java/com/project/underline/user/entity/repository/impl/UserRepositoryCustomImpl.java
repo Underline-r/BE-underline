@@ -1,10 +1,13 @@
 package com.project.underline.user.entity.repository.impl;
 
+import com.project.underline.search.web.dto.QSearchUserDto;
+import com.project.underline.search.web.dto.SearchUserDto;
 import com.project.underline.user.entity.repository.UserRepositoryCustom;
 import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -12,7 +15,7 @@ import java.util.List;
 import static com.project.underline.category.entity.QUserCategoryRelation.userCategoryRelation;
 import static com.project.underline.post.entity.QHashtag.hashtag;
 import static com.project.underline.post.entity.QPost.post;
-import static com.project.underline.reference.entity.QReference.reference;
+import static com.project.underline.source.entity.QSource.source;
 import static com.project.underline.user.entity.QUser.user;
 import static com.project.underline.user.entity.QUserFollowRelation.userFollowRelation;
 
@@ -120,19 +123,42 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
      * @Subselct 사용한 Entity 이용 모수 줄이는 방법 있음
      */
     @Override
-    public List<UserReferenceDto> selectUserReferenceList(Long id) {
+    public List<UserSourceDto> selectUserSourceList(Long id) {
         return queryFactory
                 .select(
-                        new QUserReferenceDto(
-                                reference.title
+                        new QUserSourceDto(
+                                source.title
                         )
                 )
-                .from(reference)
-                .groupBy(reference.title)
-                .join(reference.postList, post)
+                .from(source)
+                .groupBy(source.title)
+                .join(source.postList, post)
                 .join(post.user, user)
                 .on(userIdEq(id))
                 .fetch();
+    }
+
+    @Override
+    public List<SearchUserDto> searchUserProfile(String keyword, Pageable pageable) {
+        String likeKeyword = "%" + keyword + "%";
+        return queryFactory
+                .select(
+                        new QSearchUserDto(
+                                user.id,
+                                user.imagePath,
+                                user.nickname
+//                                , queryFactory
+//                                        .selectFrom(userFollowRelation)
+//                                        .where(toUserIdEq(condition.getProfileUserId())
+//                                                .and(fromUserIdEq(condition.getLoginUserId()))).exists(),
+                        )
+                )
+                .from(user)
+                .where(user.nickname.like(likeKeyword))
+                .offset(pageable.getOffset())
+                .limit(10)
+                .fetch();
+//        return null;
     }
 
     private BooleanExpression toUserIdEq(Long toUserId) {

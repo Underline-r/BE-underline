@@ -1,22 +1,19 @@
 package com.project.underline.post.web.dto;
 
-import com.project.underline.common.metadata.ErrorCode;
 import com.project.underline.common.metadata.ResponseMessage;
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Getter
 public class PostRequest {
 
-    @NotNull(message = ResponseMessage.INVALID_CONTENT)
     private List<String> category;
 
-    @NotNull(message = ResponseMessage.INVALID_CONTENT)
-    private String reference;
+    private String sources;
 
-    @NotNull(message = ResponseMessage.INVALID_CONTENT)
+    @NotEmpty(message = ResponseMessage.INVALID_CONTENT)
     private String content;
 
     private List<String> hashtag;
