@@ -140,7 +140,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
     @Override
     public List<SearchUserDto> searchUserProfile(String keyword, Pageable pageable) {
-        String likeKeyword = "%" + keyword + "%";
         return queryFactory
                 .select(
                         new QSearchUserDto(
@@ -154,7 +153,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                         )
                 )
                 .from(user)
-                .where(user.nickname.like(likeKeyword))
+                .where(user.nickname.contains(keyword))
                 .offset(pageable.getOffset())
                 .limit(10)
                 .fetch();

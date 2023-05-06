@@ -38,7 +38,6 @@ public class Post extends BaseTimeEntity {
     private Source source;
 
     @Column(name="CONTENT")
-    @Lob
     @NotNull
     private String content;
 

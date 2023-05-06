@@ -46,8 +46,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
     @Override
     public List<SearchPostDto> searchPostList(String keyword, Pageable pageable) {
-        String likeKeyword = "%" + keyword + "%";
-
+        System.out.println(keyword);
         return queryFactory
                 .select(
                         new QSearchPostDto(
@@ -58,7 +57,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                         )
                 )
                 .from(post)
-                .where(post.content.like(likeKeyword))
+                .where(post.content.contains(keyword))
                 .offset(pageable.getOffset())
                 .limit(10)
                 .fetch();
@@ -66,7 +65,6 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
     @Override
     public List<SearchSourceDto> searchSourceList(String keyword) {
-        String likeKeyword = "%" + keyword + "%";
 
         return queryFactory
                 .select(
@@ -78,13 +76,12 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                 )
                 .from(post)
                 .join(post.source, source)
-                .where(source.title.like(likeKeyword))
+                .where(source.title.contains(keyword))
                 .fetch();
     }
 
     @Override
     public List<SearchHashtagDto> searchHashtagList(String keyword) {
-        String likeKeyword = "%" + keyword + "%";
 
         return queryFactory
                 .select(
@@ -96,7 +93,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                 .from(hashtag)
                 // post id 를 이미 갖고 있음 check
 //                .join(hashtag.post, post)
-                .where(hashtag.hashtagName.like(likeKeyword))
+                .where(hashtag.hashtagName.contains(keyword))
                 .fetch();
     }
 
