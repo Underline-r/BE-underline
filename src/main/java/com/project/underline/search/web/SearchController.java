@@ -34,13 +34,13 @@ public class SearchController {
 
         switch (filterType) {
             case 0:
-                searchResponse.setUnderlines(searchService.selectPostTitle(keyword, pageable));
+                searchResponse.setUnderlines(searchService.selectPost(keyword, pageable));
                 searchResponse.setUnderliners(searchService.selectUser(keyword, pageable));
                 searchResponse.setSources(searchService.selectSource(keyword));
                 searchResponse.setHashtags(searchService.selectHashTag(keyword));
                 break;
             case 1:
-                searchResponse.setUnderlines(searchService.selectPostTitle(keyword, pageable));
+                searchResponse.setUnderlines(searchService.selectPost(keyword, pageable));
                 break;
             case 2:
                 searchResponse.setUnderliners(searchService.selectUser(keyword, pageable));

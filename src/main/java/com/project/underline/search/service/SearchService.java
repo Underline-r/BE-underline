@@ -23,7 +23,7 @@ public class SearchService {
         return userRepository.searchUserProfile(keyword, pageable);
     }
 
-    public List<SearchPostDto> selectPostTitle(String keyword, Pageable pageable) {
+    public List<SearchPostDto> selectPost(String keyword, Pageable pageable) {
         return postRepository.searchPostList(keyword, pageable);
     }
 
