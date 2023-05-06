@@ -60,6 +60,7 @@ public class MyInfoService {
     public void changeUserPassword(String newPassword) {
         Long currentUserId = SecurityUtil.getCurrentUserId();
         User findUser = userService.existUser(currentUserId);
+        SecurityUtil.checkValidPassword(newPassword);
         findUser.changePassword(passwordEncoder.encode(newPassword));
         userRepository.save(findUser);
     }

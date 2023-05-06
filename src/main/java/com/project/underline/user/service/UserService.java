@@ -7,6 +7,7 @@ import com.project.underline.common.jwt.TokenRequestDto;
 import com.project.underline.common.jwt.refreshtoken.RefreshToken;
 import com.project.underline.common.jwt.refreshtoken.RefreshTokenRepository;
 import com.project.underline.common.metadata.ErrorCode;
+import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.user.entity.User;
 import com.project.underline.user.entity.repository.UserRepository;
 import com.project.underline.user.web.dto.LoginRequestDto;
@@ -42,6 +43,8 @@ public class UserService {
      */
     public Long createUser(SignupRequestDto signupRequestDto) {
         String email = signupRequestDto.getEmail();
+        String password = signupRequestDto.getPassword();
+        SecurityUtil.checkValidPassword(password);
         validationEmail(email);
         User user = signupRequestDto.toUser(passwordEncoder);
         return userRepository.save(user).getId();

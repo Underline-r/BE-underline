@@ -23,7 +23,8 @@ public enum ErrorCode {
     INVALID_EMAIL(BAD_REQUEST,"이메일 형식이 올바르지 않습니다.."),
     INVALID_SHARE_TARGET(BAD_REQUEST,"옳지 않은 공유 대상입니다."),
     CATEGORY_LIMIT(BAD_REQUEST, "카테고리는 3개까지만 등록 가능합니다."),
-    NO_SUCH_USER(BAD_REQUEST,"등록된 유저가 아닙니다.")
+    NO_SUCH_USER(BAD_REQUEST,"등록된 유저가 아닙니다."),
+    INVALID_PASSWORD(BAD_REQUEST,"패스워드 형식이 올바르지 않습니다.")
     ;
 
     private final HttpStatus httpStatus;
