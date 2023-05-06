@@ -31,7 +31,7 @@ public class UserProfileService {
         UserProfileDto profileDto = userRepository
                 .selectUserProfile(profileSearchCondition);
         if (profileDto.getImagePath() != null) {
-            profileDto.setImagePath(s3Service.getFilePath("profile/" + profileDto.getImagePath()));
+            profileDto.setImagePath(s3Service.getFilePath(profileDto.getImagePath()));
         }
 
         if (profileUserId.equals(SecurityUtil.getCurrentUserId())) {

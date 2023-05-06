@@ -35,7 +35,8 @@ public class MyInfoService {
         Long currentUserId = SecurityUtil.getCurrentUserId();
 
         User findUser = userService.existUser(currentUserId);
-        findUser.changeProfile(dto.getNickname(), dto.getDescription(), dto.getImagePath());
+        String path = "profile/" + currentUserId + "/" +  dto.getImagePath();
+        findUser.changeProfile(dto.getNickname(), dto.getDescription(), path);
 
         userRepository.save(findUser);
     }

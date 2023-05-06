@@ -119,7 +119,9 @@ public class MyInfoController {
 
     @PostMapping("/image")
     public ResponseEntity regUserProfileImage(@RequestPart MultipartFile file) throws IOException {
-        s3Service.upload(file, "profile");
+        Long userId = SecurityUtil.getCurrentUserId();
+        String path = "profile/" + userId;
+        s3Service.upload(file, path);
 
         return new ResponseEntity(
                 DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS), HttpStatus.OK
