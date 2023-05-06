@@ -52,11 +52,13 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                         new QSearchPostDto(
                                 post.postId,
                                 post.content,
-                                post.source.title,
-                                post.user.nickname
+                                source.title,
+                                user.nickname
                         )
                 )
                 .from(post)
+                .leftJoin(post.source, source)
+                .leftJoin(post.user, user)
                 .where(post.content.contains(keyword))
                 .offset(pageable.getOffset())
                 .limit(10)
