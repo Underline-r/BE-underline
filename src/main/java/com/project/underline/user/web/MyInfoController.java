@@ -4,11 +4,11 @@ import com.project.underline.category.web.dto.UserCategoryListRequest;
 import com.project.underline.common.metadata.ResponseMessage;
 import com.project.underline.common.payload.DefaultResponse;
 import com.project.underline.common.util.S3Service;
+import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.web.dto.CommentResponse;
 import com.project.underline.user.service.MyInfoService;
-import com.project.underline.user.web.dto.SignupRequestDto;
-import com.project.underline.user.web.dto.UserPostDto;
-import com.project.underline.user.web.dto.UserProfileDto;
+import com.project.underline.user.service.UserProfileService;
+import com.project.underline.user.web.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +25,70 @@ public class MyInfoController {
 
     private final MyInfoService infoService;
     private final S3Service s3Service;
+    private final UserProfileService profileService;
+
+    @GetMapping()
+    public ResponseEntity<UserProfileDto> getMyProfile() {
+        Long id = SecurityUtil.getCurrentUserId();
+        UserProfileDto userProfile = profileService.getUserProfile(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, userProfile), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/following")
+    public ResponseEntity<FollowUserInfoDto> getFollowingList() {
+        Long id = SecurityUtil.getCurrentUserId();
+        List<FollowUserInfoDto> followingList = profileService.getFollowingList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, followingList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/followers")
+    public ResponseEntity<FollowUserInfoDto> getFollowerList() {
+        Long id = SecurityUtil.getCurrentUserId();
+        List<FollowUserInfoDto> followerList = profileService.getFollowerList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, followerList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/posts")
+    public ResponseEntity<UserPostDto> getUserPostList() {
+        Long id = SecurityUtil.getCurrentUserId();
+        List<UserPostDto> postList = profileService.getUserPostList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, postList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/hashtags")
+    public ResponseEntity<String> getUserHashtagList() {
+        Long id = SecurityUtil.getCurrentUserId();
+        List<String> hashtagList = profileService.getUserHashtagList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, hashtagList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<String> getUserCategoryList() {
+        Long id = SecurityUtil.getCurrentUserId();
+        List<String> categoryList = profileService.getUserCategoryList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, categoryList), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/sources")
+    public ResponseEntity<String> getUserSourceList() {
+        Long id = SecurityUtil.getCurrentUserId();
+        List<UserSourceDto> sourceList = profileService.getUserSourceList(id);
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, sourceList), HttpStatus.OK
+        );
+    }
 
     @PatchMapping()
     public ResponseEntity changeUserProfile(@RequestBody UserProfileDto profileDto) {
