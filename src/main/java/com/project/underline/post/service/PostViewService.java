@@ -5,6 +5,7 @@ import com.project.underline.post.entity.PostTemp;
 import com.project.underline.post.entity.PostView;
 import com.project.underline.post.entity.repository.PostRedisRepository;
 import com.project.underline.post.entity.repository.PostViewRepository;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,14 @@ import java.util.Optional;
 public class PostViewService {
     private final PostRedisRepository postRedisRepository;
     private final PostViewRepository postViewRepository;
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, PostTemp> redisTemplate;
 
-    public PostViewService(PostRedisRepository postRedisRepository, PostViewRepository postViewRepository, RedisTemplate<String, Object> redisTemplate) {
+    public PostViewService(PostRedisRepository postRedisRepository, PostViewRepository postViewRepository, @Qualifier("redisTemplateConfig") RedisTemplate<String, PostTemp> redisTemplate) {
         this.postRedisRepository = postRedisRepository;
         this.postViewRepository = postViewRepository;
         this.redisTemplate = redisTemplate;
     }
+
 
     public Long getViewCount(Long postId) {
         try {

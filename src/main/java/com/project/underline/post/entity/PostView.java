@@ -23,12 +23,18 @@ public class PostView extends BaseTimeEntity {
     private Long viewCount;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POST_ID")
+    @JoinColumn(name = "POST_ID", unique = true)
     private Post post;
 
     @Builder
     public PostView(Post post) {
         this.post = post;
+    }
+
+    @Builder
+    public PostView(PostTemp postTemp) {
+        this.viewCount = postTemp.getPostView();
+        this.post = new Post(postTemp.getPostId());
     }
 
     public PostView countPostView(Post post){
