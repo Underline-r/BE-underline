@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class PostViewService {
@@ -18,7 +19,7 @@ public class PostViewService {
     private final PostViewRepository postViewRepository;
     private final RedisTemplate<String, PostTemp> redisTemplate;
 
-    public PostViewService(PostRedisRepository postRedisRepository, PostViewRepository postViewRepository, @Qualifier("redisTemplateConfig") RedisTemplate<String, PostTemp> redisTemplate) {
+    public PostViewService(PostRedisRepository postRedisRepository, PostViewRepository postViewRepository, @Qualifier("postTempRedisTemplate") RedisTemplate<String, PostTemp> redisTemplate) {
         this.postRedisRepository = postRedisRepository;
         this.postViewRepository = postViewRepository;
         this.redisTemplate = redisTemplate;
@@ -29,20 +30,21 @@ public class PostViewService {
         try {
             Optional<PostTemp> postTemp = postRedisRepository.findById(postId);
 
-            if(postTemp.isPresent()){
+            if (postTemp.isPresent()) {
                 viewIncrease(postTemp.get());
-                return postTemp.get().getPostView();
-            }else {
+                return postTemp.get().getPostView().get(); // AtomicLong에서 Long을 Get
+            } else {
                 return postViewRepository.findByPost_PostId(postId)
-                        .map(PostView::getViewCount)
+                        .map(postView -> postView.getViewCount())
                         .orElseGet(() -> {
-                            return setViewCount(postId);
+                            return setViewCount(postId).get();
                         });
             }
         } catch (RuntimeException e) {
             throw e;
         }
     }
+
 
     public void viewIncrease(PostTemp postTemp) {
         postTemp.viewIncrease();
@@ -51,11 +53,16 @@ public class PostViewService {
 
     public void postListViewIncrease(List<FeedPost> postList) {
         try {
-            // redisTemplate을 안쓰고 싶었는데 repository를 쓴다면 find한뒤에 update해줘야하기때문에 -> 한번 왔다갔다해야한다는뜻
-            // TODO. reditTemplate을 안쓰도록 개선
             for (FeedPost post : postList) {
-                String key = "PostTemp:" + post.getPostId();
-                redisTemplate.opsForHash().increment(key, "postView", 1L);
+                Optional<PostTemp> postTempOptional = postRedisRepository.findById(post.getPostId());
+                if (postTempOptional.isPresent()) {
+                    PostTemp postTemp = postTempOptional.get();
+                    postTemp.viewIncrease();
+                    postRedisRepository.save(postTemp);
+                } else {
+                    PostTemp postTemp = new PostTemp(post.getPostId(), 1L);
+                    postRedisRepository.save(postTemp);
+                }
             }
         } catch (RuntimeException e) {
             throw e;
@@ -63,10 +70,10 @@ public class PostViewService {
     }
 
 
-    public long setViewCount(Long postId) {
-        PostTemp postTemp = new PostTemp(postId, 0L);
+    public AtomicLong setViewCount(Long postId) {
+        PostTemp postTemp = new PostTemp(postId, 1L);
         postRedisRepository.save(postTemp);
-        return 1L;
+        return new AtomicLong(1L);
     }
 
 }

@@ -34,7 +34,7 @@ public class RedisConfiguration {
         return new JedisConnectionFactory(config);
     }
 
-    @Bean
+    @Bean("postTempRedisTemplate")
     public RedisTemplate<String, PostTemp> redisTemplateConfig(RedisConnectionFactory redisConnectionFactory) {
         // TODO. RedisTemplate 제너릭하게 사용할 수 있도록 GenericRedisTemplate 생성 필요
         RedisTemplate<String, PostTemp> template = new RedisTemplate<>();

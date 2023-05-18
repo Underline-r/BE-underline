@@ -33,7 +33,7 @@ public class PostView extends BaseTimeEntity {
 
     @Builder
     public PostView(PostTemp postTemp) {
-        this.viewCount = postTemp.getPostView();
+        this.viewCount = postTemp.getPostView().get();
         this.post = new Post(postTemp.getPostId());
     }
 

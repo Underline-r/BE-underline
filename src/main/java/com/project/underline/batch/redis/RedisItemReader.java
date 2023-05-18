@@ -1,26 +1,28 @@
 package com.project.underline.batch.redis;
 
-import lombok.RequiredArgsConstructor;
+import com.project.underline.post.entity.PostTemp;
+import com.project.underline.post.entity.repository.PostRedisRepository;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Component
-@RequiredArgsConstructor
 public class RedisItemReader<T> implements ItemReader<T> {
 
-    private final RedisTemplate<String, T> redisTemplate;
-    private final String key;
+    private final PostRedisRepository postTempRepository;
     private final List<T> items = new ArrayList<>();
     private int currentIndex = 0;
+
+    @Autowired
+    public RedisItemReader(PostRedisRepository postTempRepository) {
+        this.postTempRepository = postTempRepository;
+    }
 
     @Override
     public T read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
@@ -39,7 +41,8 @@ public class RedisItemReader<T> implements ItemReader<T> {
 
     private void loadItems() {
         items.clear();
-        Set<T> resultSet = redisTemplate.opsForSet().members(key);
-        items.addAll(resultSet);
+        Iterable<PostTemp> resultSet = postTempRepository.findAll();
+        resultSet.forEach(item -> items.add((T) item));
     }
+
 }

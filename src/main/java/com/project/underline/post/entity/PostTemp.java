@@ -5,6 +5,8 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 @RedisHash("PostTemp")
 @Getter
 @ToString
@@ -16,15 +18,15 @@ public class PostTemp {
     @Id
     private Long postId;
 
-    private Long postView;
+    private AtomicLong postView;  // Long -> AtomicLong, 동시성 문제 고려
 
     public PostTemp(Long postId, Long postView) {
         this.postId = postId;
-        this.postView = postView;
+        this.postView = new AtomicLong(postView);
     }
 
-    public PostTemp viewIncrease(){
-        this.postView += 1;
+    public PostTemp viewIncrease() {
+        this.postView.incrementAndGet();
         return this;
     }
 }
