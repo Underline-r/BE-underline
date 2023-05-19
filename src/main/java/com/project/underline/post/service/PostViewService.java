@@ -2,7 +2,6 @@ package com.project.underline.post.service;
 
 import com.project.underline.feed.web.dto.FeedPost;
 import com.project.underline.post.entity.PostTemp;
-import com.project.underline.post.entity.PostView;
 import com.project.underline.post.entity.repository.PostRedisRepository;
 import com.project.underline.post.entity.repository.PostViewRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,7 +31,7 @@ public class PostViewService {
 
             if (postTemp.isPresent()) {
                 viewIncrease(postTemp.get());
-                return postTemp.get().getPostView().get(); // AtomicLong에서 Long을 Get
+                return postTemp.get().getPostView();
             } else {
                 return postViewRepository.findByPost_PostId(postId)
                         .map(postView -> postView.getViewCount())

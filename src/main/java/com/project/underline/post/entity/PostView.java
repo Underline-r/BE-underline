@@ -22,9 +22,12 @@ public class PostView extends BaseTimeEntity {
     @Column(name = "COUNT")
     private Long viewCount;
 
+    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POST_ID", unique = true)
     private Post post;
+
+    private Long postId;
 
     @Builder
     public PostView(Post post) {
@@ -33,8 +36,8 @@ public class PostView extends BaseTimeEntity {
 
     @Builder
     public PostView(PostTemp postTemp) {
-        this.viewCount = postTemp.getPostView().get();
-        this.post = new Post(postTemp.getPostId());
+        this.viewCount = postTemp.getPostView();
+        this.postId = postTemp.getPostId(); // IN절로 한꺼번에 post조회 후 업데이트하기 위해 따로 존재하는 필드
     }
 
     public PostView countPostView(Post post){

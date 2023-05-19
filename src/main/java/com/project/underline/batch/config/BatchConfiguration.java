@@ -47,7 +47,7 @@ public class BatchConfiguration {
     @Bean
     public Step redisItemReaderStep() {
         return stepBuilderFactory.get("redisItemReaderStep")
-                .<PostTemp, PostView>chunk(chunkSize)
+                .<PostTemp, PostTemp>chunk(chunkSize)
                 .reader(redisItemReader)
                 .processor(postTempToPostViewProcessor)
                 .writer(postViewItemWriter)
@@ -57,7 +57,7 @@ public class BatchConfiguration {
     //    @Scheduled(cron = "0 * * * * *") // Run once every hour
     @Scheduled(fixedDelay = 60000)
     public void runBatchJob() throws Exception {
-        log.info("* -- 조회수 배치 -- *");
+        log.info("* -- 조회수 배치 시작 -- *");
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("JobID", String.valueOf(System.currentTimeMillis()))
                 .toJobParameters();
