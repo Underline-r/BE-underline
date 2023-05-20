@@ -54,8 +54,7 @@ public class BatchConfiguration {
                 .build();
     }
 
-    //    @Scheduled(cron = "0 * * * * *") // Run once every hour
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(cron = "0 0 3 * * ?", zone = "Asia/Seoul")
     public void runBatchJob() throws Exception {
         log.info("* -- 조회수 배치 시작 -- *");
         JobParameters jobParameters = new JobParametersBuilder()
