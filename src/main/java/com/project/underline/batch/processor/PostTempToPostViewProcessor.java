@@ -8,12 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PostTempToPostViewProcessor implements ItemProcessor<PostTemp, PostView> {
-    
+public class PostTempToPostViewProcessor implements ItemProcessor<PostTemp, PostTemp> {
+
     @Override
-    public PostView process(PostTemp postTemp) throws Exception {
-        PostView postViewObj = new PostView(postTemp);
-        return postViewObj;
+    public PostTemp process(PostTemp postTemp) throws Exception {
+//        PostView postViewObj = new PostView(postTemp);
+//        return postViewObj;
+        return postTemp;
     }
 
 }

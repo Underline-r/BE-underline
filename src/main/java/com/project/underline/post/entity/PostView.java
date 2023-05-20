@@ -15,35 +15,23 @@ import javax.persistence.*;
 public class PostView extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
-    @Column(name = "VIEW_ID")
-    private Long viewId;
+    @Column(name = "POST_ID")
+    private Long postId;
+
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "POST_ID", insertable = false, updatable = false)
+//    private Post post;
 
     @Column(name = "COUNT")
     private Long viewCount;
 
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POST_ID", unique = true)
-    private Post post;
-
-    private Long postId;
-
     @Builder
-    public PostView(Post post) {
-        this.post = post;
-    }
-
-    @Builder
-    public PostView(PostTemp postTemp) {
+    public PostView(Post post,PostTemp postTemp) {
+        this.postId = post.getPostId();
         this.viewCount = postTemp.getPostView();
-        this.postId = postTemp.getPostId(); // IN절로 한꺼번에 post조회 후 업데이트하기 위해 따로 존재하는 필드
     }
-
     public PostView countPostView(Post post){
         this.viewCount = viewCount +1;
         return this;
     }
-
-
 }

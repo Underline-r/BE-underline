@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,15 +36,21 @@ public class PostViewItemWriter implements ItemWriter<PostTemp> {
         List<Long> postIds = items.stream().map(PostTemp::getPostId).collect(Collectors.toList());
         List<Post> posts = postRepository.findAllById(postIds);
 
+        // Map 생성
+        Map<Long, Post> postMap = posts.stream()
+                .collect(Collectors.toMap(Post::getPostId, Function.identity()));
+
         List<PostView> postViews = new ArrayList<>();
         for (PostTemp postTemp : items) {
-            for (Post post : posts) {
-                if (postTemp.getPostId().equals(post.getPostId())) {
-                    postViews.add(new PostView(post));
-                    break;
-                }
+            Post post = postMap.get(postTemp.getPostId());
+            if (post != null) {
+                postViews.add(new PostView(post, postTemp));
+            } else {
+                // postTemp.getPostId()에 해당하는 Post가 데이터베이스에 없음
+                // 이에 대한 처리를 여기에 추가하세요
             }
         }
+
 
         postViewRepository.saveAll(postViews);
 

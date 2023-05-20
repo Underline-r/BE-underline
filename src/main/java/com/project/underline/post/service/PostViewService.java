@@ -33,7 +33,7 @@ public class PostViewService {
                 viewIncrease(postTemp.get());
                 return postTemp.get().getPostView();
             } else {
-                return postViewRepository.findByPost_PostId(postId)
+                return postViewRepository.findByPostId(postId)
                         .map(postView -> postView.getViewCount())
                         .orElseGet(() -> {
                             return setViewCount(postId).get();
