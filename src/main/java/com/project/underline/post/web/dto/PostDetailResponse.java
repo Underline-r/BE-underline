@@ -19,10 +19,10 @@ public class PostDetailResponse {
     private LocalDateTime createdDate;
 
     private Long userId;
+    private Long viewCount;
     private String userNickname;
     private String userProfileImage;
 
-    private Long viewCount;
     private Long pickCount;
     private Long commentCount;
 
@@ -48,24 +48,13 @@ public class PostDetailResponse {
         return this;
     }
     public PostDetailResponse(Post post){
-        this.postId = post.getPostId();
         this.content = post.getContent();
-
-        // npe
-        if(post.getSource() != null) {
-            this.source = post.getSource().getTitle();
-        }else {
-            this.source = null;
-        }
-
-        this.createdDate = post.getCreatedDate();
-
         this.userId = post.getUser().getId();
-        this.userNickname = post.getUser().getNickname();
-        this.userProfileImage = post.getUser().getImagePath();
+    }
 
-        this.hashtags = post.getHashtags().stream()
-                .map(Hashtag::getHashtagName)
-                .collect(Collectors.toList());
+    public PostDetailResponse(Post post, Long viewCount){
+        this.content = post.getContent();
+        this.userId = post.getUser().getId();
+        this.viewCount = viewCount;
     }
 }

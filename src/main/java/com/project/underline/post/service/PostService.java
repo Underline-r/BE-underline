@@ -56,11 +56,8 @@ public class PostService {
                     registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
                 }
 
-                postRepository.save(registerNewPost);
-            }
-
-
-        }catch (RuntimeException e) {
+            postRepository.save(registerNewPost);
+        } catch (RuntimeException e) {
             throw e;
         }
     }
@@ -68,8 +65,7 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostDetailResponse inquiryPost(Long postId) {
         try {
-            Post findPost = postRepository.findByPostId(postId);
-            PostDetailResponse detailResponse = new PostDetailResponse(findPost);
+            PostDetailResponse detailResponse = PostDetailResponse(postRepository.findByPostId(postId).get(), postViewService.getViewCount(postId));
             setUserStatus(detailResponse);
             setPostCountOption(detailResponse);
             return detailResponse;
