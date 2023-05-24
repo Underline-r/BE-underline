@@ -41,31 +41,33 @@ public class PostService {
     private final PostExternalShareAttemptsRepository postExternalShareAttemptsRepository;
     private final CommentRepository commentRepository;
     private final SourceService sourceService;
+    private final PostViewService postViewService;
 
     @Transactional
     public void registerPost(PostRequest postRequest) {
         try {
-            if(postRequest.getSources() !=null){
-                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent(),sourceService.checkExistSource(postRequest.getSources()));
+            if (postRequest.getSources() != null) {
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(), postRequest.getContent(), sourceService.checkExistSource(postRequest.getSources()));
                 registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
                 postRepository.save(registerNewPost);
-            }else {
-                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(),postRequest.getContent());
+            } else {
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(), postRequest.getContent());
 
                 if (postRequest.getCategory() != null) {
                     registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
                 }
 
-            postRepository.save(registerNewPost);
-        } catch (RuntimeException e) {
+                postRepository.save(registerNewPost);
+            }
+        }catch (RuntimeException e) {
             throw e;
         }
     }
 
     @Transactional(readOnly = true)
-    public PostDetailResponse inquiryPost(Long postId) {
+    public PostDetailResponse inquiryPost (Long postId){
         try {
-            PostDetailResponse detailResponse = PostDetailResponse(postRepository.findByPostId(postId).get(), postViewService.getViewCount(postId));
+            PostDetailResponse detailResponse = new PostDetailResponse(postRepository.findByPostId(postId).get(), postViewService.getViewCount(postId));
             setUserStatus(detailResponse);
             setPostCountOption(detailResponse);
             return detailResponse;
@@ -75,33 +77,33 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostDetailResponse setUserStatus(PostDetailResponse postDetailResponse){
+    public PostDetailResponse setUserStatus (PostDetailResponse postDetailResponse){
         boolean isFollwed = followRelationRepository.existsByToUserIdAndFromUserId(postDetailResponse.getUserId(), SecurityUtil.getCurrentUserId());
-        boolean isBookmarked = bookmarkRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(),SecurityUtil.getCurrentUserId());
-        boolean isPicked = pickRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(),SecurityUtil.getCurrentUserId());
+        boolean isBookmarked = bookmarkRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(), SecurityUtil.getCurrentUserId());
+        boolean isPicked = pickRepository.existsByPost_PostIdAndUser_Id(postDetailResponse.getPostId(), SecurityUtil.getCurrentUserId());
 
-        postDetailResponse.setUserCheck(isPicked,isBookmarked,isFollwed);
+        postDetailResponse.setUserCheck(isPicked, isBookmarked, isFollwed);
 
         return postDetailResponse;
     }
 
     @Transactional(readOnly = true)
-    public PostDetailResponse setPostCountOption(PostDetailResponse postDetailResponse){
+    public PostDetailResponse setPostCountOption (PostDetailResponse postDetailResponse){
         Long pickCount = pickRepository.countAllByPost_PostId(postDetailResponse.getPostId());
         Optional<List<Comment>> comments = commentRepository.findAllByPost_PostId(postDetailResponse.getPostId());
-        if(comments.isPresent() && comments.get().size() > 0){
-            postDetailResponse.setCountOption(pickCount,(long) comments.get().size(),comments.get().get(0).getContent());
-        }else{
-            postDetailResponse.setCountOption(pickCount,null,null);
+        if (comments.isPresent() && comments.get().size() > 0) {
+            postDetailResponse.setCountOption(pickCount, (long) comments.get().size(), comments.get().get(0).getContent());
+        } else {
+            postDetailResponse.setCountOption(pickCount, null, null);
         }
         return postDetailResponse;
     }
 
 
     @Transactional
-    public void patchPost(Long postId, PostRequest postRequest) {
+    public void patchPost (Long postId, PostRequest postRequest){
         try {
-            Post updatePost = postRepository.findByPostId(postId);
+            Post updatePost = postRepository.findByPostId(postId).get();
             SecurityUtil.checkSameUser(updatePost.getUser().getId());
 
             updatePost.update(postRequest.getContent());
@@ -115,9 +117,9 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost (Long postId){
         try {
-            Post deletePost = postRepository.findByPostId(postId);
+            Post deletePost = postRepository.findByPostId(postId).get();
 
             SecurityUtil.checkSameUser(deletePost.getUser().getId());
 
@@ -128,14 +130,14 @@ public class PostService {
         }
     }
 
-    public UserCreatedPostListResponse inquiryUserCreatedPost(String userNickname) {
+    public UserCreatedPostListResponse inquiryUserCreatedPost (String userNickname){
         List<Post> userCreatedPost = postRepository.findAllByUserId(returnUserId(userNickname));
         UserCreatedPostListResponse userCreatedPostList = new UserCreatedPostListResponse(userCreatedPost);
 
         return userCreatedPostList;
     }
 
-    private Post setHashtagsAndCategory(Post registerPost, PostRequest postRequest) {
+    private Post setHashtagsAndCategory (Post registerPost, PostRequest postRequest){
 
         List<Hashtag> hashtags = new ArrayList<Hashtag>();
         List<PostCategoryRelation> postCategoryRelations = new ArrayList<PostCategoryRelation>();
@@ -161,21 +163,21 @@ public class PostService {
         return registerPost;
     }
 
-    private Long returnUserId(String userNickname) {
+    private Long returnUserId (String userNickname){
         Optional<User> findUser = Optional.ofNullable(userRepository.findByNickname(userNickname));
         return findUser.get().getId();
     }
 
-    public void externalSharingCount(ShareRequest shareRequest) {
-        try{
-        Optional<PostExternalShareAttempts> findByPost_PostId = postExternalShareAttemptsRepository.findByPost_PostIdAndShareTarget(shareRequest.getPostId(),shareRequest.getShareTarget());
-        if(findByPost_PostId.isPresent()){
-            findByPost_PostId.get().update();
-            postExternalShareAttemptsRepository.save(findByPost_PostId.get());
-        }else {
-            postExternalShareAttemptsRepository.save(new PostExternalShareAttempts(shareRequest.getPostId(),shareRequest.getShareTarget(),1L));
-        }
-        }catch (DataAccessException e){
+    public void externalSharingCount (ShareRequest shareRequest){
+        try {
+            Optional<PostExternalShareAttempts> findByPost_PostId = postExternalShareAttemptsRepository.findByPost_PostIdAndShareTarget(shareRequest.getPostId(), shareRequest.getShareTarget());
+            if (findByPost_PostId.isPresent()) {
+                findByPost_PostId.get().update();
+                postExternalShareAttemptsRepository.save(findByPost_PostId.get());
+            } else {
+                postExternalShareAttemptsRepository.save(new PostExternalShareAttempts(shareRequest.getPostId(), shareRequest.getShareTarget(), 1L));
+            }
+        } catch (DataAccessException e) {
             throw new UnderlineException(ErrorCode.WRONG_APPROACH);
         }
     }
