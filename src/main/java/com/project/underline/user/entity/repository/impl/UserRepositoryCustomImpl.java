@@ -7,6 +7,8 @@ import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
@@ -139,8 +141,8 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<SearchUserDto> searchUserProfile(String keyword, Pageable pageable) {
-        return queryFactory
+    public Page<SearchUserDto> searchUserProfile(String keyword, Pageable pageable) {
+        List<SearchUserDto> contents = queryFactory
                 .select(
                         new QSearchUserDto(
                                 user.id,
@@ -155,9 +157,15 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .from(user)
                 .where(user.nickname.contains(keyword))
                 .offset(pageable.getOffset())
-                .limit(10)
+                .limit(pageable.getPageSize())
                 .fetch();
-//        return null;
+
+        Long total = queryFactory.select(user.count())
+                .from(user)
+                .where(user.nickname.contains(keyword))
+                .fetchOne();
+
+        return new PageImpl<>(contents, pageable, total);
     }
 
     private BooleanExpression toUserIdEq(Long toUserId) {

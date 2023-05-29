@@ -15,7 +15,7 @@ public interface PostRepositoryCustom {
 
     List<SearchPostDto> searchPostList(String keyword, Pageable pageable);
 
-    List<SearchSourceDto> searchSourceList(String keyword);
+    List<SearchSourceDto> searchSourceList(String keyword, Pageable pageable);
 
-    List<SearchHashtagDto> searchHashtagList(String keyword);
+    List<SearchHashtagDto> searchHashtagList(String keyword, Pageable pageable);
 }

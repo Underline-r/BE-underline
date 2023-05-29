@@ -66,36 +66,41 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<SearchSourceDto> searchSourceList(String keyword) {
+    public List<SearchSourceDto> searchSourceList(String keyword, Pageable pageable) {
 
         return queryFactory
                 .select(
                         new QSearchSourceDto(
-                                post.postId,
-                                post.source.title,
-                                post.user.id
+                                post.count(),
+                                source.title
                         )
                 )
-                .from(post)
-                .join(post.source, source)
+                .from(source)
+                .leftJoin(source.postList, post)
+                .leftJoin(post.user, user)
                 .where(source.title.contains(keyword))
+                .groupBy(source.title)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
     @Override
-    public List<SearchHashtagDto> searchHashtagList(String keyword) {
+    public List<SearchHashtagDto> searchHashtagList(String keyword, Pageable pageable) {
 
         return queryFactory
                 .select(
                         new QSearchHashtagDto(
-                                hashtag.post.postId,
+                                post.count(),
                                 hashtag.hashtagName
                         )
                 )
                 .from(hashtag)
-                // post id 를 이미 갖고 있음 check
-//                .join(hashtag.post, post)
+                .leftJoin(hashtag.post, post)
                 .where(hashtag.hashtagName.contains(keyword))
+                .groupBy(hashtag.hashtagName)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
     }
 
