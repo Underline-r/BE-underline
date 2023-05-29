@@ -1,5 +1,6 @@
 package com.project.underline.post.entity;
 
+import com.project.underline.common.util.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -10,14 +11,14 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "HASHTAG")
-public class Hashtag {
+public class Hashtag extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
-    @Column(name="HASHTAG_ID")
+    @Column(name = "HASHTAG_ID")
     private Long hashtagId;
 
-    @Column(name="HASHTAG_NAME")
+    @Column(name = "HASHTAG_NAME")
     private String hashtagName;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,7 +26,7 @@ public class Hashtag {
     private Post post;
 
     @Builder
-    public Hashtag(Post post,String hashtagName){
+    public Hashtag(Post post, String hashtagName) {
         this.post = post;
         this.hashtagName = hashtagName;
     }

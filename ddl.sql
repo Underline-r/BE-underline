@@ -22,6 +22,8 @@ create table comment
 create table hashtag
 (
     hashtag_id   bigint not null auto_increment,
+    created_date  datetime(6),
+    modified_date datetime(6),
     hashtag_name varchar(255),
     post_id      bigint,
     primary key (hashtag_id)
@@ -81,6 +83,8 @@ create table post_category_relation
 create table source
 (
     source_id bigint       not null auto_increment,
+    created_date  datetime(6),
+    modified_date datetime(6),
     title     varchar(255) not null,
     primary key (source_id)
 ) engine = InnoDB;
