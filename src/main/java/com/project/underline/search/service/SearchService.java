@@ -11,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class SearchService {
@@ -20,19 +18,19 @@ public class SearchService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
+    public Page<SearchPostDto> selectPost(String keyword, Pageable pageable) {
+        return postRepository.searchPostList(keyword, pageable);
+    }
+
     public Page<SearchUserDto> selectUser(String keyword, Pageable pageable) {
         return userRepository.searchUserProfile(keyword, pageable);
     }
 
-    public List<SearchPostDto> selectPost(String keyword, Pageable pageable) {
-        return postRepository.searchPostList(keyword, pageable);
-    }
-
-    public List<SearchSourceDto> selectSource(String keyword, Pageable pageable) {
+    public Page<SearchSourceDto> selectSource(String keyword, Pageable pageable) {
         return postRepository.searchSourceList(keyword, pageable);
     }
 
-    public List<SearchHashtagDto> selectHashTag(String keyword, Pageable pageable) {
+    public Page<SearchHashtagDto> selectHashTag(String keyword, Pageable pageable) {
         return postRepository.searchHashtagList(keyword, pageable);
     }
 }

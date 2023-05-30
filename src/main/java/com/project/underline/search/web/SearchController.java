@@ -36,10 +36,10 @@ public class SearchController {
     public ResponseEntity<SearchResponse> search(@RequestParam String keyword, Integer filterType, Pageable pageable) {
         keyword = keyword.trim();
 
-        List<SearchPostDto> postResult = new ArrayList<>();
+        Page<SearchPostDto> postResult = new PageImpl<>(new ArrayList<>(), pageable, 0);
         Page<SearchUserDto> userResult = new PageImpl<>(new ArrayList<>(), pageable, 0);
-        List<SearchSourceDto> sourceResult = new ArrayList<>();
-        List<SearchHashtagDto> hashtagResult = new ArrayList<>();
+        Page<SearchSourceDto> sourceResult = new PageImpl<>(new ArrayList<>(), pageable, 0);
+        Page<SearchHashtagDto> hashtagResult = new PageImpl<>(new ArrayList<>(), pageable, 0);
         switch (filterType) {
             case 0:
                 postResult = searchService.selectPost(keyword, pageable);

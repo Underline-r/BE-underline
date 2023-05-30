@@ -156,6 +156,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 )
                 .from(user)
                 .where(user.nickname.contains(keyword))
+                .orderBy(user.modifiedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -164,6 +165,10 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
                 .from(user)
                 .where(user.nickname.contains(keyword))
                 .fetchOne();
+
+        if (total == null) {
+            total = 0L;
+        }
 
         return new PageImpl<>(contents, pageable, total);
     }
