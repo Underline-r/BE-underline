@@ -92,7 +92,6 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                 .leftJoin(post.user, user)
                 .where(source.title.contains(keyword))
                 .groupBy(source.title)
-                .orderBy(source.modifiedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -127,7 +126,6 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                 .leftJoin(hashtag.post, post)
                 .where(hashtag.hashtagName.contains(keyword))
                 .groupBy(hashtag.hashtagName)
-                .orderBy(hashtag.modifiedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
