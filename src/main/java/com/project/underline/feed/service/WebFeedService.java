@@ -7,8 +7,10 @@ import com.project.underline.common.jwt.JwtFilter;
 import com.project.underline.common.jwt.JwtTokenProvider;
 import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.feed.entity.repository.FeedQueryRepository;
+import com.project.underline.feed.web.dto.FeedPost;
 import com.project.underline.feed.web.dto.FeedResponse;
 import com.project.underline.post.entity.repository.PostRepository;
+import com.project.underline.post.service.PostViewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -25,8 +27,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class WebFeedService {
+    private final PostRepository postRepository;
     private final UserCategoryRelationRepository userCategoryRelationRepository;
     private final FeedQueryRepository feedQueryRepository;
+    private final PostViewService postViewService;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -75,13 +79,21 @@ public class WebFeedService {
         }
         feedQueryRepository.setUserPickOrBookmark(feedResponse);
 
+        feedResponse.isLastCheck();
+        postViewIncrease(feedResponse.getFeed());
+
+
         return feedResponse;
     }
 
-    private List<String> categoryListToString(List<UserCategoryRelation> categoryList) {
+    private void postViewIncrease(List<FeedPost> feedPosts){
+        postViewService.postListViewIncrease(feedPosts);
+    }
+
+    private List<String> categoryListToString(List<UserCategoryRelation> categoryList){
         List<String> stringCategoryList = new ArrayList<String>();
 
-        for (UserCategoryRelation eachCategory : categoryList) {
+        for (UserCategoryRelation eachCategory: categoryList) {
             stringCategoryList.add(eachCategory.getCategory());
 
         }
