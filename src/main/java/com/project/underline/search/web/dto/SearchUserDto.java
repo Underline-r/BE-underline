@@ -10,16 +10,17 @@ public class SearchUserDto {
     private Long userId;
     private String userProfileImage;
     private String userNickname;
-//    private Boolean isFollowed;
+    private Boolean isFollowed;
 
-//    public boolean getIsFollowed() {
-//        return isFollowed;
-//    }
+    public boolean getIsFollowed() {
+        return isFollowed;
+    }
 
     @QueryProjection
-    public SearchUserDto(Long userId, String userProfileImage, String userNickname) {
+    public SearchUserDto(Long userId, String userProfileImage, String userNickname, Boolean isFollowed) {
         this.userId = userId;
         this.userProfileImage = userProfileImage;
         this.userNickname = userNickname;
+        this.isFollowed = isFollowed;
     }
 }

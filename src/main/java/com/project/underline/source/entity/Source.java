@@ -1,5 +1,6 @@
 package com.project.underline.source.entity;
 
+import com.project.underline.common.util.BaseTimeEntity;
 import com.project.underline.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "SOURCE")
-public class Source {
+public class Source extends BaseTimeEntity {
 
     @Id
     @GeneratedValue

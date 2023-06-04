@@ -7,6 +7,8 @@ import com.project.underline.user.web.dto.QUserPostDto;
 import com.project.underline.user.web.dto.UserPostDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
@@ -45,9 +47,8 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<SearchPostDto> searchPostList(String keyword, Pageable pageable) {
-        System.out.println(keyword);
-        return queryFactory
+    public Page<SearchPostDto> searchPostList(String keyword, Pageable pageable) {
+        List<SearchPostDto> contents = queryFactory
                 .select(
                         new QSearchPostDto(
                                 post.postId,
@@ -60,43 +61,89 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                 .leftJoin(post.source, source)
                 .leftJoin(post.user, user)
                 .where(post.content.contains(keyword))
+                .orderBy(post.modifiedDate.desc())
                 .offset(pageable.getOffset())
-                .limit(10)
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory.select(post.count())
+                .from(post)
+                .where(post.content.contains(keyword)).fetchOne();
+
+        if (total == null) {
+            total = 0L;
+        }
+
+        return new PageImpl<>(contents, pageable, total);
     }
 
     @Override
-    public List<SearchSourceDto> searchSourceList(String keyword) {
+    public Page<SearchSourceDto> searchSourceList(String keyword, Pageable pageable) {
 
-        return queryFactory
+        List<SearchSourceDto> contents = queryFactory
                 .select(
                         new QSearchSourceDto(
-                                post.postId,
-                                post.source.title,
-                                post.user.id
+                                post.count(),
+                                source.title
                         )
                 )
-                .from(post)
-                .join(post.source, source)
+                .from(source)
+                .leftJoin(source.postList, post)
+                .leftJoin(post.user, user)
                 .where(source.title.contains(keyword))
+                .groupBy(source.title)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory
+                .select(
+                        source.count()
+                )
+                .from(source)
+                .groupBy(source.title)
+                .having(source.title.contains(keyword))
+                .fetchOne();
+
+        if (total == null) {
+            total = 0L;
+        }
+
+        return new PageImpl<>(contents, pageable, total);
     }
 
     @Override
-    public List<SearchHashtagDto> searchHashtagList(String keyword) {
+    public Page<SearchHashtagDto> searchHashtagList(String keyword, Pageable pageable) {
 
-        return queryFactory
+        List<SearchHashtagDto> contents = queryFactory
                 .select(
                         new QSearchHashtagDto(
-                                hashtag.post.postId,
+                                post.count(),
                                 hashtag.hashtagName
                         )
                 )
                 .from(hashtag)
-                // post id 를 이미 갖고 있음 check
-//                .join(hashtag.post, post)
+                .leftJoin(hashtag.post, post)
                 .where(hashtag.hashtagName.contains(keyword))
+                .groupBy(hashtag.hashtagName)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory
+                .select(
+                        hashtag.count()
+                )
+                .from(hashtag)
+                .groupBy(hashtag.hashtagName)
+                .having(hashtag.hashtagName.contains(keyword))
+                .fetchOne();
+
+        if (total == null) {
+            total = 0L;
+        }
+
+        return new PageImpl<>(contents, pageable, total);
     }
 
     private BooleanExpression userIdEq(Long userId) {

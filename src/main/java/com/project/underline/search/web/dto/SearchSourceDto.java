@@ -7,15 +7,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SearchSourceDto {
-
-    private Long postId;
+    private Long postCount;
     private String source;
-    private Long userId;
 
     @QueryProjection
-    public SearchSourceDto(Long postId, String source, Long userId) {
-        this.postId = postId;
+    public SearchSourceDto(Long postCount, String source) {
+        this.postCount = postCount;
         this.source = source;
-        this.userId = userId;
     }
 }
