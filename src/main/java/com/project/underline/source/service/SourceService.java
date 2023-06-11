@@ -4,6 +4,7 @@ import com.project.underline.source.entity.Source;
 import com.project.underline.source.entity.repository.SourceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 public class SourceService {
     private final SourceRepository sourceRepository;
 
+    @Transactional
     public Source checkExistSource(String title){
 
         Optional<Source> existSource = sourceRepository.findByTitle(title);
