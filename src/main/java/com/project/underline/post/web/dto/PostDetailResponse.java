@@ -50,11 +50,36 @@ public class PostDetailResponse {
     public PostDetailResponse(Post post){
         this.content = post.getContent();
         this.userId = post.getUser().getId();
+
+        /* 신규추가 항목 */
+        this.postId = post.getPostId();
+        this.createdDate = post.getCreatedDate();
+        this.userNickname = post.getUser().getNickname();
+        this.userProfileImage = post.getUser().getImagePath();
     }
 
     public PostDetailResponse(Post post, Long viewCount){
         this.content = post.getContent();
         this.userId = post.getUser().getId();
         this.viewCount = viewCount;
+        this.userNickname = post.getUser().getNickname();
+
+        /* 신규추가 항목 */
+        this.postId = post.getPostId();
+        this.createdDate = post.getCreatedDate();
+
+        if(post.getSource() != null){
+            this.source = post.getSource().getTitle();
+        }
+
+        if(post.getHashtags() != null){
+            this.hashtags = post.getHashtags().stream()
+                    .map(h -> h.getHashtagName())
+                    .collect(Collectors.toList());
+        }
+
+        if(post.getUser().getImagePath() != null){
+            this.userProfileImage = post.getUser().getImagePath();
+        }
     }
 }
