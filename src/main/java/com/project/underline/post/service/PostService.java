@@ -46,8 +46,8 @@ public class PostService {
     @Transactional
     public void registerPost(PostRequest postRequest) {
         try {
-            if (postRequest.getSources() != null) {
-                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(), postRequest.getContent(), sourceService.checkExistSource(postRequest.getSources()));
+            if (postRequest.getSource() != null) {
+                Post registerNewPost = new Post(userRepository.findById(SecurityUtil.getCurrentUserId()).get(), postRequest.getContent(), sourceService.checkExistSource(postRequest.getSource()));
                 registerNewPost = setHashtagsAndCategory(registerNewPost, postRequest);
                 postRepository.save(registerNewPost);
             } else {

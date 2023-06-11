@@ -11,7 +11,7 @@ public class PostRequest {
 
     private List<String> category;
 
-    private String sources;
+    private String source;
 
     @NotEmpty(message = ResponseMessage.INVALID_CONTENT)
     private String content;
