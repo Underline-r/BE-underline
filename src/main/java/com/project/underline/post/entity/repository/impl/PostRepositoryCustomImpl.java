@@ -101,8 +101,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                         source.count()
                 )
                 .from(source)
-                .groupBy(source.title)
-                .having(source.title.contains(keyword))
+                .where(source.title.contains(keyword))
                 .fetchOne();
 
         if (total == null) {
@@ -135,8 +134,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
                         hashtag.count()
                 )
                 .from(hashtag)
-                .groupBy(hashtag.hashtagName)
-                .having(hashtag.hashtagName.contains(keyword))
+                .where(hashtag.hashtagName.contains(keyword))
                 .fetchOne();
 
         if (total == null) {
