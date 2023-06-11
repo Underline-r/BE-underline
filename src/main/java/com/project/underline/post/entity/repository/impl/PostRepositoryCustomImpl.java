@@ -7,6 +7,7 @@ import com.project.underline.user.entity.User;
 import com.project.underline.user.web.dto.QUserPostDto;
 import com.project.underline.user.web.dto.UserPostDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -52,26 +53,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     public Page<SearchPostDto> searchPostList(String keyword, Pageable pageable) {
         Long currentUserId = SecurityUtil.getCurrentUserId();
 
-        List<SearchPostDto> contents = queryFactory
-                .select(
-                        new QSearchPostDto(
-                                post.postId,
-                                post.content,
-                                source.title,
-                                user.nickname,
-                                user.imagePath,
-                                pick.isNotNull(),
-                                bookmark.isNotNull(),
-                                post.modifiedDate
-                        )
-                )
-                .from(post)
-                .leftJoin(post.source, source)
-                .leftJoin(post.user, user)
-                .leftJoin(post.picks, pick)
-                .on(pick.user.id.eq(currentUserId))
-                .leftJoin(post.bookmarks, bookmark)
-                .on(bookmark.user.id.eq(currentUserId))
+        List<SearchPostDto> contents = getPostJoinTempTable(currentUserId)
                 .where(post.content.contains(keyword))
                 .orderBy(post.modifiedDate.desc())
                 .offset(pageable.getOffset())
@@ -154,6 +136,48 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
         }
 
         return new PageImpl<>(contents, pageable, total);
+    }
+
+    @Override
+    public List<SearchPostDto> searchPostListBySourceEq(String keyword) {
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+
+        return getPostJoinTempTable(currentUserId)
+                .where(source.title.eq(keyword))
+                .fetch();
+    }
+
+    @Override
+    public List<SearchPostDto> searchPostListByHashtagEq(String keyword) {
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+
+        return getPostJoinTempTable(currentUserId)
+                .leftJoin(post.hashtags, hashtag)
+                .where(hashtag.hashtagName.eq(keyword))
+                .fetch();
+    }
+
+    private JPAQuery<SearchPostDto> getPostJoinTempTable(Long currentUserId) {
+        return queryFactory
+                .select(
+                        new QSearchPostDto(
+                                post.postId,
+                                post.content,
+                                source.title,
+                                user.nickname,
+                                user.imagePath,
+                                pick.isNotNull(),
+                                bookmark.isNotNull(),
+                                post.modifiedDate
+                        )
+                )
+                .from(post)
+                .leftJoin(post.source, source)
+                .leftJoin(post.user, user)
+                .leftJoin(post.picks, pick)
+                .on(pick.user.id.eq(currentUserId))
+                .leftJoin(post.bookmarks, bookmark)
+                .on(bookmark.user.id.eq(currentUserId));
     }
 
     private BooleanExpression userIdEq(Long userId) {

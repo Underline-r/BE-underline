@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SearchHashtagDto {
-    private Long postId;
     private Long postCount;
     private String hashtagName;
 

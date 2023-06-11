@@ -55,4 +55,12 @@ public class SearchService {
     public Page<SearchHashtagDto> selectHashTag(String keyword, Pageable pageable) {
         return postRepository.searchHashtagList(keyword, pageable);
     }
+
+    public List<SearchPostDto> selectPostBySource(String keyword) {
+        return postRepository.searchPostListBySourceEq(keyword);
+    }
+
+    public List<SearchPostDto> selectPostByHashtag(String keyword) {
+        return postRepository.searchPostListByHashtagEq(keyword);
+    }
 }
