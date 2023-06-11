@@ -1,5 +1,6 @@
 package com.project.underline.post.entity.repository.impl;
 
+import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.repository.PostRepositoryCustom;
 import com.project.underline.search.web.dto.*;
 import com.project.underline.user.entity.User;
@@ -7,11 +8,14 @@ import com.project.underline.user.web.dto.QUserPostDto;
 import com.project.underline.user.web.dto.UserPostDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.project.underline.bookmark.entity.QBookmark.bookmark;
 import static com.project.underline.post.entity.QHashtag.hashtag;
 import static com.project.underline.post.entity.QPick.pick;
 import static com.project.underline.post.entity.QPost.post;
@@ -45,59 +49,111 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<SearchPostDto> searchPostList(String keyword, Pageable pageable) {
-        String likeKeyword = "%" + keyword + "%";
+    public Page<SearchPostDto> searchPostList(String keyword, Pageable pageable) {
+        Long currentUserId = SecurityUtil.getCurrentUserId();
 
-        return queryFactory
+        List<SearchPostDto> contents = queryFactory
                 .select(
                         new QSearchPostDto(
                                 post.postId,
                                 post.content,
-                                post.source.title,
-                                post.user.nickname
+                                source.title,
+                                user.nickname,
+                                user.imagePath,
+                                pick.isNotNull(),
+                                bookmark.isNotNull(),
+                                post.modifiedDate
                         )
                 )
                 .from(post)
-                .where(post.content.like(likeKeyword))
+                .leftJoin(post.source, source)
+                .leftJoin(post.user, user)
+                .leftJoin(post.picks, pick)
+                .on(pick.user.id.eq(currentUserId))
+                .leftJoin(post.bookmarks, bookmark)
+                .on(bookmark.user.id.eq(currentUserId))
+                .where(post.content.contains(keyword))
+                .orderBy(post.modifiedDate.desc())
                 .offset(pageable.getOffset())
-                .limit(10)
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory.select(post.count())
+                .from(post)
+                .where(post.content.contains(keyword)).fetchOne();
+
+        if (total == null) {
+            total = 0L;
+        }
+
+        return new PageImpl<>(contents, pageable, total);
     }
 
     @Override
-    public List<SearchSourceDto> searchSourceList(String keyword) {
-        String likeKeyword = "%" + keyword + "%";
+    public Page<SearchSourceDto> searchSourceList(String keyword, Pageable pageable) {
 
-        return queryFactory
+        List<SearchSourceDto> contents = queryFactory
                 .select(
                         new QSearchSourceDto(
-                                post.postId,
-                                post.source.title,
-                                post.user.id
+                                post.count(),
+                                source.title
                         )
                 )
-                .from(post)
-                .join(post.source, source)
-                .where(source.title.like(likeKeyword))
+                .from(source)
+                .leftJoin(source.postList, post)
+                .leftJoin(post.user, user)
+                .where(source.title.contains(keyword))
+                .groupBy(source.title)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory
+                .select(
+                        source.count()
+                )
+                .from(source)
+                .where(source.title.contains(keyword))
+                .fetchOne();
+
+        if (total == null) {
+            total = 0L;
+        }
+
+        return new PageImpl<>(contents, pageable, total);
     }
 
     @Override
-    public List<SearchHashtagDto> searchHashtagList(String keyword) {
-        String likeKeyword = "%" + keyword + "%";
+    public Page<SearchHashtagDto> searchHashtagList(String keyword, Pageable pageable) {
 
-        return queryFactory
+        List<SearchHashtagDto> contents = queryFactory
                 .select(
                         new QSearchHashtagDto(
-                                hashtag.post.postId,
+                                post.count(),
                                 hashtag.hashtagName
                         )
                 )
                 .from(hashtag)
-                // post id 를 이미 갖고 있음 check
-//                .join(hashtag.post, post)
-                .where(hashtag.hashtagName.like(likeKeyword))
+                .leftJoin(hashtag.post, post)
+                .where(hashtag.hashtagName.contains(keyword))
+                .groupBy(hashtag.hashtagName)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
+
+        Long total = queryFactory
+                .select(
+                        hashtag.count()
+                )
+                .from(hashtag)
+                .where(hashtag.hashtagName.contains(keyword))
+                .fetchOne();
+
+        if (total == null) {
+            total = 0L;
+        }
+
+        return new PageImpl<>(contents, pageable, total);
     }
 
     private BooleanExpression userIdEq(Long userId) {

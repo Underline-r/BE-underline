@@ -1,6 +1,7 @@
 package com.project.underline.user.entity;
 
 import com.project.underline.category.entity.UserCategoryRelation;
+import com.project.underline.common.util.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "USERS")
-public class User{
+public class User extends BaseTimeEntity {
     /* table 명 user -> users로 변경해둠 */
 
     @Id

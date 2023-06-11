@@ -1,18 +1,19 @@
 package com.project.underline.search.web.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 @Getter
-@Setter
-@NoArgsConstructor
-public class SearchResponse<T> {
+public class SearchResponse {
+    public Page underlines;
+    public Page underliners;
+    public Page sources;
+    public Page hashtags;
 
-    public List<T> underliners;
-    public List<T> underlines;
-    public List<T> sources;
-    public List<T> hashtags;
+    public SearchResponse(Page underlines, Page underliners, Page sources, Page hashtags) {
+        this.underlines = underlines;
+        this.underliners = underliners;
+        this.sources = sources;
+        this.hashtags = hashtags;
+    }
 }

@@ -1,5 +1,6 @@
 package com.project.underline.post.entity;
 
+import com.project.underline.bookmark.entity.Bookmark;
 import com.project.underline.category.entity.PostCategoryRelation;
 import com.project.underline.common.util.BaseTimeEntity;
 import com.project.underline.source.entity.Source;
@@ -38,7 +39,6 @@ public class Post extends BaseTimeEntity {
     private Source source;
 
     @Column(name="CONTENT")
-    @Lob
     @NotNull
     private String content;
 
@@ -58,6 +58,14 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post",
             cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<Comment>();
+
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.ALL)
+    private List<Bookmark> bookmarks = new ArrayList<Bookmark>();
+
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.ALL)
+    private List<Pick> picks = new ArrayList<Pick>();
 
 
     @Builder

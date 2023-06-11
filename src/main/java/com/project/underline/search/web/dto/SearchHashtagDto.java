@@ -12,19 +12,8 @@ public class SearchHashtagDto {
     private String hashtagName;
 
     @QueryProjection
-    public SearchHashtagDto(Long postId, Long postCount) {
-        this.postId = postId;
+    public SearchHashtagDto(Long postCount, String hashtagName) {
         this.postCount = postCount;
-    }
-
-    @QueryProjection
-    public SearchHashtagDto(Long postId) {
-        this.postId = postId;
-    }
-
-    @QueryProjection
-    public SearchHashtagDto(Long postId, String hashtagName) {
-        this.postId = postId;
         this.hashtagName = hashtagName;
     }
 }

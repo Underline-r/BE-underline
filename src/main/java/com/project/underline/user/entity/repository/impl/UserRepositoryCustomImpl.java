@@ -1,5 +1,6 @@
 package com.project.underline.user.entity.repository.impl;
 
+import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.search.web.dto.QSearchUserDto;
 import com.project.underline.search.web.dto.SearchUserDto;
 import com.project.underline.user.entity.repository.UserRepositoryCustom;
@@ -7,6 +8,8 @@ import com.project.underline.user.entity.repository.dto.ProfileSearchCondition;
 import com.project.underline.user.web.dto.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
@@ -139,26 +142,38 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     }
 
     @Override
-    public List<SearchUserDto> searchUserProfile(String keyword, Pageable pageable) {
-        String likeKeyword = "%" + keyword + "%";
-        return queryFactory
+    public Page<SearchUserDto> searchUserProfile(String keyword, Pageable pageable) {
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+
+        List<SearchUserDto> contents = queryFactory
                 .select(
                         new QSearchUserDto(
                                 user.id,
                                 user.imagePath,
-                                user.nickname
-//                                , queryFactory
-//                                        .selectFrom(userFollowRelation)
-//                                        .where(toUserIdEq(condition.getProfileUserId())
-//                                                .and(fromUserIdEq(condition.getLoginUserId()))).exists(),
+                                user.nickname,
+                                userFollowRelation.id.isNotNull()
                         )
                 )
                 .from(user)
-                .where(user.nickname.like(likeKeyword))
+                .where(user.nickname.contains(keyword)
+                )
+                .leftJoin(user.toUserFollowRelations, userFollowRelation)
+                .on(userFollowRelation.fromUser.id.eq(currentUserId))
+                .orderBy(user.modifiedDate.desc())
                 .offset(pageable.getOffset())
-                .limit(10)
+                .limit(pageable.getPageSize())
                 .fetch();
-//        return null;
+
+        Long total = queryFactory.select(user.count())
+                .from(user)
+                .where(user.nickname.contains(keyword))
+                .fetchOne();
+
+        if (total == null) {
+            total = 0L;
+        }
+
+        return new PageImpl<>(contents, pageable, total);
     }
 
     private BooleanExpression toUserIdEq(Long toUserId) {
