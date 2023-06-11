@@ -94,7 +94,7 @@ public class PostService {
         if (comments.isPresent() && comments.get().size() > 0) {
             postDetailResponse.setCountOption(pickCount, (long) comments.get().size(), comments.get().get(0).getContent());
         } else {
-            postDetailResponse.setCountOption(pickCount, null, null);
+            postDetailResponse.setCountOption(pickCount, 0L, null);
         }
         return postDetailResponse;
     }
