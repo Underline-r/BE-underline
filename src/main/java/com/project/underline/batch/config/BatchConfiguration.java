@@ -20,46 +20,46 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-@Slf4j
-@RequiredArgsConstructor
-@EnableScheduling
-@EnableBatchProcessing
-@Configuration
-public class BatchConfiguration {
-
-    private final JobBuilderFactory jobBuilderFactory;
-    private final StepBuilderFactory stepBuilderFactory;
-    private final JobLauncher jobLauncher;
-
-    private final PostViewItemWriter postViewItemWriter;
-    private final PostTempToPostViewProcessor postTempToPostViewProcessor;
-    private final RedisItemReader redisItemReader;
-
-    private static final int chunkSize = 10;
-
-    @Bean
-    public Job redisItemReaderJob(Step redisItemReaderStep) {
-        return jobBuilderFactory.get("redisItemReaderJob")
-                .start(redisItemReaderStep)
-                .build();
-    }
-
-    @Bean
-    public Step redisItemReaderStep() {
-        return stepBuilderFactory.get("redisItemReaderStep")
-                .<PostTemp, PostTemp>chunk(chunkSize)
-                .reader(redisItemReader)
-                .processor(postTempToPostViewProcessor)
-                .writer(postViewItemWriter)
-                .build();
-    }
-
-    @Scheduled(cron = "0 0 3 * * ?", zone = "Asia/Seoul")
-    public void runBatchJob() throws Exception {
-        log.info("* -- 조회수 배치 시작 -- *");
-        JobParameters jobParameters = new JobParametersBuilder()
-                .addString("JobID", String.valueOf(System.currentTimeMillis()))
-                .toJobParameters();
-        jobLauncher.run(redisItemReaderJob(redisItemReaderStep()), jobParameters);
-    }
-}
+//@Slf4j
+//@RequiredArgsConstructor
+//@EnableScheduling
+//@EnableBatchProcessing
+//@Configuration
+//public class BatchConfiguration {
+//
+//    private final JobBuilderFactory jobBuilderFactory;
+//    private final StepBuilderFactory stepBuilderFactory;
+//    private final JobLauncher jobLauncher;
+//
+//    private final PostViewItemWriter postViewItemWriter;
+//    private final PostTempToPostViewProcessor postTempToPostViewProcessor;
+//    private final RedisItemReader redisItemReader;
+//
+//    private static final int chunkSize = 10;
+//
+//    @Bean
+//    public Job redisItemReaderJob(Step redisItemReaderStep) {
+//        return jobBuilderFactory.get("redisItemReaderJob")
+//                .start(redisItemReaderStep)
+//                .build();
+//    }
+//
+//    @Bean
+//    public Step redisItemReaderStep() {
+//        return stepBuilderFactory.get("redisItemReaderStep")
+//                .<PostTemp, PostTemp>chunk(chunkSize)
+//                .reader(redisItemReader)
+//                .processor(postTempToPostViewProcessor)
+//                .writer(postViewItemWriter)
+//                .build();
+//    }
+//
+//    @Scheduled(cron = "0 0 3 * * ?", zone = "Asia/Seoul")
+//    public void runBatchJob() throws Exception {
+//        log.info("* -- 조회수 배치 시작 -- *");
+//        JobParameters jobParameters = new JobParametersBuilder()
+//                .addString("JobID", String.valueOf(System.currentTimeMillis()))
+//                .toJobParameters();
+//        jobLauncher.run(redisItemReaderJob(redisItemReaderStep()), jobParameters);
+//    }
+//}
