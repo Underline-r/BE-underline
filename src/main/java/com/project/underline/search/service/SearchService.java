@@ -23,7 +23,15 @@ public class SearchService {
     private final S3Service s3Service;
 
     public Page<SearchPostDto> selectPost(String keyword, Pageable pageable) {
-        return postRepository.searchPostList(keyword, pageable);
+        Page<SearchPostDto> searchResult = postRepository.searchPostList(keyword, pageable);
+        List<SearchPostDto> content = searchResult.getContent();
+
+        for (SearchPostDto dto : content) {
+            if (dto.getUserProfileImage() != null) {
+                dto.setUserProfileImage(s3Service.getFilePath(dto.getUserProfileImage()));
+            }
+        }
+        return searchResult;
     }
 
     public Page<SearchUserDto> selectUser(String keyword, Pageable pageable) {

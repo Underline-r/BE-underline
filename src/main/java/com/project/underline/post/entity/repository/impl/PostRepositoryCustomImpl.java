@@ -1,5 +1,6 @@
 package com.project.underline.post.entity.repository.impl;
 
+import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.repository.PostRepositoryCustom;
 import com.project.underline.search.web.dto.*;
 import com.project.underline.user.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static com.project.underline.bookmark.entity.QBookmark.bookmark;
 import static com.project.underline.post.entity.QHashtag.hashtag;
 import static com.project.underline.post.entity.QPick.pick;
 import static com.project.underline.post.entity.QPost.post;
@@ -48,18 +50,28 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
     @Override
     public Page<SearchPostDto> searchPostList(String keyword, Pageable pageable) {
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+
         List<SearchPostDto> contents = queryFactory
                 .select(
                         new QSearchPostDto(
                                 post.postId,
                                 post.content,
                                 source.title,
-                                user.nickname
+                                user.nickname,
+                                user.imagePath,
+                                pick.isNotNull(),
+                                bookmark.isNotNull(),
+                                post.modifiedDate
                         )
                 )
                 .from(post)
                 .leftJoin(post.source, source)
                 .leftJoin(post.user, user)
+                .leftJoin(post.picks, pick)
+                .on(pick.user.id.eq(currentUserId))
+                .leftJoin(post.bookmarks, bookmark)
+                .on(bookmark.user.id.eq(currentUserId))
                 .where(post.content.contains(keyword))
                 .orderBy(post.modifiedDate.desc())
                 .offset(pageable.getOffset())
