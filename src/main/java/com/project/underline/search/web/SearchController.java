@@ -67,6 +67,24 @@ public class SearchController {
                 DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, searchResponse), HttpStatus.OK
         );
     }
+
+    @GetMapping("/post-detail")
+    public ResponseEntity<SearchPostDto> searchPostBySource(@RequestParam String keyword, Integer filterType) {
+        List<SearchPostDto> content = new ArrayList<>();
+
+        switch (filterType) {
+            case 3:
+                content = searchService.selectPostBySource(keyword);
+                break;
+            case 4:
+                content = searchService.selectPostByHashtag(keyword);
+                break;
+        }
+
+        return new ResponseEntity(
+                DefaultResponse.res(HttpStatus.OK.value(),  ResponseMessage.SUCCESS, content), HttpStatus.OK
+        );
+    }
 }
 
 
