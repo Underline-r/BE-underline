@@ -65,3 +65,4 @@ out/
 src/main/resources/application.properties
 src/main/resources/application-prod.properties
 src/test/resources/application.properties
+http/http-client.private.env.json

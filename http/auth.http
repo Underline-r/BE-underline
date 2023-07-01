@@ -1,0 +1,19 @@
+### 1. 로그인
+POST {{host}}/sign-in
+Content-Type: application/json
+
+{
+"email" : "{{test-email}}",
+"password" : "{{test-password}}"
+}
+
+> {%
+client.test("Validate", function() {
+client.assert(response.status === 200, "Response status is not 200");
+client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json'");
+client.assert(response.body.data.accessToken.trim().length > 0);
+});
+
+client.log(response.body.data.accessToken);
+client.global.set("access_token",response.body.data.accessToken) // 토큰 값을 global 변수에 set
+%}
