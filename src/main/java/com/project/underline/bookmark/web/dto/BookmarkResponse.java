@@ -31,7 +31,9 @@ public class BookmarkResponse {
             this.postId = post.getPostId();
             this.content = post.getContent();
             this.userNickname = post.getUser().getNickname();
-            this.sourceTitle = post.getSource().getTitle();
+            if(post.getSource() != null){
+                this.sourceTitle = post.getSource().getTitle();
+            }
         }
     }
 }
