@@ -18,10 +18,10 @@ public class SearchPostDto {
     private Boolean isPicked;
     private Boolean isBookmarked;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    private LocalDateTime modifiedDate;
+    private LocalDateTime recentUpdatedAt;
 
     @QueryProjection
-    public SearchPostDto(Long postId, String content, String source, String userNickname, String userProfileImage, Boolean isPicked, Boolean isBookmarked, LocalDateTime modifiedDate) {
+    public SearchPostDto(Long postId, String content, String source, String userNickname, String userProfileImage, Boolean isPicked, Boolean isBookmarked, LocalDateTime recentUpdatedAt) {
         this.postId = postId;
         this.content = content;
         this.source = source;
@@ -29,6 +29,6 @@ public class SearchPostDto {
         this.userProfileImage = userProfileImage;
         this.isPicked = isPicked;
         this.isBookmarked = isBookmarked;
-        this.modifiedDate = modifiedDate;
+        this.recentUpdatedAt = recentUpdatedAt;
     }
 }

@@ -1,11 +1,15 @@
 package com.project.underline.search.service;
 
 import com.project.underline.common.util.S3Service;
+import com.project.underline.post.entity.Hashtag;
+import com.project.underline.post.entity.repository.HashtagRepository;
 import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.search.web.dto.SearchHashtagDto;
 import com.project.underline.search.web.dto.SearchPostDto;
 import com.project.underline.search.web.dto.SearchSourceDto;
 import com.project.underline.search.web.dto.SearchUserDto;
+import com.project.underline.source.entity.Source;
+import com.project.underline.source.entity.repository.SourceRepository;
 import com.project.underline.user.entity.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,8 @@ public class SearchService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
+    private final SourceRepository sourceRepository;
+    private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
 
     public Page<SearchPostDto> selectPost(String keyword, Pageable pageable) {
@@ -49,11 +56,23 @@ public class SearchService {
     }
 
     public Page<SearchSourceDto> selectSource(String keyword, Pageable pageable) {
-        return postRepository.searchSourceList(keyword, pageable);
+        Page<SearchSourceDto> resultDtos = postRepository.searchSourceList(keyword, pageable);
+        List<SearchSourceDto> content = resultDtos.getContent();
+        for (SearchSourceDto dto : content) {
+            Optional<Source> source = sourceRepository.findFirstByTitleOrderByModifiedDateDesc(dto.getSource());
+            source.ifPresent((v) -> dto.setRecentUpdatedAt(v.getModifiedDate()));
+        }
+        return resultDtos;
     }
 
     public Page<SearchHashtagDto> selectHashTag(String keyword, Pageable pageable) {
-        return postRepository.searchHashtagList(keyword, pageable);
+        Page<SearchHashtagDto> resultDtos = postRepository.searchHashtagList(keyword, pageable);
+        List<SearchHashtagDto> content = resultDtos.getContent();
+        for (SearchHashtagDto dto : content) {
+            Optional<Hashtag> hashtag = hashtagRepository.findFirstByHashtagNameOrderByModifiedDateDesc(dto.getHashtagName());
+            hashtag.ifPresent((v) -> dto.setRecentUpdatedAt(v.getModifiedDate()));
+        }
+        return resultDtos;
     }
 
     public List<SearchPostDto> selectPostBySource(String keyword) {
