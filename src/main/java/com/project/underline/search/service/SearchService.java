@@ -1,6 +1,8 @@
 package com.project.underline.search.service;
 
 import com.project.underline.common.util.S3Service;
+import com.project.underline.post.entity.Hashtag;
+import com.project.underline.post.entity.repository.HashtagRepository;
 import com.project.underline.post.entity.repository.PostRepository;
 import com.project.underline.search.web.dto.SearchHashtagDto;
 import com.project.underline.search.web.dto.SearchPostDto;
@@ -24,6 +26,7 @@ public class SearchService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final SourceRepository sourceRepository;
+    private final HashtagRepository hashtagRepository;
     private final S3Service s3Service;
 
     public Page<SearchPostDto> selectPost(String keyword, Pageable pageable) {
@@ -57,13 +60,19 @@ public class SearchService {
         List<SearchSourceDto> content = resultDtos.getContent();
         for (SearchSourceDto dto : content) {
             Optional<Source> source = sourceRepository.findFirstByTitleOrderByModifiedDateDesc(dto.getSource());
-            source.ifPresent((v) -> dto.setRecentDateTime(v.getModifiedDate()));
+            source.ifPresent((v) -> dto.setRecentUpdatedAt(v.getModifiedDate()));
         }
         return resultDtos;
     }
 
     public Page<SearchHashtagDto> selectHashTag(String keyword, Pageable pageable) {
-        return postRepository.searchHashtagList(keyword, pageable);
+        Page<SearchHashtagDto> resultDtos = postRepository.searchHashtagList(keyword, pageable);
+        List<SearchHashtagDto> content = resultDtos.getContent();
+        for (SearchHashtagDto dto : content) {
+            Optional<Hashtag> hashtag = hashtagRepository.findFirstByHashtagNameOrderByModifiedDateDesc(dto.getHashtagName());
+            hashtag.ifPresent((v) -> dto.setRecentUpdatedAt(v.getModifiedDate()));
+        }
+        return resultDtos;
     }
 
     public List<SearchPostDto> selectPostBySource(String keyword) {

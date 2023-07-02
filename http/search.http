@@ -1,4 +1,14 @@
-### 1.출처 검색
+### 0.전체 검색
+GET {{host}}/search?filterType=0&keyword=a&page=0&size=5
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### 3.출처 검색
 GET {{host}}/search?filterType=3&keyword=i&page=0&size=5
+Authorization: Bearer {{access_token}}
+Accept: application/json
+
+### 4.해시태그 검색
+GET {{host}}/search?filterType=4&keyword=a&page=0&size=5
 Authorization: Bearer {{access_token}}
 Accept: application/json

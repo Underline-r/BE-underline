@@ -13,7 +13,7 @@ public class SearchSourceDto {
     private Long postCount;
     private String source;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime recentDateTime;
+    private LocalDateTime recentUpdatedAt;
 
     @QueryProjection
     public SearchSourceDto(Long postCount, String source) {
