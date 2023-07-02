@@ -1,4 +1,4 @@
-### 2.검색
-GET {{host}}/search?filterType=0&keyword=투정&page=0&size=5
+### 1.출처 검색
+GET {{host}}/search?filterType=3&keyword=i&page=0&size=5
 Authorization: Bearer {{access_token}}
 Accept: application/json

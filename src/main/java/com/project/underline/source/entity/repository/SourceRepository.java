@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface SourceRepository extends JpaRepository<Source,Long> {
     Optional<Source> findByTitle(String title);
+    Optional<Source> findFirstByTitleOrderByModifiedDateDesc(String title);
 }
