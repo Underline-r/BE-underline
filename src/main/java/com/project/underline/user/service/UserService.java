@@ -105,6 +105,8 @@ public class UserService {
         RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
 
+        tokenDto.setInitialLogin(false);
+
         return tokenDto;
     }
 

@@ -16,4 +16,26 @@ client.assert(response.body.data.accessToken.trim().length > 0);
 
 client.log(response.body.data.accessToken);
 client.global.set("access_token",response.body.data.accessToken) // 토큰 값을 global 변수에 set
+client.global.set("refresh_token",response.body.data.refreshToken) // 토큰 값을 global 변수에 set
+%}
+
+### 2. 토큰 갱신
+POST {{host}}/refresh
+Content-Type: application/json
+
+{
+"accessToken" : "{{access_token}}",
+"refreshToken" : "{{refresh_token}}"
+}
+
+> {%
+client.test("Validate", function() {
+client.assert(response.status === 200, "Response status is not 200");
+client.assert(response.contentType.mimeType === "application/json", "Expected 'application/json'");
+client.assert(response.body.data.accessToken.trim().length > 0);
+});
+
+client.log(response.body.data.accessToken);
+client.global.set("access_token",response.body.data.accessToken) // 토큰 값을 global 변수에 set
+client.global.set("refresh_token",response.body.data.refreshToken) // 토큰 값을 global 변수에 set
 %}
