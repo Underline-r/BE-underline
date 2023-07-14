@@ -3,6 +3,7 @@ package com.project.underline.batch.config;
 import com.project.underline.batch.processor.PostTempToPostViewProcessor;
 import com.project.underline.batch.processor.PostViewItemWriter;
 import com.project.underline.batch.redis.RedisItemReader;
+import com.project.underline.common.exception.UnderlineJobExecutionListener;
 import com.project.underline.post.entity.PostTemp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ public class BatchConfiguration {
     private final PostViewItemWriter postViewItemWriter;
     private final PostTempToPostViewProcessor postTempToPostViewProcessor;
     private final RedisItemReader redisItemReader;
+    private final UnderlineJobExecutionListener underlineJobExecutionListener;
 
     public static int chunkSize = 10;
 
@@ -43,6 +45,7 @@ public class BatchConfiguration {
     public Job redisItemReaderJob(Step redisItemReaderStep) {
         return jobBuilderFactory.get("redisItemReaderJob")
                 .start(redisItemReaderStep)
+                .listener(underlineJobExecutionListener)
                 .build();
     }
 

@@ -229,7 +229,7 @@ create table users
     nickname    varchar(255),
     password    varchar(255),
     created_date  datetime(6),
-    modified_date datetime(6)
+    modified_date datetime(6),
     primary key (user_id)
 ) engine = InnoDB;
 

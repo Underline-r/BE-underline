@@ -1,5 +1,6 @@
 package com.project.underline.common.util;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.JobExecution;
@@ -16,31 +17,27 @@ import java.util.List;
 import java.util.Set;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class ContextRefreshEventListener implements ApplicationListener<ContextRefreshedEvent> {
-    @Autowired
-    private JobExplorer jobExplorer;
 
-    @Autowired
-    JobRepository jobRepository;
-
-    @Autowired
-    JobOperator jobOperator;
+    private final  JobExplorer jobExplorer;
+    private final JobRepository jobRepository;
+    private final JobOperator jobOperator;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        log.info("Container restart: restarting 'running' batch jobs");
+        log.info("컨텍스트 초기화");
         List<String> jobs = jobExplorer.getJobNames();
         for (String job : jobs) {
             Set<JobExecution> runningJobs = jobExplorer.findRunningJobExecutions(job);
 
             for (JobExecution runningJob : runningJobs) {
                 try {
-                    log.info("Restarting job {} with parameters {}", runningJob.getJobInstance().getJobName(), runningJob.getJobParameters().toString());
+                    log.info("배치 오류 대상 {} with parameters {}", runningJob.getJobInstance().getJobName(), runningJob.getJobParameters().toString());
                     runningJob.setStatus(BatchStatus.FAILED);
                     runningJob.setEndTime(new Date());
                     jobRepository.update(runningJob);
-                    jobOperator.restart(runningJob.getId());
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                 }
