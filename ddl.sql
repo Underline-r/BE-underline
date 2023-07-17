@@ -171,7 +171,7 @@ create table post
     post_id       bigint   not null auto_increment,
     created_date  datetime(6),
     modified_date datetime(6),
-    content       longtext not null,
+    content       varchar(255) not null,
     source_id  bigint,
     user_id       bigint   not null,
     primary key (post_id)
@@ -232,6 +232,21 @@ create table users
     modified_date datetime(6),
     primary key (user_id)
 ) engine = InnoDB;
+
+create table post_external_share_attempts (
+    pesa_id bigint not null auto_increment,
+    attempt_count bigint,
+    share_target varchar(255),
+    post_id bigint,
+    primary key (pesa_id)) engine=InnoDB;
+
+create table post_view (
+    post_id bigint not null,
+    created_date datetime(6),
+    modified_date datetime(6),
+    count bigint,
+    primary key (post_id)) engine=InnoDB;
+
 
 alter table post_category_relation
     add constraint CATEGORY_RELATION_UK unique (pcr_id, category_code);

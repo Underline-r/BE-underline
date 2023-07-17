@@ -27,7 +27,7 @@ public class ContextRefreshEventListener implements ApplicationListener<ContextR
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        log.info("컨텍스트 초기화");
+        log.info("컨텍스트 초기화 시점");
         List<String> jobs = jobExplorer.getJobNames();
         for (String job : jobs) {
             Set<JobExecution> runningJobs = jobExplorer.findRunningJobExecutions(job);
