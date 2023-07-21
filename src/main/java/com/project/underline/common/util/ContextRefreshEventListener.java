@@ -34,10 +34,12 @@ public class ContextRefreshEventListener implements ApplicationListener<ContextR
 
             for (JobExecution runningJob : runningJobs) {
                 try {
-                    log.info("배치 오류 대상 {} with parameters {}", runningJob.getJobInstance().getJobName(), runningJob.getJobParameters().toString());
-                    runningJob.setStatus(BatchStatus.FAILED);
-                    runningJob.setEndTime(new Date());
-                    jobRepository.update(runningJob);
+                    if(runningJob.getStatus() != BatchStatus.COMPLETED){
+                        log.info("배치 오류 대상 {} with parameters {}", runningJob.getJobInstance().getJobName(), runningJob.getJobParameters().toString());
+                        runningJob.setStatus(BatchStatus.FAILED);
+                        runningJob.setEndTime(new Date());
+                        jobRepository.update(runningJob);
+                    }
                 } catch (Exception e) {
                     log.error(e.getMessage(), e);
                 }
