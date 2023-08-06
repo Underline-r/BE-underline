@@ -1,4 +1,13 @@
-### 1. 로그인
+### 1. 회원가입
+POST {{host}}/sign-up
+Content-Type: application/json
+
+{
+"email" : "{{test-email}}",
+"password" : "{{test-password}}"
+}
+
+### 2. 로그인
 POST {{host}}/sign-in
 Content-Type: application/json
 
@@ -19,7 +28,7 @@ client.global.set("access_token",response.body.data.accessToken) // 토큰 값�
 client.global.set("refresh_token",response.body.data.refreshToken) // 토큰 값을 global 변수에 set
 %}
 
-### 2. 토큰 갱신
+### 3. 토큰 갱신
 POST {{host}}/refresh
 Content-Type: application/json
 
