@@ -67,19 +67,22 @@ public class UserService {
 
         // 2. 실제 검증 (사용자 비밀번호 체크)이 이루어지는 부분
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        try {
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+            TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
+            tokenDto.setInitialLogin(isFirst);
 
-        TokenDto tokenDto = jwtTokenProvider.generateToken(authentication);
-        tokenDto.setInitialLogin(isFirst);
+            RefreshToken refreshToken = RefreshToken.builder()
+                    .userId(authentication.getName())
+                    .refreshValue(tokenDto.getRefreshToken())
+                    .build();
 
-        RefreshToken refreshToken = RefreshToken.builder()
-                .userId(authentication.getName())
-                .refreshValue(tokenDto.getRefreshToken())
-                .build();
+            refreshTokenRepository.save(refreshToken);
 
-        refreshTokenRepository.save(refreshToken);
-
-        return tokenDto;
+            return tokenDto;
+        } catch (Exception e) {
+            throw new UnderlineException(ErrorCode.MISMATCH_PASSWORD);
+        }
     }
 
     public TokenDto refresh(TokenRequestDto tokenRequestDto) {
