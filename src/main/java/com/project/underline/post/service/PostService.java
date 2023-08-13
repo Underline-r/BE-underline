@@ -69,7 +69,7 @@ public class PostService {
         try {
             PostDetailResponse detailResponse = new PostDetailResponse(postRepository.findByPostId(postId).get(), postViewService.getViewCount(postId));
             setUserStatus(detailResponse);
-            setPostCountOption(detailResponse);
+//            setPostCountOption(detailResponse);
             return detailResponse;
         } catch (RuntimeException e) {
             throw e;

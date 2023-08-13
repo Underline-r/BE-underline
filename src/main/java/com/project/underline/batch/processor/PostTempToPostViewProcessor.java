@@ -1,9 +1,9 @@
 package com.project.underline.batch.processor;
 
 import com.project.underline.post.entity.PostTemp;
-import com.project.underline.post.entity.PostView;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class PostTempToPostViewProcessor implements ItemProcessor<PostTemp, PostTemp> {
 
     @Override
+    @Retryable
     public PostTemp process(PostTemp postTemp) throws Exception {
 //        PostView postViewObj = new PostView(postTemp);
 //        return postViewObj;
