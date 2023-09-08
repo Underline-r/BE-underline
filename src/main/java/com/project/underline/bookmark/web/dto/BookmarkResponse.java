@@ -1,9 +1,11 @@
 package com.project.underline.bookmark.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.underline.bookmark.entity.Bookmark;
 import com.project.underline.post.entity.Post;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class BookmarkResponse {
         private String content;
         private String sourceTitle;
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
+        private LocalDateTime modifiedDate;
+
         public EachBookmarkedPost(Post post){
             this.postId = post.getPostId();
             this.content = post.getContent();
@@ -34,6 +39,7 @@ public class BookmarkResponse {
             if(post.getSource() != null){
                 this.sourceTitle = post.getSource().getTitle();
             }
+            this.modifiedDate = post.getModifiedDate();
         }
     }
 }
