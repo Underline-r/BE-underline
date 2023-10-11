@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -65,16 +66,18 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostDetailResponse inquiryPost (Long postId){
-        try {
-            PostDetailResponse detailResponse = new PostDetailResponse(postRepository.findByPostId(postId).get(), postViewService.getViewCount(postId));
+    public PostDetailResponse inquiryPost(Long postId) {
+        Optional<Post> postOptional = postRepository.findByPostId(postId);
+        if (postOptional.isPresent()) {
+            PostDetailResponse detailResponse = new PostDetailResponse(postOptional.get(), postViewService.getViewCount(postId));
             setUserStatus(detailResponse);
             setPostCountOption(detailResponse);
             return detailResponse;
-        } catch (RuntimeException e) {
-            throw e;
+        } else {
+            throw new UnderlineException(ErrorCode.NO_POST_DATA);
         }
     }
+
 
     @Transactional(readOnly = true)
     public PostDetailResponse setUserStatus (PostDetailResponse postDetailResponse){

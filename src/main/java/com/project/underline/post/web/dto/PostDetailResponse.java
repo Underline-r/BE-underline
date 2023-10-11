@@ -1,6 +1,8 @@
 package com.project.underline.post.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.project.underline.category.entity.PostCategoryRelation;
+import com.project.underline.common.util.SecurityUtil;
 import com.project.underline.post.entity.Hashtag;
 import com.project.underline.post.entity.Post;
 import lombok.Getter;
@@ -32,6 +34,9 @@ public class PostDetailResponse {
 
     private List<String> hashtags;
     private String oldestComment;
+
+    private List<String> categoryList;
+    private Boolean isMyPost = false;
 
     public PostDetailResponse setUserCheck(Boolean isPicked,Boolean isBookmarked,Boolean isFollowed){
         this.isPicked = isPicked;
@@ -80,6 +85,22 @@ public class PostDetailResponse {
 
         if(post.getUser().getImagePath() != null){
             this.userProfileImage = post.getUser().getImagePath();
+        }
+
+        if (post.getCategoryList() != null) {
+            this.categoryList = post.getCategoryList().stream()
+                    .map(category -> category.getCategoryCode())
+                    .collect(Collectors.toList());
+        }
+
+        checkIsMyPage();
+    }
+
+    private void checkIsMyPage() {
+        if (userId != null) {
+            if (SecurityUtil.getCurrentUserId().equals(userId)) {
+                this.isMyPost = true;
+            }
         }
     }
 }
